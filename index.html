@@ -714,9 +714,141 @@
   .section.active, .quiz-container {
     animation: fadeUp 0.35s ease;
   }
+
+  /* ── TTS PLAYER BAR ── */
+  .tts-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(135deg, #0d1017, #161b26);
+    border-top: 1px solid var(--gold-dim);
+    padding: 12px 20px;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    z-index: 200;
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.6);
+  }
+  .tts-bar.visible { display: flex; }
+  .tts-bar-label {
+    flex: 1;
+    font-size: 0.8rem;
+    color: var(--gold-light);
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tts-bar-label span {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .tts-ctrl {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--white);
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .tts-ctrl:hover { background: var(--gold-dim); border-color: var(--gold); }
+  .tts-ctrl.stop { border-color: var(--red); color: var(--red-light); }
+  .tts-ctrl.stop:hover { background: rgba(192,57,43,0.2); }
+  .tts-wave {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  .tts-wave span {
+    display: block;
+    width: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+    animation: wave 1s ease-in-out infinite;
+  }
+  .tts-wave span:nth-child(1) { height: 8px; animation-delay: 0s; }
+  .tts-wave span:nth-child(2) { height: 16px; animation-delay: 0.15s; }
+  .tts-wave span:nth-child(3) { height: 22px; animation-delay: 0.3s; }
+  .tts-wave span:nth-child(4) { height: 14px; animation-delay: 0.45s; }
+  .tts-wave span:nth-child(5) { height: 8px; animation-delay: 0.6s; }
+  .tts-bar.paused .tts-wave span { animation-play-state: paused; }
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
+
+  /* ── SECTION READ BUTTONS ── */
+  .section-read-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .read-btn {
+    background: transparent;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold-light);
+    padding: 8px 16px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .read-btn:hover { background: var(--gold-dim); color: var(--white); }
+
+  /* ── CARD READ BUTTON ── */
+  .card-read-btn {
+    background: transparent;
+    border: none;
+    color: var(--gold-dim);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px;
+    float: right;
+    margin-left: 8px;
+    transition: color 0.2s;
+    line-height: 1;
+  }
+  .card-read-btn:hover { color: var(--gold-light); }
+
+  /* ── READING HIGHLIGHT ── */
+  .tts-reading {
+    outline: 1px solid var(--gold-dim);
+    box-shadow: 0 0 16px rgba(201,168,76,0.15);
+    transition: box-shadow 0.3s;
+  }
 </style>
 </head>
 <body>
+
+<!-- ── TTS FLOATING PLAYER ── -->
+<div class="tts-bar" id="ttsBar">
+  <div class="tts-wave">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="tts-bar-label">
+    <span id="ttsMode">Now Reading</span>
+    <div id="ttsTitle" style="color:var(--gold-light);font-size:0.82rem;">—</div>
+  </div>
+  <button class="tts-ctrl" id="ttsPauseBtn" onclick="ttsPause()" title="Pause / Resume">⏸</button>
+  <button class="tts-ctrl stop" onclick="ttsStop()" title="Stop">⏹</button>
+</div>
 
 <div class="hero">
   <div class="hero-belt"></div>
@@ -748,6 +880,7 @@
 ════════════════════════════════════════════════════════ -->
 <section id="dojo" class="section active">
   <h2 class="section-title">History of Freestyle Martial Arts</h2>
+  <div class="section-read-bar"><button class="read-btn" onclick="ttsReadSummary('dojo')">⚡ Quick Summary</button><button class="read-btn" onclick="ttsReadSection('dojo')">📖 Read Full Section</button></div>
 
   <div class="creed-box" style="margin-bottom:32px;">
     <h3>The Dojo</h3>
@@ -794,7 +927,7 @@
   <div class="grid-2">
     <div class="card">
       <div class="tag">Founder</div>
-      <h3>Sensei Darren Kikuchi (Sensei K)</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Founder Sensei Darren Kikuchi (Sensei K) Training since 1974 — 7th Dan Black Belt American Karate 4th Dan Black Belt World Tae Kwon Do Federation 2nd Dan Black Belt West Coast Martial Arts Instructor Certification: Haganah, Muay Thai (Deth Ko Sin), C','Card')" title="Read aloud">🔊</button>Sensei Darren Kikuchi (Sensei K)</h3>
       <ul>
         <li>Training since 1974 — 7th Dan Black Belt American Karate</li>
         <li>4th Dan Black Belt World Tae Kwon Do Federation</li>
@@ -808,7 +941,7 @@
     </div>
     <div class="card">
       <div class="tag">Head Instructor</div>
-      <h3>Sensei Will Jackson</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Head Instructor Sensei Will Jackson Born 1984 — started martial arts at age 6 (1991) Started teaching at age 15; La Jolla YMCA at 19 3rd Degree Black Belt Founder of Team Freestyle Performance President of Team Freestyle Foundation Learned b-twist in','Card')" title="Read aloud">🔊</button>Sensei Will Jackson</h3>
       <ul>
         <li>Born 1984 — started martial arts at age 6 (1991)</li>
         <li>Started teaching at age 15; La Jolla YMCA at 19</li>
@@ -822,7 +955,7 @@
     </div>
     <div class="card">
       <div class="tag">Senior Member</div>
-      <h3>Mary Davis</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Senior Member Mary Davis Third-degree black belt; began martial arts at age 57 Received first black belt at age 60 Started the STARS program First of four generations at Freestyle (daughter, granddaughter, great-grandson) Only person to teach adults,','Card')" title="Read aloud">🔊</button>Mary Davis</h3>
       <ul>
         <li>Third-degree black belt; began martial arts at age <strong>57</strong></li>
         <li>Received first black belt at age <strong>60</strong></li>
@@ -834,7 +967,7 @@
     </div>
     <div class="card">
       <div class="tag">Instructor</div>
-      <h3>Sensei Jerry Haranco</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Instructor Sensei Jerry Haranco Head Instructor before Sensei Jackson 4th Degree Black Belt One of the most athletic &amp; acrobatic students ever Grew up in the Philippines; moved to the US at age 11','Card')" title="Read aloud">🔊</button>Sensei Jerry Haranco</h3>
       <ul>
         <li>Head Instructor before Sensei Jackson</li>
         <li>4th Degree Black Belt</li>
@@ -844,7 +977,7 @@
     </div>
     <div class="card">
       <div class="tag">Instructor 1993–1999</div>
-      <h3>Sensei Yu</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Instructor 1993–1999 Sensei Yu Taught at the dojo from 1993 to 1999 Sergeant in the San Diego Police Department Teaches defensive tactics to recruits','Card')" title="Read aloud">🔊</button>Sensei Yu</h3>
       <ul>
         <li>Taught at the dojo from 1993 to 1999</li>
         <li>Sergeant in the San Diego Police Department</li>
@@ -853,7 +986,7 @@
     </div>
     <div class="card">
       <div class="tag">Family Member</div>
-      <h3>Don Kikuchi (Sensei K's Uncle)</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Family Member Don Kikuchi (Sensei K s Uncle) Judoka — expert in judo Gold medalist, US National Judo Championships — 1953 Head instructor, San Jose Buddhist Judo Club, 40+ years Has a scholarship named after him','Card')" title="Read aloud">🔊</button>Don Kikuchi (Sensei K's Uncle)</h3>
       <ul>
         <li>Judoka — expert in judo</li>
         <li>Gold medalist, US National Judo Championships — <strong>1953</strong></li>
@@ -863,7 +996,7 @@
     </div>
     <div class="card">
       <div class="tag">First Black Belt</div>
-      <h3>T.J. (Ted) Roberts</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('First Black Belt T.J. (Ted) Roberts First black belt earned at Freestyle Martial Arts Played the Masked Rider in Power Rangers crossover Known movies: Magic Kid , Power Within','Card')" title="Read aloud">🔊</button>T.J. (Ted) Roberts</h3>
       <ul>
         <li>First black belt earned at Freestyle Martial Arts</li>
         <li>Played the Masked Rider in Power Rangers crossover</li>
@@ -872,7 +1005,7 @@
     </div>
     <div class="card">
       <div class="tag">Grandmaster</div>
-      <h3>Grandmaster Lucky Luciano</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Grandmaster Grandmaster Lucky Luciano Trained in Shoto-Kan while stationed in Osaka, Japan (US Armed Forces) Studied Aikido under Sensei Harry Isesaka after discharge (1950s) 1969: Most Outstanding Martial Arts Man of the Year + Most Outstanding Inst','Card')" title="Read aloud">🔊</button>Grandmaster Lucky Luciano</h3>
       <ul>
         <li>Trained in Shoto-Kan while stationed in Osaka, Japan (US Armed Forces)</li>
         <li>Studied Aikido under Sensei Harry Isesaka after discharge (1950s)</li>
@@ -883,7 +1016,7 @@
     </div>
     <div class="card">
       <div class="tag">Notable Student</div>
-      <h3>Dr. Stephen Hayden</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Notable Student Dr. Stephen Hayden Entire family holds black belts from the dojo Doctor in emergency medicine Assistant Medical Dean at UCSD','Card')" title="Read aloud">🔊</button>Dr. Stephen Hayden</h3>
       <ul>
         <li>Entire family holds black belts from the dojo</li>
         <li>Doctor in emergency medicine</li>
@@ -892,7 +1025,7 @@
     </div>
     <div class="card">
       <div class="tag">Notable Student</div>
-      <h3>Debbie Clawson</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Notable Student Debbie Clawson Daughter of Sensei Mary Davis Second of four generations at Freestyle CPA by profession; started as a mom with daughters in the program Used to teach Cool Cats class','Card')" title="Read aloud">🔊</button>Debbie Clawson</h3>
       <ul>
         <li>Daughter of Sensei Mary Davis</li>
         <li>Second of four generations at Freestyle</li>
@@ -908,6 +1041,7 @@
 ════════════════════════════════════════════════════════ -->
 <section id="styles" class="section">
   <h2 class="section-title">Martial Art Styles</h2>
+  <div class="section-read-bar"><button class="read-btn" onclick="ttsReadSummary('styles')">⚡ Quick Summary</button><button class="read-btn" onclick="ttsReadSection('styles')">📖 Read Full Section</button></div>
 
   <div class="grid-3">
     <div class="style-card">
@@ -1000,27 +1134,27 @@
   <div class="grid-2">
     <div class="card">
       <div class="tag">Organization</div>
-      <h3>CDT — Compliance Direction &amp; Takedown</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Organization CDT — Compliance Direction &amp; Takedown Created by Tom Patiri in 1992. Designed for real-world situations to physically control/disarm a hostile aggressor. Originally for Law Enforcement; now used in hospitals, schools, airlines, relig','Card')" title="Read aloud">🔊</button>CDT — Compliance Direction &amp; Takedown</h3>
       <p>Created by Tom Patiri in 1992. Designed for real-world situations to physically control/disarm a hostile aggressor. Originally for Law Enforcement; now used in hospitals, schools, airlines, religious organizations. Sensei K is a CDT Tactical Master Instructor.</p>
     </div>
     <div class="card">
       <div class="tag">Organization</div>
-      <h3>UFC — Ultimate Fighting Championship</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Organization UFC — Ultimate Fighting Championship Founded November 1993. Based in Las Vegas. 40+ events per year. Championships are 5 rounds × 5 minutes. Scored by 3 judges on a 10-point system. 31 types of fouls. Victories by submission, KO, TKO, or','Card')" title="Read aloud">🔊</button>UFC — Ultimate Fighting Championship</h3>
       <p>Founded November 1993. Based in Las Vegas. 40+ events per year. Championships are 5 rounds × 5 minutes. Scored by 3 judges on a 10-point system. 31 types of fouls. Victories by submission, KO, TKO, or decision (unanimous, split, majority).</p>
     </div>
     <div class="card">
       <div class="tag">Organization</div>
-      <h3>WTF — World Taekwondo Federation</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Organization WTF — World Taekwondo Federation International governing body for Taekwondo. Member of the Association of Summer Olympic International Federations. Renamed from  WTF  in June 2017.','Card')" title="Read aloud">🔊</button>WTF — World Taekwondo Federation</h3>
       <p>International governing body for Taekwondo. Member of the Association of Summer Olympic International Federations. Renamed from "WTF" in June 2017.</p>
     </div>
     <div class="card">
       <div class="tag">Organization</div>
-      <h3>IBJJF — International Brazilian Jiu-Jitsu Federation</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Organization IBJJF — International Brazilian Jiu-Jitsu Federation Hosts the world s biggest BJJ tournaments. Manages ranking points across multiple events. Points calculated by placement × tournament ranking × season year.','Card')" title="Read aloud">🔊</button>IBJJF — International Brazilian Jiu-Jitsu Federation</h3>
       <p>Hosts the world's biggest BJJ tournaments. Manages ranking points across multiple events. Points calculated by placement × tournament ranking × season year.</p>
     </div>
     <div class="card">
       <div class="tag">Organization</div>
-      <h3>Kodokan</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Organization Kodokan  A place for the study of the way.  Headquarters of worldwide Judo. Founded 1882 by Jigoro Kano. Eight-story building in Tokyo. Issues ranks; many judoka register with Kodokan. Vladimir Putin is a registered judoka.','Card')" title="Read aloud">🔊</button>Kodokan</h3>
       <p>"A place for the study of the way." Headquarters of worldwide Judo. Founded 1882 by Jigoro Kano. Eight-story building in Tokyo. Issues ranks; many judoka register with Kodokan. Vladimir Putin is a registered judoka.</p>
     </div>
   </div>
@@ -1031,6 +1165,7 @@
 ════════════════════════════════════════════════════════ -->
 <section id="people" class="section">
   <h2 class="section-title">Famous Martial Artists</h2>
+  <div class="section-read-bar"><button class="read-btn" onclick="ttsReadSummary('people')">⚡ Quick Summary</button><button class="read-btn" onclick="ttsReadSection('people')">📖 Read Full Section</button></div>
   <div class="grid-3">
 
     <div class="person-card">
@@ -1155,6 +1290,7 @@
 ════════════════════════════════════════════════════════ -->
 <section id="philosophy" class="section">
   <h2 class="section-title">Philosophy, Creeds &amp; Core Values</h2>
+  <div class="section-read-bar"><button class="read-btn" onclick="ttsReadSummary('philosophy')">⚡ Quick Summary</button><button class="read-btn" onclick="ttsReadSection('philosophy')">📖 Read Full Section</button></div>
 
   <div class="grid-2">
     <div class="creed-box">
@@ -1241,6 +1377,7 @@
 ════════════════════════════════════════════════════════ -->
 <section id="achievements" class="section">
   <h2 class="section-title">Body · Mind · Spirit Achievements</h2>
+  <div class="section-read-bar"><button class="read-btn" onclick="ttsReadSummary('achievements')">⚡ Quick Summary</button><button class="read-btn" onclick="ttsReadSection('achievements')">📖 Read Full Section</button></div>
   <div class="card" style="margin-bottom:28px;">
     <p>The three achievements may be earned beginning at the <strong>adult Red Belt level</strong>. They must be earned in the order listed: Body → Mind → Spirit.</p>
   </div>
@@ -1289,6 +1426,7 @@
 ════════════════════════════════════════════════════════ -->
 <section id="mindset" class="section">
   <h2 class="section-title">Mindset, Values &amp; School Culture</h2>
+  <div class="section-read-bar"><button class="read-btn" onclick="ttsReadSummary('mindset')">⚡ Quick Summary</button><button class="read-btn" onclick="ttsReadSection('mindset')">📖 Read Full Section</button></div>
 
   <h3 class="subsection-title">The Five Mindset Checklist</h3>
 
@@ -1331,43 +1469,43 @@
   <h3 class="subsection-title">Key Terms &amp; Definitions</h3>
   <div class="grid-2">
     <div class="card">
-      <h3>Do (道)</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Do (道) Pronounced  doe.  Japanese word meaning  The Way  or  The Journey.  Used in art names: Judo (gentle way), Taekwondo (way of foot and fist), Aikido (way of unifying with life energy).','Card')" title="Read aloud">🔊</button>Do (道)</h3>
       <p>Pronounced "doe." Japanese word meaning "The Way" or "The Journey." Used in art names: Judo (gentle way), Taekwondo (way of foot and fist), Aikido (way of unifying with life energy).</p>
     </div>
     <div class="card">
-      <h3>Jitsu / Jutsu (術)</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Jitsu / Jutsu (術) Meaning  art  or  technique.  Used in names like: Ju-Jitsu (art of flexibility), Ninjutsu (ninja art).','Card')" title="Read aloud">🔊</button>Jitsu / Jutsu (術)</h3>
       <p>Meaning "art" or "technique." Used in names like: Ju-Jitsu (art of flexibility), Ninjutsu (ninja art).</p>
     </div>
     <div class="card">
-      <h3>Dan / Degree</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Dan / Degree These mean the same thing — both refer to the rank/level of a black belt. (e.g., 3rd Dan = 3rd Degree Black Belt)','Card')" title="Read aloud">🔊</button>Dan / Degree</h3>
       <p>These mean the same thing — both refer to the rank/level of a black belt. (e.g., 3rd Dan = 3rd Degree Black Belt)</p>
     </div>
     <div class="card">
-      <h3>Judoka</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Judoka A person who practices or is an expert in Judo.','Card')" title="Read aloud">🔊</button>Judoka</h3>
       <p>A person who practices or is an expert in Judo.</p>
     </div>
     <div class="card">
-      <h3>Kata</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Kata Formal practice sequences / forms. A set pattern of movements used for practice and demonstration.','Card')" title="Read aloud">🔊</button>Kata</h3>
       <p>Formal practice sequences / forms. A set pattern of movements used for practice and demonstration.</p>
     </div>
     <div class="card">
-      <h3>Randori</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Randori Free exercise / sparring in Judo. As opposed to formal kata practice.','Card')" title="Read aloud">🔊</button>Randori</h3>
       <p>Free exercise / sparring in Judo. As opposed to formal kata practice.</p>
     </div>
     <div class="card">
-      <h3>Kuzushi / Tsukuri / Kake</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Kuzushi / Tsukuri / Kake The three phases of Judo: Kuzushi = unbalancing the opponent; Tsukuri = positioning into a dominant pose; Kake = execution of the throw or technique.','Card')" title="Read aloud">🔊</button>Kuzushi / Tsukuri / Kake</h3>
       <p>The three phases of Judo: <strong>Kuzushi</strong> = unbalancing the opponent; <strong>Tsukuri</strong> = positioning into a dominant pose; <strong>Kake</strong> = execution of the throw or technique.</p>
     </div>
     <div class="card">
-      <h3>Qi (Chi / Ki)</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Qi (Chi / Ki) An energy force thought to flow through the body. Tai Chi and Aikido promote the flow and balance of Qi. Yin and Yang — opposing elements kept in harmony.','Card')" title="Read aloud">🔊</button>Qi (Chi / Ki)</h3>
       <p>An energy force thought to flow through the body. Tai Chi and Aikido promote the flow and balance of Qi. Yin and Yang — opposing elements kept in harmony.</p>
     </div>
     <div class="card">
-      <h3>Dojo</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Dojo A martial arts training hall or school. Literally means  place of the way. ','Card')" title="Read aloud">🔊</button>Dojo</h3>
       <p>A martial arts training hall or school. Literally means "place of the way."</p>
     </div>
     <div class="card">
-      <h3>Sensei</h3>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Sensei Japanese term meaning  teacher  or  one who has come before.  Used as a title of respect for a martial arts instructor.','Card')" title="Read aloud">🔊</button>Sensei</h3>
       <p>Japanese term meaning "teacher" or "one who has come before." Used as a title of respect for a martial arts instructor.</p>
     </div>
   </div>
@@ -1633,6 +1771,111 @@ function updateUI() {
 
 // ── INIT ──
 buildDeck();
+
+// ══════════════════════════════════════
+// TTS ENGINE
+// ══════════════════════════════════════
+const ttsSummaries = {
+  dojo: "Freestyle Martial Arts was founded by Sensei Darren Kikuchi, who has been training since 1974. He opened the dojo on Rosecrans Avenue in 1994, later moving to Sports Arena Boulevard in 2011. The first black belt was earned by T.J. Roberts. Key instructors include Sensei Will Jackson, the current head instructor and third-degree black belt, and Sensei Jerry Haranco, a fourth-degree black belt. Notable members include Mary Davis, who started martial arts at age 57 and earned her black belt at 60, and Dr. Stephen Hayden, whose entire family holds black belts. The Student Creed was developed in 1994 and the Mission Statement in 2002.",
+
+  styles: "Freestyle Martial Arts covers a wide range of styles. Karate means empty hands, and is a Japanese striking art. Taekwondo is the art of kicking and punching, founded in Korea in 1955. Muay Thai is the art of eight limbs from Thailand. Judo, meaning the gentle way, was created in Japan in 1882 by Jigoro Kano. Brazilian Jiu-Jitsu focuses on ground grappling and was founded by Helio Gracie. Krav Maga is the offensive Israeli military art. Arnis or Escrima is the national martial art of the Philippines. Jeet Kune Do was Bruce Lee's eclectic hybrid style. Other styles include Kung Fu, Wing Chun, Aikido, Kickboxing, and Capoeira.",
+
+  people: "Famous martial artists include Bruce Lee, who founded Jeet Kune Do in 1967 and died at age 32. Chuck Norris studied Tang Soo Do. Jackie Chan is known for performing his own stunts. Jet Li became a national Wushu champion at age 11. Muhammad Ali was an Olympic gold medalist in 1960 and famous for opposing the Vietnam War. Joe Lewis, the father of kickboxing in the western world, retired undefeated. The Gracie family founded Brazilian Jiu-Jitsu. Ronda Rousey was the first American woman to medal in Olympic Judo. Jhoon Rhee is the father of American Taekwondo. Ed Parker founded American Kenpo.",
+
+  philosophy: "The Mission Statement is: Empower our students to achieve their personal best in life. Encourage education, strong morals, and great character. Enrich lives through excellent martial arts instruction. Inspire others with honor, integrity, and loyalty. We are committed to make a difference in the world. The Student Creed states: I am developing myself in a positive manner, mentally, physically, and spiritually. I am developing confidence, discipline, and respect. I am using my martial arts to inspire a kind and compassionate world. I am dedicated and motivated to Achieve Black Belt Excellence. Dale Carnegie's five golden rules are: Smile. Remember the person's name. Give honest and sincere appreciation. Become genuinely interested in other people. And don't criticize, condemn, or complain. Stephen Covey's seven habits are: Be proactive. Begin with the end in mind. Put first things first. Think win-win. Seek first to understand then to be understood. Synergize. And sharpen the saw.",
+
+  achievements: "The three Body Mind Spirit achievements must be earned in order, beginning at the adult Red Belt level. The Body achievement requires improving one of the five fitness components tracked over two months, plus quizzes on human anatomy and striking areas. The Mind achievement requires reading the Seven Habits of Highly Effective People by Stephen Covey and being able to verbally defend yourself. The Spirit achievement requires reading Tuesdays with Morrie by Mitch Albom and mentoring a student for three months with a letter of recommendation.",
+
+  mindset: "The Five Mindset Checklist states: One, we are the friendliest place in San Diego — be the first to say hello, smile, and be sincerely interested in all. Two, we are the cleanest martial arts school in San Diego — it is everyone's job to keep the dojo clean and safe. Three, we only teach great classes, never just good classes — keep students smiling, sweating, and learning. Four, we are excellent at student and parent communication. Five, we spend quality time on new student acquisition every day. Key terms include: Do, meaning the way. Sensei, meaning teacher. Dan and Degree mean the same thing. Kata means formal practice sequences. Randori means free sparring."
+};
+
+const ttsSections = {
+  dojo: () => document.getElementById('dojo').innerText,
+  styles: () => document.getElementById('styles').innerText,
+  people: () => document.getElementById('people').innerText,
+  philosophy: () => document.getElementById('philosophy').innerText,
+  achievements: () => document.getElementById('achievements').innerText,
+  mindset: () => document.getElementById('mindset').innerText,
+};
+
+let ttsUtterance = null;
+let ttsPaused = false;
+let ttsCurrentLabel = '';
+
+function ttsSpeak(text, label) {
+  ttsStop();
+  ttsCurrentLabel = label;
+  ttsUtterance = new SpeechSynthesisUtterance(text);
+  ttsUtterance.rate = 0.92;
+  ttsUtterance.pitch = 1.0;
+  ttsUtterance.volume = 1.0;
+  // Prefer a natural English voice if available
+  const voices = speechSynthesis.getVoices();
+  const preferred = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Karen') || v.name.includes('Daniel')));
+  if (preferred) ttsUtterance.voice = preferred;
+  ttsUtterance.onstart = () => {
+    document.getElementById('ttsBar').classList.add('visible');
+    document.getElementById('ttsBar').classList.remove('paused');
+    document.getElementById('ttsTitle').textContent = label;
+    document.getElementById('ttsPauseBtn').textContent = '⏸';
+    ttsPaused = false;
+  };
+  ttsUtterance.onend = () => {
+    document.getElementById('ttsBar').classList.remove('visible');
+    ttsPaused = false;
+    ttsUtterance = null;
+  };
+  ttsUtterance.onerror = () => {
+    document.getElementById('ttsBar').classList.remove('visible');
+  };
+  speechSynthesis.speak(ttsUtterance);
+}
+
+function ttsReadSummary(sectionId) {
+  const text = ttsSummaries[sectionId] || 'No summary available.';
+  document.getElementById('ttsMode').textContent = 'Quick Summary';
+  ttsSpeak(text, document.querySelector('#' + sectionId + ' .section-title') ? document.querySelector('#' + sectionId + ' .section-title').textContent.trim() : sectionId);
+}
+
+function ttsReadSection(sectionId) {
+  const el = document.getElementById(sectionId);
+  if (!el) return;
+  // Get clean readable text, skip button labels
+  const clone = el.cloneNode(true);
+  clone.querySelectorAll('button, .read-btn, .card-read-btn, .section-read-bar').forEach(b => b.remove());
+  let text = clone.innerText || clone.textContent;
+  text = text.replace(/\n{3,}/g, '\n\n').trim();
+  document.getElementById('ttsMode').textContent = 'Reading Full Section';
+  ttsSpeak(text, el.querySelector('.section-title') ? el.querySelector('.section-title').textContent.trim() : sectionId);
+}
+
+function ttsPause() {
+  if (!speechSynthesis.speaking) return;
+  if (ttsPaused) {
+    speechSynthesis.resume();
+    ttsPaused = false;
+    document.getElementById('ttsPauseBtn').textContent = '⏸';
+    document.getElementById('ttsBar').classList.remove('paused');
+  } else {
+    speechSynthesis.pause();
+    ttsPaused = true;
+    document.getElementById('ttsPauseBtn').textContent = '▶️';
+    document.getElementById('ttsBar').classList.add('paused');
+  }
+}
+
+function ttsStop() {
+  speechSynthesis.cancel();
+  ttsPaused = false;
+  ttsUtterance = null;
+  document.getElementById('ttsBar').classList.remove('visible');
+}
+
+// Load voices (needed on some browsers)
+if (typeof speechSynthesis !== 'undefined') {
+  speechSynthesis.onvoiceschanged = () => { speechSynthesis.getVoices(); };
+}
+
 </script>
 </body>
 </html>
