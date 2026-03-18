@@ -79,17 +79,62 @@
 
   /* ── NAV TABS ── */
   .nav {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 20px;
     background: var(--deep);
     border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
     z-index: 100;
   }
+
+  /* Desktop nav row */
+  .nav-inner {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px 20px;
+  }
+
+  /* Hamburger button — hidden on desktop */
+  .nav-hamburger {
+    display: none;
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--gold-light);
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 14px 20px;
+    cursor: pointer;
+    text-align: left;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-hamburger .ham-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .nav-hamburger .ham-icon span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .nav-hamburger.open .ham-icon span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .nav-hamburger.open .ham-icon span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-hamburger.open .ham-icon span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
   .nav-btn {
     background: transparent;
     border: 1px solid var(--border);
@@ -119,6 +164,42 @@
     background: var(--red-light);
     border-color: var(--red-light);
     color: #fff;
+  }
+
+  /* Mobile nav */
+  @media (max-width: 700px) {
+    .nav-hamburger {
+      display: flex;
+    }
+    .nav-inner {
+      display: none;
+      flex-direction: column;
+      gap: 0;
+      padding: 0 0 8px;
+    }
+    .nav-inner.open {
+      display: flex;
+    }
+    .nav-btn {
+      border: none;
+      border-top: 1px solid var(--border);
+      border-radius: 0;
+      padding: 14px 24px;
+      font-size: 0.82rem;
+      text-align: left;
+      width: 100%;
+    }
+    .nav-btn.active {
+      border-left: 4px solid var(--gold);
+      padding-left: 20px;
+    }
+    .nav-btn.quiz-btn {
+      margin: 8px 16px;
+      border-radius: 4px;
+      border: none;
+      width: calc(100% - 32px);
+      text-align: center;
+    }
   }
 
   /* ── SECTIONS ── */
@@ -645,13 +726,21 @@
 </div>
 
 <nav class="nav">
-  <button class="nav-btn active" onclick="showSection('dojo')">🏯 Dojo History</button>
-  <button class="nav-btn" onclick="showSection('styles')">🥋 Martial Art Styles</button>
-  <button class="nav-btn" onclick="showSection('people')">⭐ Famous People</button>
-  <button class="nav-btn" onclick="showSection('philosophy')">📖 Philosophy</button>
-  <button class="nav-btn" onclick="showSection('achievements')">🎯 Achievements</button>
-  <button class="nav-btn" onclick="showSection('mindset')">🧠 Mindset & Values</button>
-  <button class="nav-btn quiz-btn" onclick="showSection('quiz')">⚡ Flashcard Quiz</button>
+  <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
+    <span>📚 Study Guide Menu</span>
+    <div class="ham-icon">
+      <span></span><span></span><span></span>
+    </div>
+  </button>
+  <div class="nav-inner" id="navInner">
+    <button class="nav-btn active" onclick="showSection('dojo')">🏯 Dojo History</button>
+    <button class="nav-btn" onclick="showSection('styles')">🥋 Martial Art Styles</button>
+    <button class="nav-btn" onclick="showSection('people')">⭐ Famous People</button>
+    <button class="nav-btn" onclick="showSection('philosophy')">📖 Philosophy</button>
+    <button class="nav-btn" onclick="showSection('achievements')">🎯 Achievements</button>
+    <button class="nav-btn" onclick="showSection('mindset')">🧠 Mindset & Values</button>
+    <button class="nav-btn quiz-btn" onclick="showSection('quiz')">⚡ Flashcard Quiz</button>
+  </div>
 </nav>
 
 <!-- ═══════════════════════════════════════════════════════
@@ -1338,7 +1427,17 @@
 
 <script>
 // ── NAVIGATION ──
+function toggleMenu() {
+  const nav = document.getElementById('navInner');
+  const btn = document.getElementById('hamburger');
+  nav.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
 function showSection(id) {
+  // Close mobile menu
+  document.getElementById('navInner').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
