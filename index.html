@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Belt Excellence — Freestyle Martial Arts Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --deep: #111318;
+    --card: #181c24;
+    --border: #2a2e38;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-dim: #7a6230;
+    --red: #c0392b;
+    --red-light: #e74c3c;
+    --white: #f5f0e8;
+    --muted: #8a8a9a;
+    --section-bg: #13161e;
+    --highlight: #1e2233;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    text-align: center;
+    padding: 80px 20px 60px;
+    background: radial-gradient(ellipse at 50% 0%, #1a1500 0%, var(--black) 70%);
+    border-bottom: 1px solid var(--gold-dim);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 40px,
+      rgba(201,168,76,0.03) 40px, rgba(201,168,76,0.03) 41px
+    );
+  }
+  .hero-belt {
+    display: inline-block;
+    background: linear-gradient(90deg, #000, var(--gold), #000);
+    height: 6px;
+    width: 200px;
+    margin-bottom: 32px;
+    border-radius: 3px;
+  }
+  .hero h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.6rem, 5vw, 3.2rem);
+    color: var(--gold-light);
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    text-shadow: 0 0 40px rgba(201,168,76,0.4);
+    margin-bottom: 12px;
+  }
+  .hero-sub {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.75rem, 2vw, 1rem);
+    color: var(--muted);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  /* ── NAV TABS ── */
+  .nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 20px;
+    background: var(--deep);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 8px 16px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--black);
+    font-weight: 700;
+  }
+  .nav-btn.quiz-btn {
+    background: linear-gradient(135deg, var(--red), #8b0000);
+    border-color: var(--red);
+    color: #fff;
+    font-weight: 700;
+  }
+  .nav-btn.quiz-btn:hover, .nav-btn.quiz-btn.active {
+    background: var(--red-light);
+    border-color: var(--red-light);
+    color: #fff;
+  }
+
+  /* ── SECTIONS ── */
+  .section { display: none; padding: 40px 20px 80px; max-width: 1100px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    border-left: 4px solid var(--gold);
+    padding-left: 16px;
+    margin-bottom: 32px;
+  }
+
+  .subsection-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    color: var(--gold-light);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 20px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--gold-dim); }
+  .card h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    color: var(--gold-light);
+    margin-bottom: 12px;
+  }
+  .card p { line-height: 1.75; color: #ccc; font-size: 0.95rem; }
+  .card ul { padding-left: 20px; }
+  .card ul li { line-height: 1.8; color: #ccc; font-size: 0.92rem; }
+  .card .tag {
+    display: inline-block;
+    background: var(--gold-dim);
+    color: var(--gold-light);
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+  }
+
+  /* ── GRID ── */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+
+  /* ── PERSON CARD ── */
+  .person-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .person-card:hover { transform: translateY(-3px); border-color: var(--gold-dim); }
+  .person-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    background: var(--deep);
+  }
+  .person-img-placeholder {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, var(--highlight), var(--border));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+  }
+  .person-info { padding: 18px; }
+  .person-info h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    color: var(--gold-light);
+    margin-bottom: 6px;
+  }
+  .person-info p { font-size: 0.88rem; color: #bbb; line-height: 1.65; }
+  .person-tag {
+    display: inline-block;
+    background: rgba(192,57,43,0.25);
+    color: var(--red-light);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(192,57,43,0.3);
+  }
+
+  /* ── STYLE CARD ── */
+  .style-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+  .style-card:hover { border-color: var(--gold-dim); }
+  .style-card .style-icon { font-size: 2rem; margin-bottom: 10px; }
+  .style-card h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+  }
+  .style-card p { font-size: 0.85rem; color: #bbb; line-height: 1.65; }
+  .style-card .origin {
+    font-size: 0.72rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  /* ── CREED / MISSION ── */
+  .creed-box {
+    border: 1px solid var(--gold-dim);
+    border-radius: 6px;
+    padding: 32px 36px;
+    background: linear-gradient(135deg, #13110a, #0d0d0a);
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .creed-box::before {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    left: 16px;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 8rem;
+    color: rgba(201,168,76,0.07);
+    line-height: 1;
+  }
+  .creed-box p {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    line-height: 2.2;
+    color: var(--gold-light);
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+  .creed-box h3 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1rem;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* ── HABITS / RULES LIST ── */
+  .numbered-list {
+    list-style: none;
+    padding: 0;
+  }
+  .numbered-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+    color: #ccc;
+    line-height: 1.7;
+  }
+  .numbered-list li:last-child { border-bottom: none; }
+  .num-badge {
+    min-width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--gold-dim);
+    color: var(--gold-light);
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  /* ── ACHIEVEMENT LEVELS ── */
+  .achievement {
+    border-left: 4px solid var(--gold-dim);
+    padding: 20px 20px 20px 24px;
+    background: var(--section-bg);
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 20px;
+  }
+  .achievement h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: var(--gold-light);
+    margin-bottom: 12px;
+  }
+
+  /* ── MINDSET ── */
+  .mindset-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .mindset-num {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 2rem;
+    color: var(--gold-dim);
+    min-width: 48px;
+    line-height: 1;
+  }
+  .mindset-content h4 {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
+  }
+  .mindset-content p { font-size: 0.88rem; color: #bbb; line-height: 1.7; }
+
+  /* ── QUIZ MODE ── */
+  #quiz { display: none; }
+  #quiz.active { display: block; }
+
+  .quiz-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .quiz-header h2 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.8rem;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .quiz-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .progress-bar {
+    flex: 1;
+    max-width: 300px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .flashcard {
+    perspective: 1200px;
+    margin-bottom: 28px;
+    cursor: pointer;
+  }
+  .flashcard-inner {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+    border-radius: 10px;
+  }
+  .flashcard.flipped .flashcard-inner {
+    transform: rotateY(180deg);
+  }
+  .flashcard-front, .flashcard-back {
+    border-radius: 10px;
+    padding: 40px 36px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .flashcard-front {
+    background: linear-gradient(135deg, var(--card), var(--highlight));
+    border: 1px solid var(--gold-dim);
+  }
+  .flashcard-back {
+    background: linear-gradient(135deg, #0f1a0f, #1a2a1a);
+    border: 1px solid #3a5a3a;
+    position: absolute;
+    inset: 0;
+    transform: rotateY(180deg);
+  }
+  .flashcard-category {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    font-family: 'Cinzel', serif;
+    margin-bottom: 16px;
+  }
+  .flashcard-question {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: var(--white);
+    line-height: 1.55;
+    margin-bottom: 20px;
+  }
+  .flashcard-hint {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .flashcard-answer {
+    font-size: 0.95rem;
+    color: #c8e6c9;
+    line-height: 1.75;
+  }
+  .flashcard-answer strong {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: #81c784;
+    margin-bottom: 10px;
+  }
+
+  .quiz-controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .quiz-btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-correct {
+    background: #2e7d32;
+    color: #c8e6c9;
+  }
+  .btn-correct:hover { background: #388e3c; }
+  .btn-incorrect {
+    background: #7f0000;
+    color: #ffcdd2;
+  }
+  .btn-incorrect:hover { background: #b71c1c; }
+  .btn-flip {
+    background: var(--gold-dim);
+    color: var(--gold-light);
+  }
+  .btn-flip:hover { background: var(--gold); color: var(--black); }
+  .btn-shuffle {
+    background: var(--border);
+    color: var(--white);
+  }
+  .btn-shuffle:hover { background: #3a3e50; }
+
+  .score-display {
+    text-align: center;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+  }
+  .score-item { text-align: center; }
+  .score-num {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 2rem;
+    line-height: 1;
+  }
+  .score-num.correct { color: #66bb6a; }
+  .score-num.incorrect { color: var(--red-light); }
+  .score-num.remaining { color: var(--gold); }
+  .score-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Lato', sans-serif;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--black);
+    font-weight: 700;
+  }
+
+  .complete-banner {
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, #0f1a0f, #1a2a1a);
+    border: 1px solid #3a5a3a;
+    border-radius: 10px;
+  }
+  .complete-banner h3 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.6rem;
+    color: #81c784;
+    margin-bottom: 12px;
+  }
+
+  /* ── BELT TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--black);
+  }
+  .timeline-year {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+  }
+  .timeline-text { font-size: 0.92rem; color: #ccc; line-height: 1.6; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .mindset-card { flex-direction: column; }
+    .score-display { gap: 16px; }
+    .flashcard-front, .flashcard-back { padding: 28px 20px; min-height: 200px; }
+  }
+
+  /* ── FADE IN ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section.active, .quiz-container {
+    animation: fadeUp 0.35s ease;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-belt"></div>
+  <h1>Black Belt Excellence</h1>
+  <p class="hero-sub">Freestyle Martial Arts — Black Belt Exam Study Guide</p>
+  <div class="hero-belt"></div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="showSection('dojo')">🏯 Dojo History</button>
+  <button class="nav-btn" onclick="showSection('styles')">🥋 Martial Art Styles</button>
+  <button class="nav-btn" onclick="showSection('people')">⭐ Famous People</button>
+  <button class="nav-btn" onclick="showSection('philosophy')">📖 Philosophy</button>
+  <button class="nav-btn" onclick="showSection('achievements')">🎯 Achievements</button>
+  <button class="nav-btn" onclick="showSection('mindset')">🧠 Mindset & Values</button>
+  <button class="nav-btn quiz-btn" onclick="showSection('quiz')">⚡ Flashcard Quiz</button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION: DOJO HISTORY
+════════════════════════════════════════════════════════ -->
+<section id="dojo" class="section active">
+  <h2 class="section-title">History of Freestyle Martial Arts</h2>
+
+  <div class="creed-box" style="margin-bottom:32px;">
+    <h3>The Dojo</h3>
+    <p>USA Freestyle Martial Arts — San Diego, CA<br>Owner &amp; Founder: Sensei Darren Kikuchi</p>
+  </div>
+
+  <h3 class="subsection-title">Timeline</h3>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-year">1974</div>
+      <div class="timeline-text">Sensei K begins training in martial arts.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1984</div>
+      <div class="timeline-text">Sensei Kikuchi attends San Diego State University.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1986</div>
+      <div class="timeline-text">Age 20 — Begins teaching martial arts at San Diego Parks &amp; Recreation. Still competing in Judo.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1992</div>
+      <div class="timeline-text">Over 120 students attending the Parks &amp; Rec program. Grandmaster Lucky Luciano connects with the dojo.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1993</div>
+      <div class="timeline-text">Sensei Yu begins teaching at the dojo (until 1999). UFC founded.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1994</div>
+      <div class="timeline-text">Kikuchi opens the dojo on <strong>Rosecrans Ave</strong>. Student Creed is developed. First black belt earned by T.J. Roberts.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2002</div>
+      <div class="timeline-text">Mission Statement is officially developed.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2011</div>
+      <div class="timeline-text">Dojo moves to <strong>Sports Arena Blvd</strong>.</div>
+    </div>
+  </div>
+
+  <h3 class="subsection-title">Key People of the Dojo</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="tag">Founder</div>
+      <h3>Sensei Darren Kikuchi (Sensei K)</h3>
+      <ul>
+        <li>Training since 1974 — 7th Dan Black Belt American Karate</li>
+        <li>4th Dan Black Belt World Tae Kwon Do Federation</li>
+        <li>2nd Dan Black Belt West Coast Martial Arts</li>
+        <li>Instructor Certification: Haganah, Muay Thai (Deth Ko Sin), CDT Tactical Master</li>
+        <li>Black Belt — Brazilian Jiu-Jitsu (1999)</li>
+        <li>Cousin was an Olympian in Judo; uncle was national champion</li>
+        <li>His teacher was <strong>Ernie Reyes</strong></li>
+        <li>Trained in wrestling and TKD in high school</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Head Instructor</div>
+      <h3>Sensei Will Jackson</h3>
+      <ul>
+        <li>Born 1984 — started martial arts at age 6 (1991)</li>
+        <li>Started teaching at age 15; La Jolla YMCA at 19</li>
+        <li>3rd Degree Black Belt</li>
+        <li>Founder of Team Freestyle Performance</li>
+        <li>President of Team Freestyle Foundation</li>
+        <li>Learned b-twist in 2 days</li>
+        <li><strong>Sensei Jackson Day: November 17, 2014</strong></li>
+        <li>Favorite Ninja Turtle: Raphael</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Senior Member</div>
+      <h3>Mary Davis</h3>
+      <ul>
+        <li>Third-degree black belt; began martial arts at age <strong>57</strong></li>
+        <li>Received first black belt at age <strong>60</strong></li>
+        <li>Started the <strong>STARS program</strong></li>
+        <li>First of four generations at Freestyle (daughter, granddaughter, great-grandson)</li>
+        <li>Only person to teach adults, kids, cool cats, AND STARS classes</li>
+        <li>Former grammar school teacher</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Instructor</div>
+      <h3>Sensei Jerry Haranco</h3>
+      <ul>
+        <li>Head Instructor before Sensei Jackson</li>
+        <li>4th Degree Black Belt</li>
+        <li>One of the most athletic &amp; acrobatic students ever</li>
+        <li>Grew up in the Philippines; moved to the US at age 11</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Instructor 1993–1999</div>
+      <h3>Sensei Yu</h3>
+      <ul>
+        <li>Taught at the dojo from 1993 to 1999</li>
+        <li>Sergeant in the San Diego Police Department</li>
+        <li>Teaches defensive tactics to recruits</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Family Member</div>
+      <h3>Don Kikuchi (Sensei K's Uncle)</h3>
+      <ul>
+        <li>Judoka — expert in judo</li>
+        <li>Gold medalist, US National Judo Championships — <strong>1953</strong></li>
+        <li>Head instructor, San Jose Buddhist Judo Club, 40+ years</li>
+        <li>Has a scholarship named after him</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">First Black Belt</div>
+      <h3>T.J. (Ted) Roberts</h3>
+      <ul>
+        <li>First black belt earned at Freestyle Martial Arts</li>
+        <li>Played the Masked Rider in Power Rangers crossover</li>
+        <li>Known movies: <em>Magic Kid</em>, <em>Power Within</em></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Grandmaster</div>
+      <h3>Grandmaster Lucky Luciano</h3>
+      <ul>
+        <li>Trained in Shoto-Kan while stationed in Osaka, Japan (US Armed Forces)</li>
+        <li>Studied Aikido under Sensei Harry Isesaka after discharge (1950s)</li>
+        <li>1969: Most Outstanding Martial Arts Man of the Year + Most Outstanding Instructor</li>
+        <li>June 15, 1999: Promoted to Grandmaster in Kajukempo</li>
+        <li>Connected with Freestyle since 1992</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Notable Student</div>
+      <h3>Dr. Stephen Hayden</h3>
+      <ul>
+        <li>Entire family holds black belts from the dojo</li>
+        <li>Doctor in emergency medicine</li>
+        <li>Assistant Medical Dean at UCSD</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Notable Student</div>
+      <h3>Debbie Clawson</h3>
+      <ul>
+        <li>Daughter of Sensei Mary Davis</li>
+        <li>Second of four generations at Freestyle</li>
+        <li>CPA by profession; started as a mom with daughters in the program</li>
+        <li>Used to teach Cool Cats class</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION: MARTIAL ART STYLES
+════════════════════════════════════════════════════════ -->
+<section id="styles" class="section">
+  <h2 class="section-title">Martial Art Styles</h2>
+
+  <div class="grid-3">
+    <div class="style-card">
+      <div class="style-icon">🥋</div>
+      <h3>Karate</h3>
+      <p>Meaning "empty hands." Self-defense and sport using hand/foot techniques. Features linear punches, circular strikes, multiple kicking techniques, kata, and sparring. Includes natural and tension stances.</p>
+      <div class="origin">🇯🇵 Japan / Okinawa</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">🦵</div>
+      <h3>Tae Kwon Do / Tang Soo Do</h3>
+      <p><strong>TKD:</strong> "Art of kicking and punching." Largest martial art in the world. Olympic sport. Known for flying/jump kicks. Founded April 11, 1955 by General Choi Hong Hi.<br><br><strong>Tang Soo Do:</strong> "Art of the knife hand." Founded by Grandmaster Hwang Kee. Chuck Norris is its most famous US practitioner.</p>
+      <div class="origin">🇰🇷 Korea</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">💪</div>
+      <h3>Muay Thai / Kickboxing</h3>
+      <p>"Art of eight limbs." Uses knees and elbows. Developed in 1650 by King Naresuen. Modern rules set by King Rama VII in 1920s. Kru Mark (Deth Ko Sin) is Freestyle's Muay Thai connection.</p>
+      <div class="origin">🇹🇭 Thailand</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">🤼</div>
+      <h3>Judo / BJJ</h3>
+      <p><strong>Judo:</strong> "Gentle way." Created 1882 by Jigoro Kano. Olympic sport. Throws, pins, joint locks. Three phases: Kuzushi, Tsukuri, Kake.<br><br><strong>BJJ:</strong> Founded by Helio Gracie. Ground grappling, throws using leverage. Mitsubishi Maedo brought judo/jiu-jitsu to Brazil in 1910.</p>
+      <div class="origin">🇯🇵/🇧🇷 Japan & Brazil</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">🛡️</div>
+      <h3>Krav Maga / Haganah</h3>
+      <p><strong>Krav Maga:</strong> Offensive Israeli military art. Developed by Imi Lichenfield in 1940s. No ranking system. Official self-defense of Israeli Defense Forces.<br><br><strong>Haganah:</strong> Jewish paramilitary organization founded 1920. Core of the Israel Defense Forces.</p>
+      <div class="origin">🇮🇱 Israel</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">🪃</div>
+      <h3>Escrima / Arnis-Kali</h3>
+      <p>National sport of the Philippines. Weapon-based fighting: sticks, knives, bladed weapons. Close-range strikes and throws. Practitioners train to reduce blinking. Belt ranks 1–10. Dan Inosanto is an important CA practitioner.</p>
+      <div class="origin">🇵🇭 Philippines</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">🐉</div>
+      <h3>Wushu / Kung Fu / Wing Chun</h3>
+      <p><strong>Kung Fu:</strong> "Skill/ability." Many systems. Energetic kicking/punching or subtle techniques. Influenced by Buddhism, Taoism, Confucianism.<br><br><strong>Wing Chun:</strong> Most influential Chinese art. Close-range linear strikes, simultaneous attack/defense. Bruce Lee began here.</p>
+      <div class="origin">🇨🇳 China</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">✊</div>
+      <h3>Kempo / Kajukenbo</h3>
+      <p><strong>Kempo:</strong> First Americanized martial art. Focuses on strikes, chops, punches, kicks. Introduced to Hawaii by James Mitose. Updated by Ed Parker.<br><br><strong>Kajukenbo:</strong> Hybrid of Karate, Judo, Ju-jitsu, Kenpo, Chinese boxing. Developed 1947 by the "Black Belt Society." Goal: invincible on the street.</p>
+      <div class="origin">🇯🇵/🇺🇸 Japan/Hawaii</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">🌊</div>
+      <h3>Aikido / Ninjutsu</h3>
+      <p><strong>Aikido:</strong> Developed by Morihei Ueshiba in 1942. Joint locks and throws. "Way of unifying with life energy." Non-violent philosophy.<br><br><strong>Ninjutsu:</strong> Feudal Japanese art. Espionage, commando warfare. Outlawed 17th century. Stephen Hayes is a famous modern practitioner.</p>
+      <div class="origin">🇯🇵 Japan</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">⚡</div>
+      <h3>Jeet Kune Do</h3>
+      <p>"Way of the intercepting fist." Eclectic hybrid style founded by Bruce Lee in 1967. Meant to free practitioners from one style. Resembles Wing Chun, Arnis, TKD, Wrestling, Thai boxing. Key instructors: Dan Inosanto, Dan Lee, Ted Wong.</p>
+      <div class="origin">🇺🇸 USA (Bruce Lee)</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">🥊</div>
+      <h3>Wrestling / Boxing</h3>
+      <p><strong>Boxing:</strong> First documented match 1681 in Britain. Jack Broughton created first rules in 1743. Modern rules by John Sholto Douglas in 1865. Olympic sport since 1904. Sanctioned bodies: WBC, IBF, WBA.<br><br>Three minute rounds, approved gloves.</p>
+      <div class="origin">🌍 Global</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">☯️</div>
+      <h3>Tai Chi / Yoga</h3>
+      <p>Tai Chi: "Meditation in motion." Mind-body practice from China as a martial art. Low-impact, slow motion. Promotes flow of Qi (life energy) and Yin-Yang balance. Movements named for animal actions.</p>
+      <div class="origin">🇨🇳 China</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">🤸</div>
+      <h3>XMA / Tricking</h3>
+      <p>Extreme Martial Arts — combines traditional martial arts with gymnastics, acrobatics, and freestyle moves. Team Freestyle Performance is Sensei Jackson's performance team.</p>
+      <div class="origin">🇺🇸 USA (Modern)</div>
+    </div>
+    <div class="style-card">
+      <div class="style-icon">🌐</div>
+      <h3>Other Styles</h3>
+      <p><strong>Sambo:</strong> Russian jacket wrestling, 1930s. 20+ wrestling styles. First sport in 1968.<br><br><strong>Savate:</strong> French kickboxing, 16th century. Sailors in Marseilles.<br><br><strong>Capoeira:</strong> Brazilian — kicks, flips, dance. Founded by African slaves 300+ years ago.<br><br><strong>Silat:</strong> Indonesian, ~1000 years old. National defense sport of Indonesia.<br><br><strong>Sumo:</strong> Japanese combat. Force opponent out of 15-foot ring or make them touch the ground.</p>
+      <div class="origin">🌍 Various</div>
+    </div>
+  </div>
+
+  <h3 class="subsection-title">Important Organizations</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="tag">Organization</div>
+      <h3>CDT — Compliance Direction &amp; Takedown</h3>
+      <p>Created by Tom Patiri in 1992. Designed for real-world situations to physically control/disarm a hostile aggressor. Originally for Law Enforcement; now used in hospitals, schools, airlines, religious organizations. Sensei K is a CDT Tactical Master Instructor.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Organization</div>
+      <h3>UFC — Ultimate Fighting Championship</h3>
+      <p>Founded November 1993. Based in Las Vegas. 40+ events per year. Championships are 5 rounds × 5 minutes. Scored by 3 judges on a 10-point system. 31 types of fouls. Victories by submission, KO, TKO, or decision (unanimous, split, majority).</p>
+    </div>
+    <div class="card">
+      <div class="tag">Organization</div>
+      <h3>WTF — World Taekwondo Federation</h3>
+      <p>International governing body for Taekwondo. Member of the Association of Summer Olympic International Federations. Renamed from "WTF" in June 2017.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Organization</div>
+      <h3>IBJJF — International Brazilian Jiu-Jitsu Federation</h3>
+      <p>Hosts the world's biggest BJJ tournaments. Manages ranking points across multiple events. Points calculated by placement × tournament ranking × season year.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Organization</div>
+      <h3>Kodokan</h3>
+      <p>"A place for the study of the way." Headquarters of worldwide Judo. Founded 1882 by Jigoro Kano. Eight-story building in Tokyo. Issues ranks; many judoka register with Kodokan. Vladimir Putin is a registered judoka.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION: FAMOUS PEOPLE
+════════════════════════════════════════════════════════ -->
+<section id="people" class="section">
+  <h2 class="section-title">Famous Martial Artists</h2>
+  <div class="grid-3">
+
+    <div class="person-card">
+      <img class="person-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Bruce_Lee_1973.jpg/440px-Bruce_Lee_1973.jpg" alt="Bruce Lee" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="person-img-placeholder" style="display:none">🥋</div>
+      <div class="person-info">
+        <div class="person-tag">Founder of JKD</div>
+        <h3>Bruce Lee</h3>
+        <p><strong>1940–1973</strong> | Born San Francisco, raised Hong Kong. Began Wing Chun at 13. Founded Jeet Kune Do in 1967. Started as Kato in The Green Hornet (1966). Famous for one-inch punch and one-finger push-ups. Died of cerebral edema (brain swelled 13%) at age 32. Named by Time as one of 100 most influential people of the 20th century.</p>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <img class="person-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Chuck_Norris_May_2015.jpg/440px-Chuck_Norris_May_2015.jpg" alt="Chuck Norris" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="person-img-placeholder" style="display:none">🥊</div>
+      <div class="person-info">
+        <div class="person-tag">Tang Soo Do</div>
+        <h3>Chuck Norris</h3>
+        <p>Studied Tang Soo Do. Discharged from US Air Force. Fighting career 1964–1974. Famously fought Bruce Lee in <em>Enter the Dragon</em> / <em>Way of the Dragon</em>. Defeated multiple times in tournament by Joe Lewis. Most famous US practitioner of Tang Soo Do.</p>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <img class="person-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Jackie_Chan_2017.jpg/440px-Jackie_Chan_2017.jpg" alt="Jackie Chan" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="person-img-placeholder" style="display:none">🎬</div>
+      <div class="person-info">
+        <div class="person-tag">Stunt Legend</div>
+        <h3>Jackie Chan</h3>
+        <p>Born April 7, 1954 — Hong Kong. Had minor roles in two Bruce Lee films. Breakthrough with <em>Drunken Master</em>. Known for performing most of his own stunts. Top grossing films include <em>Rush Hour</em>, <em>Kung Fu Panda</em> (voice of Monkey), and <em>The Forbidden Kingdom</em>.</p>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <img class="person-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Jet_Li_2008.jpg/440px-Jet_Li_2008.jpg" alt="Jet Li" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="person-img-placeholder" style="display:none">🏆</div>
+      <div class="person-info">
+        <div class="person-tag">Wushu Champion</div>
+        <h3>Jet Li</h3>
+        <p>Born 1963 — Beijing, China. Started Wushu at age 8. National Wushu Champion at age 11 (held 5 years). Film debut in <em>Shaolin Temple</em> (1982). Moved to Hong Kong then Hollywood. Appeared with Jackie Chan in <em>The Forbidden Kingdom</em>.</p>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <img class="person-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Muhammad_Ali_NYWTS.jpg/440px-Muhammad_Ali_NYWTS.jpg" alt="Muhammad Ali" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="person-img-placeholder" style="display:none">🥊</div>
+      <div class="person-info">
+        <div class="person-tag">Boxing Legend</div>
+        <h3>Muhammad Ali</h3>
+        <p>Born January 17, 1942 — Died 2016. 1960 Olympic Gold Medal (Rome). Retired 1981. Changed name from Cassius Clay. Famous for opposition to Vietnam draft (stripped of passport, banned 3 years). Received MLK Award 1970. "Float like a butterfly, sting like a bee." Bruce Lee was inspired by his footwork. Developed Parkinson's later in life.</p>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <div class="person-img-placeholder">🥋</div>
+      <div class="person-info">
+        <div class="person-tag">Kickboxing Pioneer</div>
+        <h3>Joe Lewis</h3>
+        <p>1944–2012 — Born North Carolina. Retired <strong>undefeated</strong> in heavyweight kickboxing. Defeated Chuck Norris multiple times in tournament. Trained with Bruce Lee 1967–1968. "Father of Kickboxing" in the western world. Signature move: fast left leg sidekick. Paved the way for modern MMA. Passed away from brain cancer 2012.</p>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <div class="person-img-placeholder">🤼</div>
+      <div class="person-info">
+        <div class="person-tag">BJJ Founders</div>
+        <h3>The Gracie Family</h3>
+        <p>From Rio de Janeiro, Brazil. Founders of Brazilian Jiu-Jitsu. Helio Gracie (1913–2009) still practicing at age 90. Carlos Gracie co-founded the art. Rorion Gracie was one of 5 founders of UFC (1993). Brought BJJ to the US in the 1980s. UFC gave BJJ credibility globally.</p>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <div class="person-img-placeholder">🥊</div>
+      <div class="person-info">
+        <div class="person-tag">Boxing</div>
+        <h3>Floyd Mayweather</h3>
+        <p>Born February 24, 1977. Competed 1996–2007 and 2009–2015. Retired with a perfect record of <strong>50–0</strong>. Considered one of the greatest defensive boxers in history.</p>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <img class="person-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Ronda_Rousey_2015.jpg/440px-Ronda_Rousey_2015.jpg" alt="Ronda Rousey" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="person-img-placeholder" style="display:none">🏅</div>
+      <div class="person-info">
+        <div class="person-tag">MMA / Judo</div>
+        <h3>Ronda Rousey</h3>
+        <p>Born February 1, 1987 — Riverside, CA. First American woman to medal in Olympic Judo. First female fighter in UFC Hall of Fame. UFC debut 2015, WWE 2018. Her mother was a decorated Judoka. Struggled to speak until age 6 — required intensive speech therapy. Retired from Judo at 21; began MMA at 22.</p>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <div class="person-img-placeholder">🎓</div>
+      <div class="person-info">
+        <div class="person-tag">TKD Pioneer</div>
+        <h3>Jhoon Rhee</h3>
+        <p>Born January 7, 1932 — Korea. "Father of American Taekwondo." Arrived in the US in the 1950s and introduced TKD to America. Met Bruce Lee and Ed Parker at the 1964 Long Beach International Karate Championships.</p>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <div class="person-img-placeholder">🥇</div>
+      <div class="person-info">
+        <div class="person-tag">Kenpo Founder</div>
+        <h3>Ed Parker</h3>
+        <p>Founder of American Kenpo. Organized the <strong>first Long Beach International Karate Championships</strong> where Bruce Lee, Jhoon Rhee, and Ed Parker met. Revised Kenpo techniques into a logical progression of basics, self-defense, and freestyle.</p>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <div class="person-img-placeholder">🥷</div>
+      <div class="person-info">
+        <div class="person-tag">Ninjutsu Expert</div>
+        <h3>Stephen Hayes</h3>
+        <p>Traveled to Japan in 1970s. Trained under Masaaki Hatsumi (34th Grandmaster of Ninjutsu, founder of Bujinkan). 1985: Black Belt Hall of Fame — Instructor of the Year. 1993: Judan (10th-degree black belt) in Ninjutsu. 1997: Founded <strong>To-Shin Do</strong>. 1990s: Served as the Dalai Lama's personal protection escort.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION: PHILOSOPHY
+════════════════════════════════════════════════════════ -->
+<section id="philosophy" class="section">
+  <h2 class="section-title">Philosophy, Creeds &amp; Core Values</h2>
+
+  <div class="grid-2">
+    <div class="creed-box">
+      <h3>Mission Statement</h3>
+      <p>
+        Empower our students to achieve their personal best in life.<br>
+        Encourage education, strong morals, and great character.<br>
+        Enrich lives through excellent martial arts instruction.<br>
+        Inspire others with honor, integrity, and loyalty.<br>
+        We are committed to make a difference in the world.
+      </p>
+    </div>
+    <div class="creed-box">
+      <h3>Student Creed</h3>
+      <p>
+        I am developing myself in a positive manner:<br>
+        mentally, physically, and spiritually.<br>
+        I am developing confidence, discipline, and respect.<br>
+        I am using my martial arts to inspire a<br>
+        kind and compassionate world.<br>
+        I am dedicated and motivated to<br>
+        "Achieve Black Belt Excellence."
+      </p>
+    </div>
+  </div>
+
+  <h3 class="subsection-title">Concept of Black Belt Excellence</h3>
+  <div class="card">
+    <p>Always doing your personal best in everything that you do in life — <strong>mentally, physically, and spiritually.</strong> "Our dojo is unique because we put our values into action and practice them rather than just talking about them."</p>
+  </div>
+
+  <h3 class="subsection-title">Dale Carnegie — 5 Golden Rules</h3>
+  <div class="card">
+    <ol class="numbered-list">
+      <li><span class="num-badge">1</span><div><strong>Smile</strong> — A simple smile communicates warmth and welcome.</div></li>
+      <li><span class="num-badge">2</span><div><strong>Remember the person's name</strong> — People love to hear their own name.</div></li>
+      <li><span class="num-badge">3</span><div><strong>Give honest and sincere appreciation</strong> — Make others feel important, and do it sincerely.</div></li>
+      <li><span class="num-badge">4</span><div><strong>Become genuinely interested in other people</strong> — Be a good listener; encourage others to talk about themselves.</div></li>
+      <li><span class="num-badge">5</span><div><strong>Don't criticize, condemn or complain</strong> — Handle people with positive approaches.</div></li>
+    </ol>
+  </div>
+
+  <h3 class="subsection-title">Stephen Covey — 7 Habits of Highly Effective People</h3>
+  <div class="card">
+    <ol class="numbered-list">
+      <li><span class="num-badge">1</span><div><strong>Be Proactive</strong> — Control what you can; don't waste energy on what you cannot. Changes come from the inside out.</div></li>
+      <li><span class="num-badge">2</span><div><strong>Begin with the End in Mind</strong> — Imagine your own eulogy and live a life you'd be proud of. Develop a personal mission statement.</div></li>
+      <li><span class="num-badge">3</span><div><strong>Put First Things First</strong> — Do what matters most first.</div></li>
+      <li><span class="num-badge">4</span><div><strong>Think Win-Win</strong> — For someone to win, another doesn't have to lose. Combining talents gets you farther.</div></li>
+      <li><span class="num-badge">5</span><div><strong>Seek First to Understand, Then to be Understood</strong> — Listen deeply before speaking.</div></li>
+      <li><span class="num-badge">6</span><div><strong>Synergize</strong> — The whole is greater than the sum of its parts. Creative cooperation.</div></li>
+      <li><span class="num-badge">7</span><div><strong>Sharpen the Saw</strong> — Keep improving and training yourself. Constant renewal.</div></li>
+    </ol>
+  </div>
+
+  <h3 class="subsection-title">Sensei Sayings &amp; Aphorisms</h3>
+  <div class="grid-2">
+    <div class="card"><p>"Time is the most valuable currency."</p></div>
+    <div class="card"><p>"Pain is inevitable. Suffering is optional."</p></div>
+    <div class="card"><p>"Many false steps were made by standing still."</p></div>
+    <div class="card"><p>"You miss 100% of the shots you don't take."</p></div>
+    <div class="card"><p>"Talent does not equal success. Effort equals success."</p></div>
+    <div class="card"><p>"Unsuccessful people drown in puddles."</p></div>
+    <div class="card"><p>"You are not chained to your current capabilities."</p></div>
+    <div class="card"><p>"To be successful you need: Talent, intelligence, resilience, and competitive spirit."</p></div>
+    <div class="card"><p><em>"A Black Belt is a White Belt who never gave up."</em></p></div>
+    <div class="card"><p>"A picture speaks a thousand words, but action speaks a thousand pictures." — Grandmaster Rhee</p></div>
+  </div>
+
+  <h3 class="subsection-title">Concept of the Belts</h3>
+  <div class="card">
+    <p>Each belt represents a stage of growth in mind, body, and spirit. The journey from white belt to black belt is not just physical — it reflects personal development, discipline, and character. Achieving Black Belt Excellence means doing your personal best in all aspects of life.</p>
+    <br>
+    <p><strong>NOTE:</strong> "Do" (pronounced "doe") in Japanese means "the way" or "the journey." Examples: Judo = Gentle Way, Taekwondo = Way of Foot and Fist, Aikido = Way of Unifying with Life Energy.</p>
+    <br>
+    <p><strong>Dan / Degree:</strong> These mean the same thing — both refer to the level of a black belt rank.</p>
+    <br>
+    <p><strong>"Jitsu/Jutsu"</strong> means "art" or "technique."</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION: ACHIEVEMENTS
+════════════════════════════════════════════════════════ -->
+<section id="achievements" class="section">
+  <h2 class="section-title">Body · Mind · Spirit Achievements</h2>
+  <div class="card" style="margin-bottom:28px;">
+    <p>The three achievements may be earned beginning at the <strong>adult Red Belt level</strong>. They must be earned in the order listed: Body → Mind → Spirit.</p>
+  </div>
+
+  <div class="achievement">
+    <h3>🏋️ The Body</h3>
+    <p style="color:#bbb; margin-bottom:14px;">Being physically healthy and fit means having flexibility, strength, cardiovascular endurance, balance, agility, and good nutritional habits.</p>
+    <p style="color:#888; font-style:italic; margin-bottom:16px;">"We are what we repeatedly do. Excellence then, is not an act, but a habit." — Aristotle</p>
+    <p style="color: var(--gold-light); font-family:'Cinzel',serif; font-size:0.85rem; margin-bottom:8px;">Requirements:</p>
+    <ul style="color:#bbb; padding-left:20px; line-height:2;">
+      <li>Take 1+ of the 5 fitness components and improve it. Track over <strong>two months</strong> with pictures, measurements, and/or journals.</li>
+      <li>Quiz on <strong>human anatomy</strong> (basic)</li>
+      <li>Quiz on the <strong>striking areas on the body</strong></li>
+    </ul>
+  </div>
+
+  <div class="achievement" style="border-left-color: #4a7abf;">
+    <h3>🧠 The Mind</h3>
+    <p style="color:#bbb; margin-bottom:14px;">The mind achievement is the beginning to great achievements in life.</p>
+    <p style="color:#888; font-style:italic; margin-bottom:16px;">"A picture speaks a thousand words, but action speaks a thousand pictures." — Grandmaster Rhee</p>
+    <p style="color: var(--gold-light); font-family:'Cinzel',serif; font-size:0.85rem; margin-bottom:8px;">Requirements:</p>
+    <ul style="color:#bbb; padding-left:20px; line-height:2;">
+      <li>Read <strong>"7 Habits of Highly Effective People"</strong> by Stephen Covey</li>
+      <li>Be able to <strong>verbally defend yourself</strong></li>
+    </ul>
+  </div>
+
+  <div class="achievement" style="border-left-color: #4a8c4a;">
+    <h3>✨ The Spirit</h3>
+    <p style="color:#bbb; margin-bottom:14px;">Our spirit brings together the mind and body. The journey for each of us is different.</p>
+    <p style="color:#888; font-style:italic; margin-bottom:16px;">"Do" (doe) in Japanese means the way — let us enjoy each and every moment because life is a journey.</p>
+    <p style="color: var(--gold-light); font-family:'Cinzel',serif; font-size:0.85rem; margin-bottom:8px;">Requirements:</p>
+    <ul style="color:#bbb; padding-left:20px; line-height:2;">
+      <li>Read <strong>"Tuesdays with Morrie"</strong> by Mitch Albom</li>
+      <li>Find a student and <strong>mentor them for 3 months</strong> (get a letter of recommendation from the student and their parent)</li>
+    </ul>
+  </div>
+
+  <div class="card" style="background: linear-gradient(135deg, #13110a, #0d0d0a); border-color: var(--gold-dim); text-align: center; padding: 32px;">
+    <p style="font-family:'Cinzel Decorative',serif; font-size:1.1rem; color: var(--gold-light);">"A Black Belt is a White Belt who never gave up."</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION: MINDSET
+════════════════════════════════════════════════════════ -->
+<section id="mindset" class="section">
+  <h2 class="section-title">Mindset, Values &amp; School Culture</h2>
+
+  <h3 class="subsection-title">The Five Mindset Checklist</h3>
+
+  <div class="mindset-card">
+    <div class="mindset-num">1</div>
+    <div class="mindset-content">
+      <h4>Friendliest Place in San Diego</h4>
+      <p>Be the first to say Hello! Smile. Be sincerely interested in all.</p>
+    </div>
+  </div>
+  <div class="mindset-card">
+    <div class="mindset-num">2</div>
+    <div class="mindset-content">
+      <h4>Cleanest Martial Arts School in San Diego</h4>
+      <p>It's everyone's job to keep the dojo clean and safe.</p>
+    </div>
+  </div>
+  <div class="mindset-card">
+    <div class="mindset-num">3</div>
+    <div class="mindset-content">
+      <h4>We Only Teach GREAT Classes — Never Just Good</h4>
+      <p>Keep our students: Smiling, Sweating, Learning.</p>
+    </div>
+  </div>
+  <div class="mindset-card">
+    <div class="mindset-num">4</div>
+    <div class="mindset-content">
+      <h4>Excellent Student &amp; Parent Communication</h4>
+      <p>Verbally, Constant Contact, social media, bulletin board, paper, calls. Special events, student progress, belt exams, schedule changes, etc.</p>
+    </div>
+  </div>
+  <div class="mindset-card">
+    <div class="mindset-num">5</div>
+    <div class="mindset-content">
+      <h4>Quality Time on New Student Acquisition — Every Day</h4>
+      <p>Encourage friends, siblings, co-workers and parents to join. Look for opportunities at school, work, sports, activities, and social functions to promote Freestyle Martial Arts.</p>
+    </div>
+  </div>
+
+  <h3 class="subsection-title">Key Terms &amp; Definitions</h3>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Do (道)</h3>
+      <p>Pronounced "doe." Japanese word meaning "The Way" or "The Journey." Used in art names: Judo (gentle way), Taekwondo (way of foot and fist), Aikido (way of unifying with life energy).</p>
+    </div>
+    <div class="card">
+      <h3>Jitsu / Jutsu (術)</h3>
+      <p>Meaning "art" or "technique." Used in names like: Ju-Jitsu (art of flexibility), Ninjutsu (ninja art).</p>
+    </div>
+    <div class="card">
+      <h3>Dan / Degree</h3>
+      <p>These mean the same thing — both refer to the rank/level of a black belt. (e.g., 3rd Dan = 3rd Degree Black Belt)</p>
+    </div>
+    <div class="card">
+      <h3>Judoka</h3>
+      <p>A person who practices or is an expert in Judo.</p>
+    </div>
+    <div class="card">
+      <h3>Kata</h3>
+      <p>Formal practice sequences / forms. A set pattern of movements used for practice and demonstration.</p>
+    </div>
+    <div class="card">
+      <h3>Randori</h3>
+      <p>Free exercise / sparring in Judo. As opposed to formal kata practice.</p>
+    </div>
+    <div class="card">
+      <h3>Kuzushi / Tsukuri / Kake</h3>
+      <p>The three phases of Judo: <strong>Kuzushi</strong> = unbalancing the opponent; <strong>Tsukuri</strong> = positioning into a dominant pose; <strong>Kake</strong> = execution of the throw or technique.</p>
+    </div>
+    <div class="card">
+      <h3>Qi (Chi / Ki)</h3>
+      <p>An energy force thought to flow through the body. Tai Chi and Aikido promote the flow and balance of Qi. Yin and Yang — opposing elements kept in harmony.</p>
+    </div>
+    <div class="card">
+      <h3>Dojo</h3>
+      <p>A martial arts training hall or school. Literally means "place of the way."</p>
+    </div>
+    <div class="card">
+      <h3>Sensei</h3>
+      <p>Japanese term meaning "teacher" or "one who has come before." Used as a title of respect for a martial arts instructor.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     QUIZ / FLASHCARD SECTION
+════════════════════════════════════════════════════════ -->
+<section id="quiz" class="section">
+<div class="quiz-container">
+  <div class="quiz-header">
+    <h2>⚡ Flashcard Quiz</h2>
+    <p style="color:var(--muted); font-size:0.9rem;">Click a card to reveal the answer. Mark correct or incorrect to track your progress.</p>
+  </div>
+
+  <div class="category-filter" id="categoryFilter">
+    <button class="filter-btn active" onclick="filterCategory('all', this)">All Topics</button>
+    <button class="filter-btn" onclick="filterCategory('Dojo History', this)">Dojo History</button>
+    <button class="filter-btn" onclick="filterCategory('Famous People', this)">Famous People</button>
+    <button class="filter-btn" onclick="filterCategory('Martial Art Styles', this)">Styles</button>
+    <button class="filter-btn" onclick="filterCategory('Philosophy', this)">Philosophy</button>
+    <button class="filter-btn" onclick="filterCategory('Terms', this)">Terms</button>
+    <button class="filter-btn" onclick="filterCategory('Achievements', this)">Achievements</button>
+  </div>
+
+  <div class="score-display">
+    <div class="score-item">
+      <div class="score-num correct" id="scoreCorrect">0</div>
+      <div class="score-label">Correct</div>
+    </div>
+    <div class="score-item">
+      <div class="score-num incorrect" id="scoreIncorrect">0</div>
+      <div class="score-label">Incorrect</div>
+    </div>
+    <div class="score-item">
+      <div class="score-num remaining" id="scoreRemaining">0</div>
+      <div class="score-label">Remaining</div>
+    </div>
+  </div>
+
+  <div class="quiz-progress">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span class="progress-text" id="progressText">0 / 0</span>
+  </div>
+
+  <div id="flashcardArea"></div>
+
+  <div class="quiz-controls">
+    <button class="quiz-btn btn-flip" onclick="flipCard()">👁 Reveal Answer</button>
+    <button class="quiz-btn btn-correct" onclick="markAnswer(true)">✓ Got It</button>
+    <button class="quiz-btn btn-incorrect" onclick="markAnswer(false)">✗ Still Learning</button>
+    <button class="quiz-btn btn-shuffle" onclick="shuffleDeck()">🔀 Shuffle</button>
+    <button class="quiz-btn btn-shuffle" onclick="resetQuiz()">↺ Reset</button>
+  </div>
+</div>
+</section>
+
+<script>
+// ── NAVIGATION ──
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const btns = document.querySelectorAll('.nav-btn');
+  const labels = ['dojo','styles','people','philosophy','achievements','mindset','quiz'];
+  const idx = labels.indexOf(id);
+  if (idx >= 0) btns[idx].classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ── FLASHCARD DATA ──
+const allCards = [
+  // DOJO HISTORY
+  { cat:'Dojo History', q:'When did Sensei Kikuchi open the Freestyle Martial Arts dojo, and where?', a:'1994 — on Rosecrans Ave in San Diego. It later moved to Sports Arena Blvd in 2011.' },
+  { cat:'Dojo History', q:'When did Sensei K begin training in martial arts?', a:'1974 — he has been training since 1974.' },
+  { cat:'Dojo History', q:'Who was the first black belt earned at Freestyle Martial Arts?', a:'T.J. (Ted) Roberts — he also starred as the Masked Rider in the Power Rangers crossover event.' },
+  { cat:'Dojo History', q:'When was the Student Creed developed?', a:'1994 — the same year the dojo opened on Rosecrans Ave.' },
+  { cat:'Dojo History', q:'When was the Mission Statement developed?', a:'2002.' },
+  { cat:'Dojo History', q:'How many students were in the Parks & Rec program by 1992?', a:'Over 120 students.' },
+  { cat:'Dojo History', q:'What are Sensei K\'s black belt credentials?', a:'7th Dan American Karate, 4th Dan World TKD Federation, 2nd Dan West Coast Martial Arts, Black Belt BJJ (1999). Also certified in Haganah, Muay Thai (Deth Ko Sin), and CDT Tactical Master.' },
+  { cat:'Dojo History', q:'Who was Sensei Kikuchi\'s TKD teacher?', a:'Ernie Reyes — also famous for his performance team.' },
+  { cat:'Dojo History', q:'What is special about Mary Davis?', a:'She began martial arts at age 57, earned her black belt at 60, started the STARS program, and was the first of four generations to attend Freestyle. Only person to teach adults, kids, cool cats, AND STARS classes.' },
+  { cat:'Dojo History', q:'What are Sensei Will Jackson\'s credentials?', a:'3rd Degree Black Belt, Head Instructor, Founder of Team Freestyle Performance, President of Team Freestyle Foundation. Born 1984, started MA at age 6, teaching at age 15. Sensei Jackson Day: November 17, 2014.' },
+  { cat:'Dojo History', q:'What did Don Kikuchi achieve in Judo?', a:'Gold medalist at the US National Judo Championships in 1953. Head instructor of San Jose Buddhist Judo Club for 40+ years. Has a scholarship named after him.' },
+  { cat:'Dojo History', q:'What is Grandmaster Lucky Luciano\'s role in Kajukempo?', a:'Promoted to Grandmaster on June 15, 1999 in Las Vegas. Voted Most Outstanding Martial Arts Man of the Year in 1969. Connected with Freestyle since 1992.' },
+  { cat:'Dojo History', q:'Who was the head instructor before Sensei Jackson?', a:'Sensei Jerry Haranco — 4th Degree Black Belt, grew up in the Philippines, moved to the US at age 11. One of the most athletic students they\'ve ever had.' },
+  { cat:'Dojo History', q:'What are Sensei Yu\'s notable roles?', a:'Taught at Freestyle from 1993–1999. Sergeant in the San Diego Police Department. Teaches defensive tactics to recruits.' },
+
+  // FAMOUS PEOPLE
+  { cat:'Famous People', q:'When was Bruce Lee born and what is his birth name?', a:'Born November 27, 1940. Birth name: Lee Jun-fan. Born in Chinese Hospital, San Francisco. Raised in Hong Kong.' },
+  { cat:'Famous People', q:'What is Jeet Kune Do and who founded it?', a:'Founded by Bruce Lee in 1967. Meaning "Way of the Intercepting Fist." An eclectic hybrid style that frees practitioners from being limited to one style.' },
+  { cat:'Famous People', q:'How did Bruce Lee die?', a:'July 20, 1973 — cerebral edema (brain swelling). His brain swelled 13% due to an allergic reaction to a pain killer. He was 32 years old. Died just weeks before Enter the Dragon\'s premier.' },
+  { cat:'Famous People', q:'What was Bruce Lee\'s first major role?', a:'Kato, the Green Hornet\'s sidekick in The Green Hornet TV show (1966–1967).' },
+  { cat:'Famous People', q:'What martial art did Chuck Norris study?', a:'Tang Soo Do. Discharged from US Air Force. Fighting career 1964–1974. Famously fought Bruce Lee. Defeated multiple times by Joe Lewis.' },
+  { cat:'Famous People', q:'What are Jackie Chan\'s noteworthy facts?', a:'Born April 7, 1954 — Hong Kong. Had minor roles in two Bruce Lee films. Breakthrough with Drunken Master. Famous for performing his own stunts. Voice of Monkey in Kung Fu Panda.' },
+  { cat:'Famous People', q:'What are Jet Li\'s martial arts achievements?', a:'Born 1963 — Beijing. Started Wushu at age 8. National Wushu Champion at age 11 (held title 5 years). Film debut in Shaolin Temple (1982).' },
+  { cat:'Famous People', q:'What is Muhammad Ali famous for beyond boxing?', a:'1960 Olympic Gold Medal. Famous opposition to Vietnam War — stripped of passport, banned from boxing 3 years. Changed name from Cassius Clay. Received MLK Award 1970. "Float like a butterfly, sting like a bee." Bruce Lee was inspired by his footwork.' },
+  { cat:'Famous People', q:'Who is called the "Father of Kickboxing" in the western world?', a:'Joe Lewis (1944–2012). Born North Carolina. Retired UNDEFEATED in heavyweight kickboxing. Trained with Bruce Lee 1967–1968. Signature: fast left leg sidekick. Passed away from brain cancer.' },
+  { cat:'Famous People', q:'Who founded Brazilian Jiu-Jitsu and what is their legacy?', a:'The Gracie family — Helio Gracie and Carlos Gracie. From Rio de Janeiro. Helio practiced until age 90. Rorion Gracie was one of 5 founders of UFC (1993). BJJ came to the US in the 1980s.' },
+  { cat:'Famous People', q:'What is Ronda Rousey known for?', a:'Born February 1, 1987 — Riverside, CA. First American woman to medal in Olympic Judo. First female fighter in UFC Hall of Fame. Her mother was a decorated Judoka. Struggled to speak until age 6.' },
+  { cat:'Famous People', q:'What did Jhoon Rhee accomplish?', a:'"Father of American Taekwondo." Born January 7, 1932. Arrived in US in the 1950s and introduced TKD to America. Met Bruce Lee and Ed Parker at the 1964 Long Beach Karate Championships.' },
+  { cat:'Famous People', q:'Who is Stephen Hayes and what is his claim to fame?', a:'Expert in Ninjutsu. Trained under Masaaki Hatsumi (34th Grandmaster). 1985: Black Belt Hall of Fame Instructor of Year. 1993: 10th-degree black belt. 1997: Founded To-Shin Do. Served as Dalai Lama\'s personal security escort.' },
+  { cat:'Famous People', q:'What was Floyd Mayweather\'s record?', a:'Retired 50–0. Competed 1996–2007 and 2009–2015.' },
+  { cat:'Famous People', q:'Who organized the first Long Beach International Karate Championships?', a:'Ed Parker — Founder of American Kenpo. This is where Bruce Lee, Jhoon Rhee, and Ed Parker all met.' },
+
+  // MARTIAL ART STYLES
+  { cat:'Martial Art Styles', q:'What does "Jeet Kune Do" mean and who founded it?', a:'"Way of the Intercepting Fist." Founded by Bruce Lee in 1967. Hybrid style. Key instructors: Dan Inosanto, Dan Lee, Ted Wong.' },
+  { cat:'Martial Art Styles', q:'What is Muay Thai known as and who developed its modern rules?', a:'"Art of eight limbs." Uses knees and elbows. Developed in 1650 by King Naresuen. Modern rules by King Rama VII in 1920s after a death in the ring.' },
+  { cat:'Martial Art Styles', q:'When and where did Judo originate, and who founded it?', a:'Created in Japan in 1882 by Jigoro Kano. It is an Olympic sport. Three phases: Kuzushi, Tsukuri, Kake. Practitioners called judoka.' },
+  { cat:'Martial Art Styles', q:'What is the national martial art of the Philippines?', a:'Arnis (also known as Kali or Escrima). Emphasizes weapon-based fighting with sticks, knives, bladed weapons. Belt ranks 1–10. Dan Inosanto is an important CA practitioner.' },
+  { cat:'Martial Art Styles', q:'When was Taekwondo officially founded and by whom?', a:'April 11, 1955 by General Choi Hong Hi (founder of Oh Do Kwan). "Way of the Foot and Fist." Largest martial art in the world. Olympic sport. Known for flying/jump kicks.' },
+  { cat:'Martial Art Styles', q:'What is Krav Maga and where did it originate?', a:'Developed by Imi Lichenfield in 1940s Israel. Offensive martial art. Official self-defense of Israeli Defense Forces. No ranking system. Originally taught for Haganah (Jewish underground army).' },
+  { cat:'Martial Art Styles', q:'What is Capoeira and how did it originate?', a:'Brazilian martial art, 300+ years old. Founded by African slaves from Angola in the 16th century. Uses kicks, flips, cartwheels, backflips. Based on kicks because slaves\' hands were shackled. Became official sport in 1972.' },
+  { cat:'Martial Art Styles', q:'What is the difference between Judo and BJJ?', a:'Judo: created by Jigoro Kano, 1882 Japan. Olympic sport. Focus on throws, pins, joint locks. BJJ: founded by Helio Gracie in Brazil. Predominantly ground grappling. Mitsubishi Maedo brought judo/jiu-jitsu to Brazil in 1910 then taught the Gracie family.' },
+  { cat:'Martial Art Styles', q:'What is Aikido and who developed it?', a:'Developed by Morihei Ueshiba in 1942. Joint locks and throws. "Way of unifying with life energy." Encourages NON-VIOLENCE. Goal: defend yourself while protecting your attacker from injury.' },
+  { cat:'Martial Art Styles', q:'What is Wing Chun and what is its significance?', a:'Subset of Kung Fu. Most influential Chinese martial art in the modern era. Close-range linear strikes — simultaneous attack and defense. Originally from Shaolin monks. Bruce Lee began with Wing Chun.' },
+  { cat:'Martial Art Styles', q:'What is Kajukenbo and where did it start?', a:'Japanese-American hybrid. Combines Karate, Tang Soo Do, Judo, Ju-jitsu, Kempo, and Chinese boxing. Originated 1947, taught in Hawaii\'s Palomas settlements. Created by "the Black Belt Society." Goal: invincible on the street.' },
+  { cat:'Martial Art Styles', q:'What are the rules of Sumo wrestling?', a:'Force your opponent out of the 15-foot diameter "dohyo" (sumo ring) OR make your opponent touch the ground with any body part other than the soles of the feet. Originated in Japan.' },
+  { cat:'Martial Art Styles', q:'Who founded the UFC and when?', a:'Founded November 1993. Rorion Gracie was one of the 5 founders. Based in Las Vegas. 40+ events per year, championships are 5 rounds × 5 minutes. Scored by 3 judges on a 10-point system.' },
+  { cat:'Martial Art Styles', q:'What is CDT and who created it?', a:'Compliance Direction & Takedown. Created by Tom Patiri in 1992. Designed for real-world physical control of hostile aggressors. Originally for Law Enforcement; now used in hospitals, schools, airlines.' },
+  { cat:'Martial Art Styles', q:'What is the Kodokan?', a:'Headquarters of worldwide Judo, founded 1882 by Jigoro Kano. Eight-story building in Tokyo. Ko = "to lecture," Do = "way," Kan = "a public building." Vladimir Putin is a registered judoka.' },
+  { cat:'Martial Art Styles', q:'What is Savate and where did it originate?', a:'French kickboxing. Originated in France in the 16th century. Sailors in Marseilles developed stretching kicks before long voyages. Some influence from Burma, China, and Thailand.' },
+  { cat:'Martial Art Styles', q:'When did Kickboxing start and where?', a:'Started in Japan in 1960, then practiced in America in 1970. Competitors wear boxing gloves and throw punches like boxing, but kick with bare feet like karate.' },
+  { cat:'Martial Art Styles', q:'What is Tang Soo Do and who is its most famous US practitioner?', a:'"Art of the knife hand." Korean martial art, composite hard and soft style. Founded by Grandmaster Hwang Kee. Not competitive — great combat application. Most famous US practitioner: Chuck Norris.' },
+
+  // PHILOSOPHY
+  { cat:'Philosophy', q:'What is the Freestyle Martial Arts Mission Statement?', a:'Empower our students to achieve their personal best in life. Encourage education, strong morals, and great character. Enrich lives through excellent martial arts instruction. Inspire others with honor, integrity, and loyalty. We are committed to make a difference in the world.' },
+  { cat:'Philosophy', q:'What is the Student Creed?', a:'I am developing myself in a positive manner: mentally, physically, and spiritually. I am developing confidence, discipline, and respect. I am using my martial arts to inspire a kind and compassionate world. I am dedicated and motivated to "Achieve Black Belt Excellence."' },
+  { cat:'Philosophy', q:'What is the Concept of Black Belt Excellence?', a:'Always doing your personal best in everything that you do in life — mentally, physically, and spiritually.' },
+  { cat:'Philosophy', q:'Name all 5 of Dale Carnegie\'s Golden Rules.', a:'1) Smile  2) Remember the person\'s name  3) Give honest and sincere appreciation  4) Become genuinely interested in other people  5) Don\'t criticize, condemn, or complain.' },
+  { cat:'Philosophy', q:'Name all 7 of Stephen Covey\'s habits.', a:'1) Be Proactive  2) Begin with the End in Mind  3) Put First Things First  4) Think Win-Win  5) Seek First to Understand, Then to be Understood  6) Synergize  7) Sharpen the Saw.' },
+  { cat:'Philosophy', q:'What does "Sharpen the Saw" mean (Habit 7)?', a:'Go back and keep training yourself. Seek constant improvement. Even if it seems time consuming, you\'ll save time in the future by what you\'ve gained in skill.' },
+  { cat:'Philosophy', q:'What does "Think Win-Win" mean (Habit 4)?', a:'For someone to win, another doesn\'t have to lose. Often combining talents gets you farther than if you\'d worked alone.' },
+  { cat:'Philosophy', q:'What does "Do" mean in Japanese?', a:'Pronounced "doe." Means "the way" or "the journey." Examples: Judo = gentle way, Taekwondo = way of foot and fist, Aikido = way of unifying with life energy.' },
+  { cat:'Philosophy', q:'What is the difference between Dan and Degree?', a:'They mean the same thing — both refer to the rank/level of a black belt. 3rd Dan = 3rd Degree Black Belt.' },
+
+  // TERMS
+  { cat:'Terms', q:'What does "Jitsu / Jutsu" mean?', a:'"Art" or "technique." Used in: Ju-Jitsu (art of flexibility), Ninjutsu (ninja art).' },
+  { cat:'Terms', q:'What is a Judoka?', a:'A person who practices or is an expert in Judo.' },
+  { cat:'Terms', q:'What is Kata?', a:'Formal practice sequences / forms. A set pattern of movements used for practice and demonstration.' },
+  { cat:'Terms', q:'What is Randori?', a:'Free exercise / sparring in Judo — as opposed to formal kata practice.' },
+  { cat:'Terms', q:'Explain Kuzushi, Tsukuri, and Kake.', a:'The three phases of Judo: Kuzushi = unbalancing the opponent; Tsukuri = positioning into a dominant pose; Kake = execution of the throw or technique.' },
+  { cat:'Terms', q:'What is Qi (Chi/Ki)?', a:'An energy force thought to flow through the body. Tai Chi and Aikido promote proper flow of Qi. Related to Yin and Yang balance.' },
+  { cat:'Terms', q:'What is a Dojo?', a:'A martial arts training hall or school. Literally means "place of the way."' },
+  { cat:'Terms', q:'What is a Sensei?', a:'Japanese term meaning "teacher" or "one who has come before." Used as a title of respect for a martial arts instructor.' },
+  { cat:'Terms', q:'What does "Karate" mean?', a:'"Empty hands" — reflecting the art\'s focus on unarmed self-defense using hand and foot techniques.' },
+  { cat:'Terms', q:'What does "Judo" mean?', a:'"Gentle way" — reflecting the principle of using minimal effort and maximum efficiency.' },
+  { cat:'Terms', q:'What does "Aikido" mean?', a:'"Way of unifying with life energy" — synthesizing philosophy and religious beliefs with practical self-defense.' },
+
+  // ACHIEVEMENTS
+  { cat:'Achievements', q:'What are the three Body-Mind-Spirit achievements?', a:'Body: improve fitness components + anatomy quizzes. Mind: read 7 Habits + verbal self-defense. Spirit: read Tuesdays with Morrie + mentor a student for 3 months with letter of recommendation.' },
+  { cat:'Achievements', q:'When can you begin earning the Body-Mind-Spirit achievements?', a:'Beginning at the adult Red Belt level. Must be earned in order: Body → Mind → Spirit.' },
+  { cat:'Achievements', q:'What does the Body achievement require?', a:'1) Improve 1+ of the 5 fitness components (flexibility, strength, endurance, balance, agility) tracked over 2 months with pictures/measurements/journals.  2) Quiz on human anatomy.  3) Quiz on striking areas on the body.' },
+  { cat:'Achievements', q:'What does the Mind achievement require?', a:'1) Read "7 Habits of Highly Effective People" by Stephen Covey.  2) Be able to verbally defend yourself.' },
+  { cat:'Achievements', q:'What does the Spirit achievement require?', a:'1) Read "Tuesdays with Morrie" by Mitch Albom.  2) Mentor a student for 3 months and get a letter of recommendation from both the student and their parent.' },
+  { cat:'Achievements', q:'What is the Aristotle quote used in the Body achievement?', a:'"We are what we repeatedly do. Excellence then, is not an act, but a habit."' },
+  { cat:'Achievements', q:'What is the Grandmaster Rhee quote used in the Mind achievement?', a:'"A picture speaks a thousand words, but action speaks a thousand pictures."' },
+];
+
+// ── QUIZ STATE ──
+let deck = [];
+let currentIndex = 0;
+let correct = 0;
+let incorrect = 0;
+let isFlipped = false;
+let activeCategory = 'all';
+
+function buildDeck() {
+  deck = (activeCategory === 'all' ? [...allCards] : allCards.filter(c => c.cat === activeCategory));
+  currentIndex = 0;
+  correct = 0;
+  incorrect = 0;
+  isFlipped = false;
+  updateUI();
+}
+
+function filterCategory(cat, btn) {
+  activeCategory = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildDeck();
+}
+
+function shuffleDeck() {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  currentIndex = 0;
+  isFlipped = false;
+  updateUI();
+}
+
+function resetQuiz() {
+  buildDeck();
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  const fc = document.getElementById('currentCard');
+  if (fc) {
+    if (isFlipped) fc.classList.add('flipped');
+    else fc.classList.remove('flipped');
+  }
+}
+
+function markAnswer(wasCorrect) {
+  if (currentIndex >= deck.length) return;
+  if (wasCorrect) correct++; else incorrect++;
+  currentIndex++;
+  isFlipped = false;
+  updateUI();
+}
+
+function updateUI() {
+  const remaining = deck.length - currentIndex;
+  document.getElementById('scoreCorrect').textContent = correct;
+  document.getElementById('scoreIncorrect').textContent = incorrect;
+  document.getElementById('scoreRemaining').textContent = remaining;
+  const done = correct + incorrect;
+  const total = deck.length;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = done + ' / ' + total;
+
+  const area = document.getElementById('flashcardArea');
+  if (currentIndex >= deck.length) {
+    const pctRight = total > 0 ? Math.round((correct / total) * 100) : 0;
+    area.innerHTML = `
+      <div class="complete-banner">
+        <h3>🎖 Deck Complete!</h3>
+        <p style="color:#bbb; margin:12px 0;">You scored <strong style="color:#81c784;">${correct} / ${total}</strong> (${pctRight}%)</p>
+        <p style="color:var(--muted); font-size:0.88rem; margin-top:8px;">Click Reset or Shuffle to practice again.</p>
+      </div>`;
+    return;
+  }
+  const card = deck[currentIndex];
+  area.innerHTML = `
+    <div class="flashcard" id="currentCard" onclick="flipCard()">
+      <div class="flashcard-inner">
+        <div class="flashcard-front">
+          <div class="flashcard-category">${card.cat}</div>
+          <div class="flashcard-question">${card.q}</div>
+          <div class="flashcard-hint">Tap card or click "Reveal Answer"</div>
+        </div>
+        <div class="flashcard-back">
+          <div class="flashcard-category">${card.cat}</div>
+          <div class="flashcard-answer"><strong>Answer:</strong>${card.a}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── INIT ──
+buildDeck();
+</script>
+</body>
+</html>
