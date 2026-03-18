@@ -1874,10 +1874,33 @@ function ttsHideBar() {
 }
 
 // ── ELEVENLABS SPEAK ──
+// Safari iOS requires Audio to be created & played synchronously
+// inside a user gesture. We pre-create and unlock a silent Audio
+// object on first tap, then reuse it for all ElevenLabs playback.
+let safariUnlocked = false;
+let safariAudioCtx = null;
+
+function unlockSafariAudio() {
+  if (safariUnlocked) return;
+  safariUnlocked = true;
+  // Create and immediately suspend an AudioContext to satisfy Safari
+  try {
+    safariAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    safariAudioCtx.resume();
+  } catch(e) {}
+  // Also play a silent buffer so Safari marks this session as user-initiated
+  try {
+    const silent = new Audio("data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA");
+    silent.volume = 0.001;
+    silent.play().catch(() => {});
+  } catch(e) {}
+}
+
 async function ttsElevenLabs(text, label, mode) {
   ttsStop();
   ttsShowBar(label, mode);
-  // Chunk text if over 2500 chars (EL free tier limit per request)
+
+  // Chunk text at sentence boundaries (~2400 chars per request)
   const chunks = [];
   const maxLen = 2400;
   let remaining = text;
@@ -1888,14 +1911,19 @@ async function ttsElevenLabs(text, label, mode) {
     chunks.push(remaining.slice(0, cut + 1));
     remaining = remaining.slice(cut + 1).trim();
   }
+
+  // Pre-fetch all chunks in parallel, then play sequentially
+  // This way Safari only sees play() calls, not awaited fetches
   try {
+    const audioUrls = [];
     for (let i = 0; i < chunks.length; i++) {
-      if (!ttsUseEL) break; // stopped
-      const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ttsVoiceId}`, {
+      if (!ttsUseEL) { ttsHideBar(); return; }
+      const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ttsVoiceId}/stream`, {
         method: 'POST',
         headers: {
           'xi-api-key': ttsApiKey,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'audio/mpeg'
         },
         body: JSON.stringify({
           text: chunks[i],
@@ -1905,20 +1933,35 @@ async function ttsElevenLabs(text, label, mode) {
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err.detail?.message || 'ElevenLabs API error');
+        throw new Error(err.detail?.message || `API error ${res.status}`);
       }
       const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
+      audioUrls.push(URL.createObjectURL(blob));
+    }
+
+    // Now play all chunks sequentially
+    for (let i = 0; i < audioUrls.length; i++) {
+      if (!ttsUseEL) { audioUrls.forEach(u => URL.revokeObjectURL(u)); ttsHideBar(); return; }
       await new Promise((resolve, reject) => {
-        ttsAudio = new Audio(url);
-        ttsAudio.onended = () => { URL.revokeObjectURL(url); resolve(); };
-        ttsAudio.onerror = reject;
-        ttsAudio.play();
+        ttsAudio = new Audio(audioUrls[i]);
+        ttsAudio.preload = 'auto';
+        ttsAudio.onended = () => { URL.revokeObjectURL(audioUrls[i]); resolve(); };
+        ttsAudio.onerror = (e) => { URL.revokeObjectURL(audioUrls[i]); reject(e); };
+        // Play and handle Safari's NotAllowedError gracefully
+        const playPromise = ttsAudio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.warn('Audio play blocked:', err);
+            reject(err);
+          });
+        }
       });
     }
   } catch(e) {
     console.warn('ElevenLabs error, falling back to browser TTS:', e.message);
-    ttsBrowserSpeak(text, label, mode);
+    // Show user-friendly error in bar before falling back
+    document.getElementById('ttsMode').textContent = 'Using browser voice (check API key)';
+    setTimeout(() => ttsBrowserSpeak(text, label, mode), 500);
     return;
   }
   ttsHideBar();
@@ -1942,6 +1985,7 @@ function ttsBrowserSpeak(text, label, mode) {
 
 // ── MAIN SPEAK ENTRY POINT ──
 function ttsSpeak(text, label, mode) {
+  unlockSafariAudio(); // must be called synchronously inside user gesture
   if (ttsUseEL && ttsApiKey) {
     ttsElevenLabs(text, label, mode);
   } else {
