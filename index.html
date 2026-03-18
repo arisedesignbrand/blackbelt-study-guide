@@ -1958,10 +1958,16 @@ async function ttsElevenLabs(text, label, mode) {
       });
     }
   } catch(e) {
-    console.warn('ElevenLabs error, falling back to browser TTS:', e.message);
-    // Show user-friendly error in bar before falling back
-    document.getElementById('ttsMode').textContent = 'Using browser voice (check API key)';
-    setTimeout(() => ttsBrowserSpeak(text, label, mode), 500);
+    console.warn('ElevenLabs error:', e.message);
+    // Show the actual error so user can diagnose
+    document.getElementById('ttsBar').classList.add('visible');
+    document.getElementById('ttsMode').textContent = '⚠️ ElevenLabs Error:';
+    document.getElementById('ttsTitle').textContent = e.message || 'Unknown error — check API key';
+    document.getElementById('ttsPauseBtn').style.display = 'none';
+    setTimeout(() => {
+      document.getElementById('ttsPauseBtn').style.display = '';
+      ttsBrowserSpeak(text, label, mode);
+    }, 4000);
     return;
   }
   ttsHideBar();
