@@ -3,871 +3,706 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Black Belt Excellence — Freestyle Martial Arts Study Guide</title>
+<title>Black Belt Excellence — Freestyle Martial Arts</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --black: #0a0a0a;
-    --deep: #111318;
-    --card: #181c24;
-    --border: #2a2e38;
-    --gold: #c9a84c;
-    --gold-light: #e8c96a;
-    --gold-dim: #7a6230;
-    --red: #c0392b;
-    --red-light: #e74c3c;
-    --white: #f5f0e8;
-    --muted: #8a8a9a;
-    --section-bg: #13161e;
-    --highlight: #1e2233;
-  }
+:root {
+  --black: #0a0a0a;
+  --deep: #111318;
+  --card: #181c24;
+  --border: #2a2e38;
+  --white: #f5f0e8;
+  --muted: #8a8a9a;
+  --section-bg: #13161e;
+  --highlight: #1e2233;
+  /* Gold theme (Oral) */
+  --gold: #c9a84c;
+  --gold-light: #e8c96a;
+  --gold-dim: #7a6230;
+  /* Steel theme (Skills) */
+  --steel: #4a90b8;
+  --steel-light: #6db4d8;
+  --steel-dim: #2a5a78;
+  /* Red */
+  --red: #c0392b;
+  --red-light: #e74c3c;
+  /* Active accent — swaps based on mode */
+  --accent: var(--gold);
+  --accent-light: var(--gold-light);
+  --accent-dim: var(--gold-dim);
+}
+.mode-skills {
+  --accent: var(--steel);
+  --accent-light: var(--steel-light);
+  --accent-dim: var(--steel-dim);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── HERO ── */
+.hero {
+  position: relative;
+  text-align: center;
+  padding: 48px 20px 36px;
+  background: radial-gradient(ellipse at 50% 0%, #1a1500 0%, var(--black) 70%);
+  border-bottom: 1px solid var(--gold-dim);
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(201,168,76,0.03) 40px,rgba(201,168,76,0.03) 41px);
+}
+.hero-belt {
+  display: inline-block;
+  background: linear-gradient(90deg,#000,var(--gold),#000);
+  height: 4px; width: 160px;
+  margin-bottom: 20px;
+  border-radius: 3px;
+}
+.hero h1 {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1.3rem, 4vw, 2.4rem);
+  color: var(--gold-light);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-shadow: 0 0 40px rgba(201,168,76,0.4);
+  margin-bottom: 8px;
+}
+.hero-sub {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.65rem, 1.8vw, 0.85rem);
+  color: var(--muted);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
 
-  body {
-    background: var(--black);
-    color: var(--white);
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+/* ── TOP NAV (3 modes) ── */
+.top-nav {
+  background: #0d0f14;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+}
+.top-nav-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--muted);
+  padding: 14px 8px;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.6rem, 2vw, 0.75rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.top-nav-btn:hover { color: var(--white); }
+.top-nav-btn.active-dash {
+  color: var(--white);
+  border-bottom-color: var(--muted);
+}
+.top-nav-btn.active-oral {
+  color: var(--gold-light);
+  border-bottom-color: var(--gold);
+}
+.top-nav-btn.active-skills {
+  color: var(--steel-light);
+  border-bottom-color: var(--steel);
+}
 
-  /* ── HERO ── */
-  .hero {
-    position: relative;
-    text-align: center;
-    padding: 80px 20px 60px;
-    background: radial-gradient(ellipse at 50% 0%, #1a1500 0%, var(--black) 70%);
-    border-bottom: 1px solid var(--gold-dim);
-    overflow: hidden;
+/* ── SUB NAV ── */
+.sub-nav {
+  background: var(--deep);
+  border-bottom: 1px solid var(--border);
+}
+.sub-nav-inner {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 16px;
+}
+.sub-nav-hamburger {
+  display: none;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  color: var(--accent-light);
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 12px 16px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+}
+.ham-icon { display: flex; flex-direction: column; gap: 4px; }
+.ham-icon span { display: block; width: 20px; height: 2px; background: var(--accent); border-radius: 2px; transition: all 0.3s; }
+.sub-nav-hamburger.open .ham-icon span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.sub-nav-hamburger.open .ham-icon span:nth-child(2) { opacity: 0; }
+.sub-nav-hamburger.open .ham-icon span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.sub-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 7px 13px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.sub-btn:hover, .sub-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--black);
+  font-weight: 700;
+}
+.sub-btn.quiz-btn {
+  background: linear-gradient(135deg,var(--red),#8b0000);
+  border-color: var(--red);
+  color: #fff;
+  font-weight: 700;
+}
+.sub-btn.quiz-btn:hover, .sub-btn.quiz-btn.active {
+  background: var(--red-light);
+  border-color: var(--red-light);
+}
+@media (max-width: 700px) {
+  .sub-nav-hamburger { display: flex; }
+  .sub-nav-inner { display: none; flex-direction: column; gap: 0; padding: 0 0 8px; }
+  .sub-nav-inner.open { display: flex; }
+  .sub-btn {
+    border: none; border-top: 1px solid var(--border);
+    border-radius: 0; padding: 13px 20px;
+    font-size: 0.8rem; text-align: left; width: 100%;
   }
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      45deg, transparent, transparent 40px,
-      rgba(201,168,76,0.03) 40px, rgba(201,168,76,0.03) 41px
-    );
-  }
-  .hero-belt {
-    display: inline-block;
-    background: linear-gradient(90deg, #000, var(--gold), #000);
-    height: 6px;
-    width: 200px;
-    margin-bottom: 32px;
-    border-radius: 3px;
-  }
-  .hero h1 {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: clamp(1.6rem, 5vw, 3.2rem);
-    color: var(--gold-light);
-    letter-spacing: 0.08em;
-    line-height: 1.2;
-    text-shadow: 0 0 40px rgba(201,168,76,0.4);
-    margin-bottom: 12px;
-  }
-  .hero-sub {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(0.75rem, 2vw, 1rem);
-    color: var(--muted);
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    margin-bottom: 40px;
-  }
+  .sub-btn.active { border-left: 4px solid var(--accent); padding-left: 16px; }
+  .sub-btn.quiz-btn { margin: 8px 14px; border-radius: 4px; border: none; width: calc(100% - 28px); text-align: center; }
+}
 
-  /* ── NAV TABS ── */
-  .nav {
-    background: var(--deep);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
+/* ── SECTIONS ── */
+.section { display: none; padding: 36px 20px 100px; max-width: 1100px; margin: 0 auto; }
+.section.active { display: block; animation: fadeUp 0.3s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
 
-  /* Desktop nav row */
-  .nav-inner {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 14px 20px;
-  }
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.1rem, 3vw, 1.7rem);
+  color: var(--accent-light);
+  letter-spacing: 0.1em;
+  border-left: 4px solid var(--accent);
+  padding-left: 14px;
+  margin-bottom: 10px;
+}
+.section-read-bar {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.read-btn {
+  background: transparent;
+  border: 1px solid var(--accent-dim);
+  color: var(--accent-light);
+  padding: 7px 14px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.read-btn:hover { background: var(--accent-dim); color: var(--white); }
+.subsection-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  color: var(--accent-light);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin: 32px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
 
-  /* Hamburger button — hidden on desktop */
-  .nav-hamburger {
-    display: none;
-    width: 100%;
-    background: transparent;
-    border: none;
-    color: var(--gold-light);
-    font-family: 'Cinzel', serif;
-    font-size: 0.85rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 14px 20px;
-    cursor: pointer;
-    text-align: left;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .nav-hamburger .ham-icon {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  .nav-hamburger .ham-icon span {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background: var(--gold);
-    border-radius: 2px;
-    transition: all 0.3s;
-  }
-  .nav-hamburger.open .ham-icon span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-  }
-  .nav-hamburger.open .ham-icon span:nth-child(2) {
-    opacity: 0;
-  }
-  .nav-hamburger.open .ham-icon span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-  }
+/* ── CARDS ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 22px;
+  margin-bottom: 18px;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--accent-dim); }
+.card h3 { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--accent-light); margin-bottom: 10px; }
+.card p { line-height: 1.75; color: #ccc; font-size: 0.93rem; }
+.card ul { padding-left: 18px; }
+.card ul li { line-height: 1.85; color: #ccc; font-size: 0.9rem; }
+.tag {
+  display: inline-block;
+  background: var(--accent-dim);
+  color: var(--accent-light);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 2px;
+  margin-bottom: 8px;
+}
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit,minmax(290px,1fr)); gap: 18px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit,minmax(230px,1fr)); gap: 14px; }
 
-  .nav-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 8px 16px;
-    font-family: 'Cinzel', serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.2s;
-  }
-  .nav-btn:hover, .nav-btn.active {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--black);
-    font-weight: 700;
-  }
-  .nav-btn.quiz-btn {
-    background: linear-gradient(135deg, var(--red), #8b0000);
-    border-color: var(--red);
-    color: #fff;
-    font-weight: 700;
-  }
-  .nav-btn.quiz-btn:hover, .nav-btn.quiz-btn.active {
-    background: var(--red-light);
-    border-color: var(--red-light);
-    color: #fff;
-  }
+/* ── PERSON CARDS ── */
+.person-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.person-card:hover { transform: translateY(-3px); border-color: var(--accent-dim); }
+.person-img { width: 100%; height: 190px; object-fit: cover; object-position: top; display: block; background: var(--deep); }
+.person-img-placeholder {
+  width: 100%; height: 190px;
+  background: linear-gradient(135deg,var(--highlight),var(--border));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem;
+}
+.person-info { padding: 16px; }
+.person-info h3 { font-family: 'Cinzel', serif; font-size: 0.95rem; color: var(--accent-light); margin-bottom: 6px; }
+.person-info p { font-size: 0.86rem; color: #bbb; line-height: 1.65; }
+.person-tag {
+  display: inline-block;
+  background: rgba(192,57,43,0.2); color: var(--red-light);
+  font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 2px; margin-bottom: 7px;
+  border: 1px solid rgba(192,57,43,0.3);
+}
 
-  /* Mobile nav */
-  @media (max-width: 700px) {
-    .nav-hamburger {
-      display: flex;
-    }
-    .nav-inner {
-      display: none;
-      flex-direction: column;
-      gap: 0;
-      padding: 0 0 8px;
-    }
-    .nav-inner.open {
-      display: flex;
-    }
-    .nav-btn {
-      border: none;
-      border-top: 1px solid var(--border);
-      border-radius: 0;
-      padding: 14px 24px;
-      font-size: 0.82rem;
-      text-align: left;
-      width: 100%;
-    }
-    .nav-btn.active {
-      border-left: 4px solid var(--gold);
-      padding-left: 20px;
-    }
-    .nav-btn.quiz-btn {
-      margin: 8px 16px;
-      border-radius: 4px;
-      border: none;
-      width: calc(100% - 32px);
-      text-align: center;
-    }
-  }
+/* ── STYLE CARD ── */
+.style-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; padding: 18px;
+  transition: border-color 0.2s;
+}
+.style-card:hover { border-color: var(--accent-dim); }
+.style-card .style-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.style-card h3 { font-family: 'Cinzel', serif; font-size: 0.9rem; color: var(--accent-light); margin-bottom: 7px; }
+.style-card p { font-size: 0.83rem; color: #bbb; line-height: 1.65; }
+.style-card .origin { font-size: 0.7rem; color: var(--accent-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 7px; }
 
-  /* ── SECTIONS ── */
-  .section { display: none; padding: 40px 20px 80px; max-width: 1100px; margin: 0 auto; }
-  .section.active { display: block; }
+/* ── CREED BOX ── */
+.creed-box {
+  border: 1px solid var(--accent-dim);
+  border-radius: 6px; padding: 28px 32px;
+  background: linear-gradient(135deg,#13110a,#0d0d0a);
+  margin-bottom: 22px; position: relative; overflow: hidden;
+}
+.creed-box::before {
+  content: '"'; position: absolute; top: -20px; left: 14px;
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 7rem; color: rgba(201,168,76,0.06); line-height: 1;
+}
+.creed-box p {
+  font-family: 'Cinzel', serif; font-size: 0.95rem;
+  line-height: 2.1; color: var(--accent-light);
+  text-align: center; letter-spacing: 0.05em;
+}
+.creed-box h3 {
+  font-family: 'Cinzel Decorative', serif; font-size: 0.9rem;
+  color: var(--accent); text-align: center;
+  margin-bottom: 18px; letter-spacing: 0.2em; text-transform: uppercase;
+}
 
-  .section-title {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
-    color: var(--gold);
-    letter-spacing: 0.1em;
-    border-left: 4px solid var(--gold);
-    padding-left: 16px;
-    margin-bottom: 32px;
-  }
+/* ── NUMBERED LIST ── */
+.numbered-list { list-style: none; padding: 0; }
+.numbered-list li {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+  font-size: 0.92rem; color: #ccc; line-height: 1.7;
+}
+.numbered-list li:last-child { border-bottom: none; }
+.num-badge {
+  min-width: 30px; height: 30px; border-radius: 50%;
+  background: var(--accent-dim); color: var(--accent-light);
+  font-family: 'Cinzel', serif; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.82rem; flex-shrink: 0;
+}
 
-  .subsection-title {
-    font-family: 'Cinzel', serif;
-    font-size: 1rem;
-    color: var(--gold-light);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin: 36px 0 16px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
+/* ── ACHIEVEMENT ── */
+.achievement {
+  border-left: 4px solid var(--accent-dim); padding: 18px 18px 18px 22px;
+  background: var(--section-bg); border-radius: 0 6px 6px 0; margin-bottom: 18px;
+}
+.achievement h3 { font-family: 'Cinzel', serif; font-size: 1.05rem; color: var(--accent-light); margin-bottom: 10px; }
 
-  /* ── CARDS ── */
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 24px;
-    margin-bottom: 20px;
-    transition: border-color 0.2s;
-  }
-  .card:hover { border-color: var(--gold-dim); }
-  .card h3 {
-    font-family: 'Cinzel', serif;
-    font-size: 1.05rem;
-    color: var(--gold-light);
-    margin-bottom: 12px;
-  }
-  .card p { line-height: 1.75; color: #ccc; font-size: 0.95rem; }
-  .card ul { padding-left: 20px; }
-  .card ul li { line-height: 1.8; color: #ccc; font-size: 0.92rem; }
-  .card .tag {
-    display: inline-block;
-    background: var(--gold-dim);
-    color: var(--gold-light);
-    font-size: 0.68rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    border-radius: 2px;
-    margin-bottom: 10px;
-  }
+/* ── MINDSET CARD ── */
+.mindset-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; padding: 18px 22px; margin-bottom: 14px;
+  display: flex; gap: 18px; align-items: flex-start;
+}
+.mindset-num {
+  font-family: 'Cinzel Decorative', serif; font-size: 1.8rem;
+  color: var(--accent-dim); min-width: 44px; line-height: 1;
+}
+.mindset-content h4 { font-family: 'Cinzel', serif; color: var(--accent-light); margin-bottom: 7px; font-size: 0.92rem; }
+.mindset-content p { font-size: 0.86rem; color: #bbb; line-height: 1.7; }
+@media (max-width: 600px) { .mindset-card { flex-direction: column; } }
 
-  /* ── GRID ── */
-  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+/* ── TIMELINE ── */
+.timeline { position: relative; padding-left: 30px; }
+.timeline::before {
+  content: ''; position: absolute; left: 9px; top: 0; bottom: 0;
+  width: 2px; background: linear-gradient(to bottom,var(--accent-dim),transparent);
+}
+.timeline-item { position: relative; margin-bottom: 24px; }
+.timeline-item::before {
+  content: ''; position: absolute; left: -25px; top: 5px;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--black);
+}
+.timeline-year { font-family: 'Cinzel', serif; font-size: 0.78rem; color: var(--accent); letter-spacing: 0.1em; }
+.timeline-text { font-size: 0.9rem; color: #ccc; line-height: 1.6; }
 
-  /* ── PERSON CARD ── */
-  .person-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-    transition: transform 0.2s, border-color 0.2s;
-  }
-  .person-card:hover { transform: translateY(-3px); border-color: var(--gold-dim); }
-  .person-img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    object-position: top center;
-    display: block;
-    background: var(--deep);
-  }
-  .person-img-placeholder {
-    width: 100%;
-    height: 200px;
-    background: linear-gradient(135deg, var(--highlight), var(--border));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-  }
-  .person-info { padding: 18px; }
-  .person-info h3 {
-    font-family: 'Cinzel', serif;
-    font-size: 1rem;
-    color: var(--gold-light);
-    margin-bottom: 6px;
-  }
-  .person-info p { font-size: 0.88rem; color: #bbb; line-height: 1.65; }
-  .person-tag {
-    display: inline-block;
-    background: rgba(192,57,43,0.25);
-    color: var(--red-light);
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 2px 7px;
-    border-radius: 2px;
-    margin-bottom: 8px;
-    border: 1px solid rgba(192,57,43,0.3);
-  }
+/* ── CARD READ BUTTON ── */
+.card-read-btn {
+  background: transparent; border: none; color: var(--accent-dim);
+  font-size: 1rem; cursor: pointer; padding: 3px; float: right;
+  margin-left: 7px; transition: color 0.2s; line-height: 1;
+}
+.card-read-btn:hover { color: var(--accent-light); }
 
-  /* ── STYLE CARD ── */
-  .style-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 20px;
-    transition: border-color 0.2s;
-  }
-  .style-card:hover { border-color: var(--gold-dim); }
-  .style-card .style-icon { font-size: 2rem; margin-bottom: 10px; }
-  .style-card h3 {
-    font-family: 'Cinzel', serif;
-    font-size: 0.95rem;
-    color: var(--gold-light);
-    margin-bottom: 8px;
-  }
-  .style-card p { font-size: 0.85rem; color: #bbb; line-height: 1.65; }
-  .style-card .origin {
-    font-size: 0.72rem;
-    color: var(--gold-dim);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-top: 8px;
-  }
+/* ── COLLAPSIBLE PARTS ── */
+.collapsible-header {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; padding: 14px 18px;
+  background: var(--section-bg); border: 1px solid var(--border);
+  border-radius: 6px; margin-bottom: 4px;
+  transition: border-color 0.2s, background 0.2s;
+  user-select: none;
+}
+.collapsible-header:hover { border-color: var(--accent-dim); background: var(--highlight); }
+.collapsible-header h3 {
+  font-family: 'Cinzel', serif; font-size: 0.95rem;
+  color: var(--accent-light); display: flex; align-items: center; gap: 10px;
+}
+.collapsible-header .pts {
+  font-size: 0.7rem; color: var(--muted); font-family: 'Lato',sans-serif;
+  font-weight: 400; letter-spacing: 0.05em;
+}
+.collapsible-arrow {
+  color: var(--accent-dim); font-size: 1rem;
+  transition: transform 0.3s; flex-shrink: 0;
+}
+.collapsible-header.open .collapsible-arrow { transform: rotate(180deg); }
+.collapsible-body {
+  display: none; padding: 4px 0 16px;
+  animation: fadeUp 0.25s ease;
+}
+.collapsible-body.open { display: block; }
 
-  /* ── CREED / MISSION ── */
-  .creed-box {
-    border: 1px solid var(--gold-dim);
-    border-radius: 6px;
-    padding: 32px 36px;
-    background: linear-gradient(135deg, #13110a, #0d0d0a);
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
-  }
-  .creed-box::before {
-    content: '"';
-    position: absolute;
-    top: -20px;
-    left: 16px;
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 8rem;
-    color: rgba(201,168,76,0.07);
-    line-height: 1;
-  }
-  .creed-box p {
-    font-family: 'Cinzel', serif;
-    font-size: 1rem;
-    line-height: 2.2;
-    color: var(--gold-light);
-    text-align: center;
-    letter-spacing: 0.05em;
-  }
-  .creed-box h3 {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 1rem;
-    color: var(--gold);
-    text-align: center;
-    margin-bottom: 20px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-  }
+/* ── ANCHOR LINKS ── */
+.anchor-grid {
+  display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap: 10px; margin-bottom: 28px;
+}
+.anchor-btn {
+  background: var(--section-bg); border: 1px solid var(--border);
+  border-radius: 6px; padding: 14px 16px; cursor: pointer;
+  text-decoration: none; display: block;
+  transition: border-color 0.2s, background 0.2s;
+}
+.anchor-btn:hover { border-color: var(--accent-dim); background: var(--highlight); }
+.anchor-btn .part-label {
+  font-family: 'Cinzel', serif; font-size: 0.68rem;
+  color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase;
+}
+.anchor-btn .part-name { font-size: 0.88rem; color: #ccc; margin-top: 3px; }
+.anchor-btn .part-pts { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
 
-  /* ── HABITS / RULES LIST ── */
-  .numbered-list {
-    list-style: none;
-    padding: 0;
-  }
-  .numbered-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.95rem;
-    color: #ccc;
-    line-height: 1.7;
-  }
-  .numbered-list li:last-child { border-bottom: none; }
-  .num-badge {
-    min-width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--gold-dim);
-    color: var(--gold-light);
-    font-family: 'Cinzel', serif;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.85rem;
-    flex-shrink: 0;
-  }
+/* ── DASHBOARD ── */
+.dash-countdown {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  margin-bottom: 28px;
+}
+.countdown-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 24px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.countdown-card.oral { border-color: var(--gold-dim); }
+.countdown-card.skills { border-color: var(--steel-dim); }
+.countdown-card .exam-label {
+  font-family: 'Cinzel', serif; font-size: 0.7rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.countdown-card.oral .exam-label { color: var(--gold); }
+.countdown-card.skills .exam-label { color: var(--steel); }
+.countdown-card .exam-date { font-size: 0.8rem; color: var(--muted); margin-bottom: 14px; }
+.countdown-units { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.countdown-unit { text-align: center; min-width: 44px; }
+.countdown-num {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  line-height: 1;
+}
+.countdown-card.oral .countdown-num { color: var(--gold-light); }
+.countdown-card.skills .countdown-num { color: var(--steel-light); }
+.countdown-unit-label { font-size: 0.6rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
+@media (max-width: 480px) {
+  .dash-countdown { grid-template-columns: 1fr; }
+}
 
-  /* ── ACHIEVEMENT LEVELS ── */
-  .achievement {
-    border-left: 4px solid var(--gold-dim);
-    padding: 20px 20px 20px 24px;
-    background: var(--section-bg);
-    border-radius: 0 6px 6px 0;
-    margin-bottom: 20px;
-  }
-  .achievement h3 {
-    font-family: 'Cinzel', serif;
-    font-size: 1.1rem;
-    color: var(--gold-light);
-    margin-bottom: 12px;
-  }
+/* ── THIS WEEK CARD ── */
+.this-week-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 24px; margin-bottom: 24px;
+}
+.this-week-card h3 {
+  font-family: 'Cinzel', serif; font-size: 1rem;
+  color: var(--gold-light); margin-bottom: 6px;
+}
+.this-week-card .week-meta {
+  font-size: 0.75rem; color: var(--muted);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 18px;
+}
+.checklist-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.checklist-item:last-child { border-bottom: none; }
+.checklist-item input[type=checkbox] {
+  width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px;
+  accent-color: var(--gold); cursor: pointer;
+}
+.checklist-item label {
+  font-size: 0.9rem; color: #ccc; line-height: 1.5; cursor: pointer;
+}
+.checklist-item.done label {
+  text-decoration: line-through; color: var(--muted);
+}
 
-  /* ── MINDSET ── */
-  .mindset-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 20px 24px;
-    margin-bottom: 16px;
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-  }
-  .mindset-num {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 2rem;
-    color: var(--gold-dim);
-    min-width: 48px;
-    line-height: 1;
-  }
-  .mindset-content h4 {
-    font-family: 'Cinzel', serif;
-    color: var(--gold-light);
-    margin-bottom: 8px;
-    font-size: 0.95rem;
-    letter-spacing: 0.1em;
-  }
-  .mindset-content p { font-size: 0.88rem; color: #bbb; line-height: 1.7; }
+/* ── WEEKLY CURRICULUM ── */
+.week-block {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; margin-bottom: 10px; overflow: hidden;
+}
+.week-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px; cursor: pointer;
+  transition: background 0.2s;
+}
+.week-header:hover { background: var(--highlight); }
+.week-badge {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif; font-size: 0.8rem; font-weight: 700;
+  flex-shrink: 0;
+}
+.week-badge.current { background: var(--accent); color: var(--black); }
+.week-badge.done { background: #2e7d32; color: #c8e6c9; }
+.week-badge.future { background: var(--border); color: var(--muted); }
+.week-info { flex: 1; }
+.week-info .week-label { font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--white); }
+.week-info .week-dates { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+.week-progress { font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+.week-progress.all-done { color: #66bb6a; }
+.week-body { display: none; padding: 4px 18px 16px; border-top: 1px solid var(--border); }
+.week-body.open { display: block; }
 
-  /* ── QUIZ MODE ── */
-  #quiz { display: none; }
-  #quiz.active { display: block; }
+/* ── QUIZ ── */
+.quiz-container { max-width: 700px; margin: 0 auto; padding: 32px 20px 100px; }
+.quiz-header { text-align: center; margin-bottom: 32px; }
+.quiz-header h2 { font-family: 'Cinzel Decorative', serif; font-size: 1.6rem; color: var(--accent); margin-bottom: 6px; }
+.quiz-progress { display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 10px; }
+.progress-bar { flex: 1; max-width: 280px; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg,var(--accent-dim),var(--accent)); border-radius: 3px; transition: width 0.4s ease; }
+.progress-text { font-family: 'Cinzel', serif; font-size: 0.75rem; color: var(--muted); }
+.score-display { display: flex; gap: 20px; justify-content: center; margin-bottom: 20px; }
+.score-item { text-align: center; }
+.score-num { font-family: 'Cinzel Decorative', serif; font-size: 1.8rem; line-height: 1; }
+.score-num.correct { color: #66bb6a; }
+.score-num.incorrect { color: var(--red-light); }
+.score-num.remaining { color: var(--accent); }
+.score-label { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; }
+.category-filter { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-bottom: 24px; }
+.filter-btn {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--muted); padding: 5px 12px;
+  font-size: 0.72rem; border-radius: 20px;
+  cursor: pointer; transition: all 0.2s; font-family: 'Lato',sans-serif;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: var(--accent); border-color: var(--accent);
+  color: var(--black); font-weight: 700;
+}
+.flashcard { perspective: 1200px; margin-bottom: 24px; cursor: pointer; }
+.flashcard-inner {
+  position: relative; transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); border-radius: 10px;
+}
+.flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+.flashcard-front, .flashcard-back {
+  border-radius: 10px; padding: 36px 30px; min-height: 200px;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; text-align: center; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.flashcard-front { background: linear-gradient(135deg,var(--card),var(--highlight)); border: 1px solid var(--accent-dim); }
+.flashcard-back { background: linear-gradient(135deg,#0f1a0f,#1a2a1a); border: 1px solid #3a5a3a; position: absolute; inset: 0; transform: rotateY(180deg); }
+.flashcard-category { font-size: 0.67rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-dim); font-family: 'Cinzel',serif; margin-bottom: 14px; }
+.flashcard-question { font-family: 'Cinzel',serif; font-size: 1.1rem; color: var(--white); line-height: 1.5; margin-bottom: 16px; }
+.flashcard-hint { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+.flashcard-answer { font-size: 0.9rem; color: #c8e6c9; line-height: 1.75; }
+.flashcard-answer strong { display: block; font-family: 'Cinzel',serif; font-size: 1rem; color: #81c784; margin-bottom: 8px; }
+.quiz-controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }
+.quiz-btn { padding: 11px 24px; border: none; border-radius: 4px; font-family: 'Cinzel',serif; font-size: 0.8rem; letter-spacing: 0.1em; cursor: pointer; transition: all 0.2s; }
+.btn-correct { background: #2e7d32; color: #c8e6c9; }
+.btn-correct:hover { background: #388e3c; }
+.btn-incorrect { background: #7f0000; color: #ffcdd2; }
+.btn-incorrect:hover { background: #b71c1c; }
+.btn-flip { background: var(--accent-dim); color: var(--accent-light); }
+.btn-flip:hover { background: var(--accent); color: var(--black); }
+.btn-neutral { background: var(--border); color: var(--white); }
+.btn-neutral:hover { background: #3a3e50; }
+.complete-banner { text-align: center; padding: 36px; background: linear-gradient(135deg,#0f1a0f,#1a2a1a); border: 1px solid #3a5a3a; border-radius: 10px; }
+.complete-banner h3 { font-family: 'Cinzel Decorative',serif; font-size: 1.5rem; color: #81c784; margin-bottom: 10px; }
 
-  .quiz-container {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 40px 20px 80px;
-  }
+/* ── TTS BAR ── */
+.tts-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(135deg,#0d1017,#161b26);
+  border-top: 1px solid var(--accent-dim);
+  padding: 11px 18px;
+  display: none; align-items: center; gap: 10px;
+  z-index: 300; box-shadow: 0 -4px 24px rgba(0,0,0,0.6);
+}
+.tts-bar.visible { display: flex; }
+.tts-bar-label { flex: 1; font-size: 0.78rem; color: var(--accent-light); font-family: 'Cinzel',serif; letter-spacing: 0.08em; overflow: hidden; }
+.tts-bar-label span { display: block; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2px; }
+.tts-ctrl {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--white); width: 36px; height: 36px; border-radius: 50%;
+  font-size: 0.9rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.tts-ctrl:hover { background: var(--accent-dim); border-color: var(--accent); }
+.tts-ctrl.stop { border-color: var(--red); color: var(--red-light); }
+.tts-ctrl.stop:hover { background: rgba(192,57,43,0.2); }
+.tts-wave { display: flex; align-items: center; gap: 2px; height: 22px; flex-shrink: 0; }
+.tts-wave span { display: block; width: 3px; background: var(--accent); border-radius: 2px; animation: wave 1s ease-in-out infinite; }
+.tts-wave span:nth-child(1) { height: 7px; animation-delay: 0s; }
+.tts-wave span:nth-child(2) { height: 14px; animation-delay: 0.15s; }
+.tts-wave span:nth-child(3) { height: 20px; animation-delay: 0.3s; }
+.tts-wave span:nth-child(4) { height: 13px; animation-delay: 0.45s; }
+.tts-wave span:nth-child(5) { height: 7px; animation-delay: 0.6s; }
+.tts-bar.paused .tts-wave span { animation-play-state: paused; }
+@keyframes wave { 0%,100% { transform:scaleY(0.5);opacity:0.5; } 50% { transform:scaleY(1);opacity:1; } }
 
-  .quiz-header {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  .quiz-header h2 {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 1.8rem;
-    color: var(--gold);
-    margin-bottom: 8px;
-  }
-  .quiz-progress {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    justify-content: center;
-    margin-bottom: 12px;
-  }
-  .progress-bar {
-    flex: 1;
-    max-width: 300px;
-    height: 6px;
-    background: var(--border);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
-    border-radius: 3px;
-    transition: width 0.4s ease;
-  }
-  .progress-text {
-    font-family: 'Cinzel', serif;
-    font-size: 0.8rem;
-    color: var(--muted);
-  }
+/* ── TTS MODAL ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85); z-index: 500;
+  align-items: center; justify-content: center; padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: #181c24; border: 1px solid var(--accent);
+  border-radius: 10px; padding: 28px; max-width: 420px; width: 100%;
+}
+.modal-box h3 {
+  font-family: 'Cinzel',serif; color: var(--accent-light);
+  margin-bottom: 18px; font-size: 1rem; letter-spacing: 0.1em;
+}
+.modal-label {
+  display: block; font-size: 0.75rem; color: var(--muted);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px;
+}
+.modal-input {
+  width: 100%; background: #0a0a0a; border: 1px solid var(--border);
+  color: var(--white); padding: 9px 12px; border-radius: 4px;
+  font-size: 0.88rem; margin-bottom: 14px;
+}
+.modal-select {
+  width: 100%; background: #0a0a0a; border: 1px solid var(--border);
+  color: var(--white); padding: 9px 12px; border-radius: 4px;
+  font-size: 0.88rem; margin-bottom: 22px;
+}
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.modal-btn {
+  padding: 9px 20px; border-radius: 4px;
+  font-family: 'Cinzel',serif; font-size: 0.78rem; cursor: pointer;
+}
+.modal-btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+.modal-btn-save { background: var(--accent); border: none; color: var(--black); font-weight: 700; }
 
-  .flashcard {
-    perspective: 1200px;
-    margin-bottom: 28px;
-    cursor: pointer;
-  }
-  .flashcard-inner {
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
-    border-radius: 10px;
-  }
-  .flashcard.flipped .flashcard-inner {
-    transform: rotateY(180deg);
-  }
-  .flashcard-front, .flashcard-back {
-    border-radius: 10px;
-    padding: 40px 36px;
-    min-height: 220px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-  }
-  .flashcard-front {
-    background: linear-gradient(135deg, var(--card), var(--highlight));
-    border: 1px solid var(--gold-dim);
-  }
-  .flashcard-back {
-    background: linear-gradient(135deg, #0f1a0f, #1a2a1a);
-    border: 1px solid #3a5a3a;
-    position: absolute;
-    inset: 0;
-    transform: rotateY(180deg);
-  }
-  .flashcard-category {
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold-dim);
-    font-family: 'Cinzel', serif;
-    margin-bottom: 16px;
-  }
-  .flashcard-question {
-    font-family: 'Cinzel', serif;
-    font-size: 1.2rem;
-    color: var(--white);
-    line-height: 1.55;
-    margin-bottom: 20px;
-  }
-  .flashcard-hint {
-    font-size: 0.78rem;
-    color: var(--muted);
-    font-style: italic;
-  }
-  .flashcard-answer {
-    font-size: 0.95rem;
-    color: #c8e6c9;
-    line-height: 1.75;
-  }
-  .flashcard-answer strong {
-    display: block;
-    font-family: 'Cinzel', serif;
-    font-size: 1.1rem;
-    color: #81c784;
-    margin-bottom: 10px;
-  }
-
-  .quiz-controls {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 8px;
-  }
-  .quiz-btn {
-    padding: 12px 28px;
-    border: none;
-    border-radius: 4px;
-    font-family: 'Cinzel', serif;
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .btn-correct {
-    background: #2e7d32;
-    color: #c8e6c9;
-  }
-  .btn-correct:hover { background: #388e3c; }
-  .btn-incorrect {
-    background: #7f0000;
-    color: #ffcdd2;
-  }
-  .btn-incorrect:hover { background: #b71c1c; }
-  .btn-flip {
-    background: var(--gold-dim);
-    color: var(--gold-light);
-  }
-  .btn-flip:hover { background: var(--gold); color: var(--black); }
-  .btn-shuffle {
-    background: var(--border);
-    color: var(--white);
-  }
-  .btn-shuffle:hover { background: #3a3e50; }
-
-  .score-display {
-    text-align: center;
-    margin-bottom: 24px;
-    display: flex;
-    gap: 24px;
-    justify-content: center;
-  }
-  .score-item { text-align: center; }
-  .score-num {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 2rem;
-    line-height: 1;
-  }
-  .score-num.correct { color: #66bb6a; }
-  .score-num.incorrect { color: var(--red-light); }
-  .score-num.remaining { color: var(--gold); }
-  .score-label {
-    font-size: 0.7rem;
-    color: var(--muted);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
-
-  .category-filter {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    margin-bottom: 28px;
-  }
-  .filter-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 6px 14px;
-    font-size: 0.75rem;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'Lato', sans-serif;
-  }
-  .filter-btn:hover, .filter-btn.active {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--black);
-    font-weight: 700;
-  }
-
-  .complete-banner {
-    text-align: center;
-    padding: 40px;
-    background: linear-gradient(135deg, #0f1a0f, #1a2a1a);
-    border: 1px solid #3a5a3a;
-    border-radius: 10px;
-  }
-  .complete-banner h3 {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 1.6rem;
-    color: #81c784;
-    margin-bottom: 12px;
-  }
-
-  /* ── BELT TIMELINE ── */
-  .timeline {
-    position: relative;
-    padding-left: 32px;
-  }
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 10px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: linear-gradient(to bottom, var(--gold-dim), transparent);
-  }
-  .timeline-item {
-    position: relative;
-    margin-bottom: 28px;
-  }
-  .timeline-item::before {
-    content: '';
-    position: absolute;
-    left: -26px;
-    top: 6px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--gold);
-    border: 2px solid var(--black);
-  }
-  .timeline-year {
-    font-family: 'Cinzel', serif;
-    font-size: 0.8rem;
-    color: var(--gold);
-    letter-spacing: 0.1em;
-  }
-  .timeline-text { font-size: 0.92rem; color: #ccc; line-height: 1.6; }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 600px) {
-    .mindset-card { flex-direction: column; }
-    .score-display { gap: 16px; }
-    .flashcard-front, .flashcard-back { padding: 28px 20px; min-height: 200px; }
-  }
-
-  /* ── FADE IN ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .section.active, .quiz-container {
-    animation: fadeUp 0.35s ease;
-  }
-
-  /* ── TTS PLAYER BAR ── */
-  .tts-bar {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: linear-gradient(135deg, #0d1017, #161b26);
-    border-top: 1px solid var(--gold-dim);
-    padding: 12px 20px;
-    display: none;
-    align-items: center;
-    gap: 12px;
-    z-index: 200;
-    box-shadow: 0 -4px 24px rgba(0,0,0,0.6);
-  }
-  .tts-bar.visible { display: flex; }
-  .tts-bar-label {
-    flex: 1;
-    font-size: 0.8rem;
-    color: var(--gold-light);
-    font-family: 'Cinzel', serif;
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .tts-bar-label span {
-    display: block;
-    font-size: 0.68rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 2px;
-  }
-  .tts-ctrl {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--white);
-    width: 38px; height: 38px;
-    border-radius: 50%;
-    font-size: 1rem;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-    flex-shrink: 0;
-  }
-  .tts-ctrl:hover { background: var(--gold-dim); border-color: var(--gold); }
-  .tts-ctrl.stop { border-color: var(--red); color: var(--red-light); }
-  .tts-ctrl.stop:hover { background: rgba(192,57,43,0.2); }
-  .tts-wave {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    height: 24px;
-    flex-shrink: 0;
-  }
-  .tts-wave span {
-    display: block;
-    width: 3px;
-    background: var(--gold);
-    border-radius: 2px;
-    animation: wave 1s ease-in-out infinite;
-  }
-  .tts-wave span:nth-child(1) { height: 8px; animation-delay: 0s; }
-  .tts-wave span:nth-child(2) { height: 16px; animation-delay: 0.15s; }
-  .tts-wave span:nth-child(3) { height: 22px; animation-delay: 0.3s; }
-  .tts-wave span:nth-child(4) { height: 14px; animation-delay: 0.45s; }
-  .tts-wave span:nth-child(5) { height: 8px; animation-delay: 0.6s; }
-  .tts-bar.paused .tts-wave span { animation-play-state: paused; }
-  @keyframes wave {
-    0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
-    50% { transform: scaleY(1); opacity: 1; }
-  }
-
-  /* ── SECTION READ BUTTONS ── */
-  .section-read-bar {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 28px;
-  }
-  .read-btn {
-    background: transparent;
-    border: 1px solid var(--gold-dim);
-    color: var(--gold-light);
-    padding: 8px 16px;
-    font-family: 'Cinzel', serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 3px;
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .read-btn:hover { background: var(--gold-dim); color: var(--white); }
-
-  /* ── CARD READ BUTTON ── */
-  .card-read-btn {
-    background: transparent;
-    border: none;
-    color: var(--gold-dim);
-    font-size: 1rem;
-    cursor: pointer;
-    padding: 4px;
-    float: right;
-    margin-left: 8px;
-    transition: color 0.2s;
-    line-height: 1;
-  }
-  .card-read-btn:hover { color: var(--gold-light); }
-
-  /* ── READING HIGHLIGHT ── */
-  .tts-reading {
-    outline: 1px solid var(--gold-dim);
-    box-shadow: 0 0 16px rgba(201,168,76,0.15);
-    transition: box-shadow 0.3s;
-  }
+/* ── SCROLL TO TOP ── */
+.scroll-top {
+  position: fixed; bottom: 70px; right: 18px;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--accent-dim); border: 1px solid var(--accent);
+  color: var(--white); font-size: 1.1rem; cursor: pointer;
+  display: none; align-items: center; justify-content: center;
+  z-index: 250; transition: all 0.2s; box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+.scroll-top.visible { display: flex; }
+.scroll-top:hover { background: var(--accent); color: var(--black); }
 </style>
 </head>
 <body>
 
-<!-- ── TTS FLOATING PLAYER ── -->
-<!-- TTS SETTINGS MODAL -->
-<div id="ttsModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;align-items:center;justify-content:center;padding:20px;">
-  <div style="background:#181c24;border:1px solid #c9a84c;border-radius:10px;padding:32px;max-width:440px;width:100%;">
-    <h3 style="font-family:Cinzel,serif;color:#e8c96a;margin-bottom:20px;font-size:1.1rem;letter-spacing:0.1em;">🔊 Voice Settings</h3>
-    <label style="display:block;font-size:0.8rem;color:#8a8a9a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">ElevenLabs API Key</label>
-    <input id="ttsApiInput" type="password" placeholder="Paste your API key here" style="width:100%;background:#0a0a0a;border:1px solid #2a2e38;color:#f5f0e8;padding:10px 14px;border-radius:4px;font-size:0.9rem;margin-bottom:6px;">
-    <p style="font-size:0.75rem;color:#8a8a9a;margin-bottom:20px;">Stored locally on this device only. <button onclick="ttsClearKey()" style="background:none;border:none;color:#c0392b;cursor:pointer;font-size:0.75rem;text-decoration:underline;">Clear key</button></p>
-    <label style="display:block;font-size:0.8rem;color:#8a8a9a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Voice</label>
-    <select id="ttsVoiceSelect" style="width:100%;background:#0a0a0a;border:1px solid #2a2e38;color:#f5f0e8;padding:10px 14px;border-radius:4px;font-size:0.9rem;margin-bottom:24px;"></select>
-    <p style="font-size:0.75rem;color:#8a8a9a;margin-bottom:20px;">No API key? The browser voice will be used as a fallback.</p>
-    <div style="display:flex;gap:10px;justify-content:flex-end;">
-      <button onclick="ttsCloseSettings()" style="background:transparent;border:1px solid #2a2e38;color:#8a8a9a;padding:10px 20px;border-radius:4px;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;">Cancel</button>
-      <button id="ttsSettingsBtn" onclick="ttsSaveSettings()" style="background:#c9a84c;border:none;color:#0a0a0a;padding:10px 24px;border-radius:4px;font-family:Cinzel,serif;font-size:0.8rem;font-weight:700;cursor:pointer;">Save Settings</button>
+<!-- TTS MODAL -->
+<div class="modal-overlay" id="ttsModal">
+  <div class="modal-box">
+    <h3>🔊 Voice Settings</h3>
+    <label class="modal-label">ElevenLabs API Key</label>
+    <input id="ttsApiInput" type="password" class="modal-input" placeholder="Paste your API key here">
+    <p style="font-size:0.72rem;color:var(--muted);margin-bottom:14px;">Stored locally on this device only. <button onclick="ttsClearKey()" style="background:none;border:none;color:var(--red-light);cursor:pointer;font-size:0.72rem;text-decoration:underline;">Clear key</button></p>
+    <label class="modal-label">Voice</label>
+    <select id="ttsVoiceSelect" class="modal-select"></select>
+    <p style="font-size:0.72rem;color:var(--muted);margin-bottom:18px;">No API key? Browser voice will be used as fallback.</p>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-cancel" onclick="ttsCloseSettings()">Cancel</button>
+      <button class="modal-btn modal-btn-save" id="ttsSettingsBtn" onclick="ttsSaveSettings()">Save Settings</button>
     </div>
   </div>
 </div>
 
+<!-- TTS PLAYER BAR -->
 <div class="tts-bar" id="ttsBar">
-  <div class="tts-wave">
-    <span></span><span></span><span></span><span></span><span></span>
-  </div>
+  <div class="tts-wave"><span></span><span></span><span></span><span></span><span></span></div>
   <div class="tts-bar-label">
     <span id="ttsMode">Now Reading</span>
-    <div id="ttsTitle" style="color:var(--gold-light);font-size:0.82rem;">—</div>
+    <div id="ttsTitle" style="color:var(--accent-light);font-size:0.8rem;">—</div>
   </div>
-  <button class="tts-ctrl" id="ttsPauseBtn" onclick="ttsPause()" title="Pause / Resume">⏸</button>
+  <button class="tts-ctrl" id="ttsPauseBtn" onclick="ttsPause()" title="Pause/Resume">⏸</button>
   <button class="tts-ctrl stop" onclick="ttsStop()" title="Stop">⏹</button>
-  <button class="tts-ctrl" onclick="ttsOpenSettings()" title="Voice Settings" style="font-size:0.85rem;">⚙️</button>
+  <button class="tts-ctrl" onclick="ttsOpenSettings()" title="Voice Settings" style="font-size:0.82rem;">⚙️</button>
 </div>
 
+<!-- SCROLL TO TOP -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({{top:0,behavior:'smooth'}})">↑</button>
+
+<!-- HERO -->
 <div class="hero">
   <div class="hero-belt"></div>
   <h1>Black Belt Excellence</h1>
@@ -875,31 +710,34 @@
   <div class="hero-belt"></div>
 </div>
 
-<nav class="nav">
-  <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
-    <span>📚 Study Guide Menu</span>
-    <div class="ham-icon">
-      <span></span><span></span><span></span>
-    </div>
-  </button>
-  <div class="nav-inner" id="navInner">
-    <button class="nav-btn active" onclick="showSection('dojo')">🏯 Dojo History</button>
-    <button class="nav-btn" onclick="showSection('styles')">🥋 Martial Art Styles</button>
-    <button class="nav-btn" onclick="showSection('people')">⭐ Famous People</button>
-    <button class="nav-btn" onclick="showSection('philosophy')">📖 Philosophy</button>
-    <button class="nav-btn" onclick="showSection('achievements')">🎯 Achievements</button>
-    <button class="nav-btn" onclick="showSection('mindset')">🧠 Mindset & Values</button>
-    <button class="nav-btn quiz-btn" onclick="showSection('quiz')">⚡ Flashcard Quiz</button>
-  </div>
+<!-- TOP NAV -->
+<nav class="top-nav" id="topNav">
+  <button class="top-nav-btn" id="btn-dash" onclick="setMode('dash')">🏠 Dashboard</button>
+  <button class="top-nav-btn" id="btn-oral" onclick="setMode('oral')">📚 Oral Exam — June 5</button>
+  <button class="top-nav-btn" id="btn-skills" onclick="setMode('skills')">🥊 Skills Exam — Aug 7–9</button>
 </nav>
 
-<!-- ═══════════════════════════════════════════════════════
-     SECTION: DOJO HISTORY
-════════════════════════════════════════════════════════ -->
-<section id="dojo" class="section active">
-  <h2 class="section-title">History of Freestyle Martial Arts</h2>
-  <div class="section-read-bar"><button class="read-btn" onclick="ttsReadSummary('dojo')">⚡ Quick Summary</button><button class="read-btn" onclick="ttsReadSection('dojo')">📖 Read Full Section</button></div>
+<!-- SUB NAV -->
+<div class="sub-nav" id="subNav">
+  <button class="sub-nav-hamburger" id="subHamburger" onclick="toggleSubMenu()">
+    <span id="subMenuLabel">Menu</span>
+    <div class="ham-icon"><span></span><span></span><span></span></div>
+  </button>
+  <div class="sub-nav-inner" id="subNavInner"></div>
+</div>
 
+<!-- ═══ DASHBOARD ═══ -->
+<section id="sec-dash" class="section">
+  <div id="dashContent"></div>
+</section>
+
+<!-- ═══ ORAL SECTIONS ═══ -->
+<section id="sec-dojo" class="section">
+  <h2 class="section-title">History of Freestyle Martial Arts</h2>
+  <div class="section-read-bar">
+    <button class="read-btn" onclick="ttsReadSummary('dojo')">⚡ Quick Summary</button>
+    <button class="read-btn" onclick="ttsReadSection('sec-dojo')">📖 Read Full Section</button>
+  </div>
   <div class="creed-box" style="margin-bottom:32px;">
     <h3>The Dojo</h3>
     <p>USA Freestyle Martial Arts — San Diego, CA<br>Owner &amp; Founder: Sensei Darren Kikuchi</p>
@@ -1054,13 +892,12 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════
-     SECTION: MARTIAL ART STYLES
-════════════════════════════════════════════════════════ -->
-<section id="styles" class="section">
+<section id="sec-styles" class="section">
   <h2 class="section-title">Martial Art Styles</h2>
-  <div class="section-read-bar"><button class="read-btn" onclick="ttsReadSummary('styles')">⚡ Quick Summary</button><button class="read-btn" onclick="ttsReadSection('styles')">📖 Read Full Section</button></div>
-
+  <div class="section-read-bar">
+    <button class="read-btn" onclick="ttsReadSummary('styles')">⚡ Quick Summary</button>
+    <button class="read-btn" onclick="ttsReadSection('sec-styles')">📖 Read Full Section</button>
+  </div>
   <div class="grid-3">
     <div class="style-card">
       <div class="style-icon">🥋</div>
@@ -1083,7 +920,7 @@
     <div class="style-card">
       <div class="style-icon">🤼</div>
       <h3>Judo / BJJ</h3>
-      <p><strong>Judo:</strong> "Gentle way." Created 1882 by Jigoro Kano. Olympic sport. Throws, pins, joint locks. Three phases: Kuzushi, Tsukuri, Kake.<br><br><strong>BJJ:</strong> Founded by Helio Gracie. Ground grappling, throws using leverage. Mitsubishi Maedo brought judo/jiu-jitsu to Brazil in 1910.</p>
+      <p><strong>Judo:</strong> "Gentle way." Created 1882 by Jigoro Kano. Olympic sport. Throws, pins, joint locks. Three phases: Kuzushi, Tsukuri, Kake.<br><br><strong>BJJ:</strong> Founded by Helio Gracie. Ground grappling, throws using leverage. Mitsuyo Maeda brought judo and jiu-jitsu to Brazil in 1914, teaching primarily Carlos Gracie who passed the art to his brothers including Helio.</p>
       <div class="origin">🇯🇵/🇧🇷 Japan & Brazil</div>
     </div>
     <div class="style-card">
@@ -1178,12 +1015,12 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════
-     SECTION: FAMOUS PEOPLE
-════════════════════════════════════════════════════════ -->
-<section id="people" class="section">
+<section id="sec-people" class="section">
   <h2 class="section-title">Famous Martial Artists</h2>
-  <div class="section-read-bar"><button class="read-btn" onclick="ttsReadSummary('people')">⚡ Quick Summary</button><button class="read-btn" onclick="ttsReadSection('people')">📖 Read Full Section</button></div>
+  <div class="section-read-bar">
+    <button class="read-btn" onclick="ttsReadSummary('people')">⚡ Quick Summary</button>
+    <button class="read-btn" onclick="ttsReadSection('sec-people')">📖 Read Full Section</button>
+  </div>
   <div class="grid-3">
 
     <div class="person-card">
@@ -1192,7 +1029,7 @@
       <div class="person-info">
         <div class="person-tag">Founder of JKD</div>
         <h3>Bruce Lee</h3>
-        <p><strong>1940–1973</strong> | Born San Francisco, raised Hong Kong. Began Wing Chun at 13. Founded Jeet Kune Do in 1967. Started as Kato in The Green Hornet (1966). Famous for one-inch punch and one-finger push-ups. Died of cerebral edema (brain swelled 13%) at age 32. Named by Time as one of 100 most influential people of the 20th century.</p>
+        <p><strong>1940–1973</strong> | Born San Francisco, raised Hong Kong. Began Wing Chun at 13. Founded Jeet Kune Do in 1967. Started as Kato in The Green Hornet (1966). Famous for one-inch punch and one-finger push-ups. Died of cerebral edema (brain swelled 13%) at age 32. Named by Time magazine as one of the 100 most important people of the 20th century.</p>
       </div>
     </div>
 
@@ -1232,7 +1069,7 @@
       <div class="person-info">
         <div class="person-tag">Boxing Legend</div>
         <h3>Muhammad Ali</h3>
-        <p>Born January 17, 1942 — Died 2016. 1960 Olympic Gold Medal (Rome). Retired 1981. Changed name from Cassius Clay. Famous for opposition to Vietnam draft (stripped of passport, banned 3 years). Received MLK Award 1970. "Float like a butterfly, sting like a bee." Bruce Lee was inspired by his footwork. Developed Parkinson's later in life.</p>
+        <p>Born January 17, 1942 — Died 2016. 1960 Olympic Gold Medal in the light heavyweight division (Rome). Retired 1981. Member of the Nation of Islam, inspired by Malcolm X and civil rights. Changed name from Cassius Clay. Famous for opposition to Vietnam draft (stripped of passport, banned for over 3 years). Received MLK Award 1970. "Float like a butterfly, sting like a bee." Bruce Lee was inspired by his footwork. Developed Parkinson's later in life.</p>
       </div>
     </div>
 
@@ -1250,7 +1087,7 @@
       <div class="person-info">
         <div class="person-tag">BJJ Founders</div>
         <h3>The Gracie Family</h3>
-        <p>From Rio de Janeiro, Brazil. Founders of Brazilian Jiu-Jitsu. Helio Gracie (1913–2009) still practicing at age 90. Carlos Gracie co-founded the art. Rorion Gracie was one of 5 founders of UFC (1993). Brought BJJ to the US in the 1980s. UFC gave BJJ credibility globally.</p>
+        <p>From Rio de Janeiro, Brazil. Founders of Brazilian Jiu-Jitsu. Helio Gracie (1913–2009) still practicing at age 90. Carlos Gracie co-founded the art. Rorion Gracie was a co-founder of the UFC (1993). Rorion Gracie arrived in the US in the late 1970s; BJJ spread widely through the 1980s and 90s. UFC gave BJJ credibility globally.</p>
       </div>
     </div>
 
@@ -1269,7 +1106,7 @@
       <div class="person-info">
         <div class="person-tag">MMA / Judo</div>
         <h3>Ronda Rousey</h3>
-        <p>Born February 1, 1987 — Riverside, CA. First American woman to medal in Olympic Judo. First female fighter in UFC Hall of Fame. UFC debut 2015, WWE 2018. Her mother was a decorated Judoka. Struggled to speak until age 6 — required intensive speech therapy. Retired from Judo at 21; began MMA at 22.</p>
+        <p>Born February 1, 1987 — Riverside, CA. First American woman to win a bronze medal in Olympic Judo. First female fighter in UFC Hall of Fame. UFC debut 2015, WWE 2018. Her mother was a decorated Judoka. Struggled to speak until age 6 — required intensive speech therapy. Retired from Judo at 21; began MMA at 22.</p>
       </div>
     </div>
 
@@ -1303,13 +1140,12 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════
-     SECTION: PHILOSOPHY
-════════════════════════════════════════════════════════ -->
-<section id="philosophy" class="section">
+<section id="sec-philosophy" class="section">
   <h2 class="section-title">Philosophy, Creeds &amp; Core Values</h2>
-  <div class="section-read-bar"><button class="read-btn" onclick="ttsReadSummary('philosophy')">⚡ Quick Summary</button><button class="read-btn" onclick="ttsReadSection('philosophy')">📖 Read Full Section</button></div>
-
+  <div class="section-read-bar">
+    <button class="read-btn" onclick="ttsReadSummary('philosophy')">⚡ Quick Summary</button>
+    <button class="read-btn" onclick="ttsReadSection('sec-philosophy')">📖 Read Full Section</button>
+  </div>
   <div class="grid-2">
     <div class="creed-box">
       <h3>Mission Statement</h3>
@@ -1390,12 +1226,12 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════
-     SECTION: ACHIEVEMENTS
-════════════════════════════════════════════════════════ -->
-<section id="achievements" class="section">
+<section id="sec-achievements" class="section">
   <h2 class="section-title">Body · Mind · Spirit Achievements</h2>
-  <div class="section-read-bar"><button class="read-btn" onclick="ttsReadSummary('achievements')">⚡ Quick Summary</button><button class="read-btn" onclick="ttsReadSection('achievements')">📖 Read Full Section</button></div>
+  <div class="section-read-bar">
+    <button class="read-btn" onclick="ttsReadSummary('achievements')">⚡ Quick Summary</button>
+    <button class="read-btn" onclick="ttsReadSection('sec-achievements')">📖 Read Full Section</button>
+  </div>
   <div class="card" style="margin-bottom:28px;">
     <p>The three achievements may be earned beginning at the <strong>adult Red Belt level</strong>. They must be earned in the order listed: Body → Mind → Spirit.</p>
   </div>
@@ -1439,13 +1275,12 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════
-     SECTION: MINDSET
-════════════════════════════════════════════════════════ -->
-<section id="mindset" class="section">
+<section id="sec-mindset" class="section">
   <h2 class="section-title">Mindset, Values &amp; School Culture</h2>
-  <div class="section-read-bar"><button class="read-btn" onclick="ttsReadSummary('mindset')">⚡ Quick Summary</button><button class="read-btn" onclick="ttsReadSection('mindset')">📖 Read Full Section</button></div>
-
+  <div class="section-read-bar">
+    <button class="read-btn" onclick="ttsReadSummary('mindset')">⚡ Quick Summary</button>
+    <button class="read-btn" onclick="ttsReadSection('sec-mindset')">📖 Read Full Section</button>
+  </div>
   <h3 class="subsection-title">The Five Mindset Checklist</h3>
 
   <div class="mindset-card">
@@ -1529,82 +1364,897 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════
-     QUIZ / FLASHCARD SECTION
-════════════════════════════════════════════════════════ -->
-<section id="quiz" class="section">
-<div class="quiz-container">
-  <div class="quiz-header">
-    <h2>⚡ Flashcard Quiz</h2>
-    <p style="color:var(--muted); font-size:0.9rem;">Click a card to reveal the answer. Mark correct or incorrect to track your progress.</p>
-  </div>
-
-  <div class="category-filter" id="categoryFilter">
-    <button class="filter-btn active" onclick="filterCategory('all', this)">All Topics</button>
-    <button class="filter-btn" onclick="filterCategory('Dojo History', this)">Dojo History</button>
-    <button class="filter-btn" onclick="filterCategory('Famous People', this)">Famous People</button>
-    <button class="filter-btn" onclick="filterCategory('Martial Art Styles', this)">Styles</button>
-    <button class="filter-btn" onclick="filterCategory('Philosophy', this)">Philosophy</button>
-    <button class="filter-btn" onclick="filterCategory('Terms', this)">Terms</button>
-    <button class="filter-btn" onclick="filterCategory('Achievements', this)">Achievements</button>
-  </div>
-
-  <div class="score-display">
-    <div class="score-item">
-      <div class="score-num correct" id="scoreCorrect">0</div>
-      <div class="score-label">Correct</div>
+<section id="sec-oral-quiz" class="section">
+  <div class="quiz-container" id="oralQuizContainer">
+    <div class="quiz-header">
+      <h2>📚 Oral Exam Flashcards</h2>
+      <p style="color:var(--muted);font-size:0.88rem;">Tap a card to reveal the answer.</p>
     </div>
-    <div class="score-item">
-      <div class="score-num incorrect" id="scoreIncorrect">0</div>
-      <div class="score-label">Incorrect</div>
+    <div class="category-filter" id="oralCategoryFilter"></div>
+    <div class="score-display">
+      <div class="score-item"><div class="score-num correct" id="oralScoreCorrect">0</div><div class="score-label">Correct</div></div>
+      <div class="score-item"><div class="score-num incorrect" id="oralScoreIncorrect">0</div><div class="score-label">Incorrect</div></div>
+      <div class="score-item"><div class="score-num remaining" id="oralScoreRemaining">0</div><div class="score-label">Remaining</div></div>
     </div>
-    <div class="score-item">
-      <div class="score-num remaining" id="scoreRemaining">0</div>
-      <div class="score-label">Remaining</div>
+    <div class="quiz-progress"><div class="progress-bar"><div class="progress-fill" id="oralProgressFill" style="width:0%"></div></div><span class="progress-text" id="oralProgressText">0/0</span></div>
+    <div id="oralFlashcardArea"></div>
+    <div class="quiz-controls">
+      <button class="quiz-btn btn-flip" onclick="flipCard('oral')">👁 Reveal</button>
+      <button class="quiz-btn btn-correct" onclick="markAnswer('oral',true)">✓ Got It</button>
+      <button class="quiz-btn btn-incorrect" onclick="markAnswer('oral',false)">✗ Still Learning</button>
+      <button class="quiz-btn btn-neutral" onclick="shuffleDeck('oral')">🔀 Shuffle</button>
+      <button class="quiz-btn btn-neutral" onclick="resetQuiz('oral')">↺ Reset</button>
     </div>
   </div>
+</section>
 
-  <div class="quiz-progress">
-    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-    <span class="progress-text" id="progressText">0 / 0</span>
+<!-- ═══ SKILLS SECTIONS ═══ -->
+<section id="sec-techniques" class="section">
+  <h2 class="section-title">Techniques &amp; Skills</h2>
+  <div class="section-read-bar">
+    <button class="read-btn" onclick="ttsReadSummary('techniques')">⚡ Quick Summary</button>
+    <button class="read-btn" onclick="ttsReadSection('sec-techniques')">📖 Read Full Section</button>
+  </div>
+  <!-- EXAM OVERVIEW -->
+  <div class="card" style="margin-bottom:28px; background: linear-gradient(135deg, #13110a, #0d0d0a); border-color: var(--gold-dim);">
+    <h3>📋 Black Belt Exam — 9 Parts Overview</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:12px;">
+      <div style="background:var(--deep);padding:12px;border-radius:4px;border:1px solid var(--border);">
+        <div style="font-family:Cinzel,serif;color:var(--gold);font-size:0.8rem;">Part 1</div>
+        <div style="color:#ccc;font-size:0.88rem;">Traditional Basics — 400 pts</div>
+      </div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;border:1px solid var(--border);">
+        <div style="font-family:Cinzel,serif;color:var(--gold);font-size:0.8rem;">Part 2</div>
+        <div style="color:#ccc;font-size:0.88rem;">Kicking Techniques — 440 pts</div>
+      </div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;border:1px solid var(--border);">
+        <div style="font-family:Cinzel,serif;color:var(--gold);font-size:0.8rem;">Part 3</div>
+        <div style="color:#ccc;font-size:0.88rem;">Kata / Forms — 1000 pts</div>
+      </div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;border:1px solid var(--border);">
+        <div style="font-family:Cinzel,serif;color:var(--gold);font-size:0.8rem;">Part 4</div>
+        <div style="color:#ccc;font-size:0.88rem;">Breaking — 1000 pts</div>
+      </div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;border:1px solid var(--border);">
+        <div style="font-family:Cinzel,serif;color:var(--gold);font-size:0.8rem;">Part 5</div>
+        <div style="color:#ccc;font-size:0.88rem;">Sparring Skills — 200 pts</div>
+      </div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;border:1px solid var(--border);">
+        <div style="font-family:Cinzel,serif;color:var(--gold);font-size:0.8rem;">Part 6</div>
+        <div style="color:#ccc;font-size:0.88rem;">Pad Drills — 200 pts</div>
+      </div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;border:1px solid var(--border);">
+        <div style="font-family:Cinzel,serif;color:var(--gold);font-size:0.8rem;">Part 7</div>
+        <div style="color:#ccc;font-size:0.88rem;">Grappling Skills — 885 pts</div>
+      </div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;border:1px solid var(--border);">
+        <div style="font-family:Cinzel,serif;color:var(--gold);font-size:0.8rem;">Part 8</div>
+        <div style="color:#ccc;font-size:0.88rem;">Combatives</div>
+      </div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;border:1px solid var(--border);">
+        <div style="font-family:Cinzel,serif;color:var(--gold);font-size:0.8rem;">Part 9</div>
+        <div style="color:#ccc;font-size:0.88rem;">Self Defense — 500 pts</div>
+      </div>
+    </div>
   </div>
 
-  <div id="flashcardArea"></div>
-
-  <div class="quiz-controls">
-    <button class="quiz-btn btn-flip" onclick="flipCard()">👁 Reveal Answer</button>
-    <button class="quiz-btn btn-correct" onclick="markAnswer(true)">✓ Got It</button>
-    <button class="quiz-btn btn-incorrect" onclick="markAnswer(false)">✗ Still Learning</button>
-    <button class="quiz-btn btn-shuffle" onclick="shuffleDeck()">🔀 Shuffle</button>
-    <button class="quiz-btn btn-shuffle" onclick="resetQuiz()">↺ Reset</button>
+  <!-- PART 1: TRADITIONAL BASICS -->
+  <h3 class="subsection-title">Part 1 — Traditional Basics (400 pts)</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="tag">Stances — Pass/Fail</div>
+      <h3>Basic Stances</h3>
+      <ul>
+        <li>Attention</li>
+        <li>Ready Position</li>
+        <li>Horse Ready Position</li>
+        <li>Front Stance</li>
+        <li>Back Stance</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Blocks &amp; Strikes — Horse Stance (40 pts)</div>
+      <h3>Blocks &amp; Strikes</h3>
+      <ul>
+        <li>Middle Punch — Front Stance (20 pts)</li>
+        <li>Down Block — Front Stance (20 pts)</li>
+        <li>High Block — Front Stance (15 pts)</li>
+        <li>Outside Block — Front Stance (15 pts)</li>
+        <li>Inside Block — Front Stance (15 pts)</li>
+        <li>Knife Hand Strike — Front Stance (15 pts)</li>
+        <li>Knife Hand Middle — Back Stance (20 pts)</li>
+        <li>Side Attack — Horse Stance (20 pts)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Basic Hand Combinations</div>
+      <h3>Hand Combinations</h3>
+      <ul>
+        <li>Front Stance: Strike → Middle Punch (40 pts)</li>
+        <li>Back Stance Knife Hand Middle → Front Stance Middle Punch (40 pts)</li>
+        <li>Horse Stance Down Block → Front Stance Middle Punch (40 pts)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">1-Step Attacks (100 pts)</div>
+      <h3>1-Step Attacks</h3>
+      <p>10 different attacks demonstrating precision &amp; control within 1 inch. Must show variety, control, and accuracy of strikes to target.</p>
+    </div>
   </div>
-</div>
+
+  <!-- PART 2: KICKING TECHNIQUES -->
+  <h3 class="subsection-title">Part 2 — Kicking Techniques (440 pts)</h3>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="tag">Rear Leg Kicks</div>
+    <h3>Rear Leg Kicks</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:8px;">
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">50 pts</span><div style="color:#ccc;font-size:0.88rem;">Front Kick</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">50 pts</span><div style="color:#ccc;font-size:0.88rem;">Side Kick</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">50 pts</span><div style="color:#ccc;font-size:0.88rem;">Roundhouse Kick</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">30 pts</span><div style="color:#ccc;font-size:0.88rem;">Back Kick</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">30 pts</span><div style="color:#ccc;font-size:0.88rem;">Axe Kick</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">10 pts</span><div style="color:#ccc;font-size:0.88rem;">Push Kick (Front/Rear)</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">10 pts</span><div style="color:#ccc;font-size:0.88rem;">Inside Crescent Kick</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">10 pts</span><div style="color:#ccc;font-size:0.88rem;">Outside Crescent Kick</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">10 pts</span><div style="color:#ccc;font-size:0.88rem;">Mule Kick</div></div>
+    </div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+      <div style="font-family:Cinzel,serif;font-size:0.75rem;color:var(--gold-light);margin-bottom:8px;">JBB (Junior Black Belt) Kicks</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;">
+        <div style="background:var(--highlight);padding:10px;border-radius:4px;"><span style="color:#e8c96a;font-family:Cinzel,serif;font-size:0.75rem;">20 pts</span><div style="color:#ccc;font-size:0.88rem;">Wheel Kick</div></div>
+        <div style="background:var(--highlight);padding:10px;border-radius:4px;"><span style="color:#e8c96a;font-family:Cinzel,serif;font-size:0.75rem;">20 pts</span><div style="color:#ccc;font-size:0.88rem;">Spin Outside Crescent Kick</div></div>
+        <div style="background:var(--highlight);padding:10px;border-radius:4px;"><span style="color:#e8c96a;font-family:Cinzel,serif;font-size:0.75rem;">20 pts</span><div style="color:#ccc;font-size:0.88rem;">Tornado Kick</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="tag">Slide/Front Leg Kicks</div>
+    <h3>Slide &amp; Front Leg Kicks</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:8px;">
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">10 pts</span><div style="color:#ccc;font-size:0.88rem;">Slide Front Kick</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">20 pts</span><div style="color:#ccc;font-size:0.88rem;">Slide Side Kick</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">50 pts</span><div style="color:#ccc;font-size:0.88rem;">Slide Roundhouse (within 1")</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">10 pts</span><div style="color:#ccc;font-size:0.88rem;">Slide Back Kick</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">50 pts</span><div style="color:#ccc;font-size:0.88rem;">Slide Hook Kick (within 1")</div></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="tag">JBB Jump &amp; Pop Kicks</div>
+    <h3>Jump &amp; Pop Kicks (JBB)</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:8px;">
+      <div style="background:var(--highlight);padding:10px;border-radius:4px;"><span style="color:#e8c96a;font-family:Cinzel,serif;font-size:0.75rem;">10 pts</span><div style="color:#ccc;font-size:0.88rem;">Jump Front Kick</div></div>
+      <div style="background:var(--highlight);padding:10px;border-radius:4px;"><span style="color:#e8c96a;font-family:Cinzel,serif;font-size:0.75rem;">10 pts</span><div style="color:#ccc;font-size:0.88rem;">Jump Side Kick</div></div>
+      <div style="background:var(--highlight);padding:10px;border-radius:4px;"><span style="color:#e8c96a;font-family:Cinzel,serif;font-size:0.75rem;">10 pts</span><div style="color:#ccc;font-size:0.88rem;">Jump Roundhouse Kick</div></div>
+      <div style="background:var(--highlight);padding:10px;border-radius:4px;"><span style="color:#e8c96a;font-family:Cinzel,serif;font-size:0.75rem;">10 pts</span><div style="color:#ccc;font-size:0.88rem;">Pop Front Kick</div></div>
+      <div style="background:var(--highlight);padding:10px;border-radius:4px;"><span style="color:#e8c96a;font-family:Cinzel,serif;font-size:0.75rem;">10 pts</span><div style="color:#ccc;font-size:0.88rem;">Pop Roundhouse Kick</div></div>
+      <div style="background:var(--highlight);padding:10px;border-radius:4px;"><span style="color:#e8c96a;font-family:Cinzel,serif;font-size:0.75rem;">10 pts</span><div style="color:#ccc;font-size:0.88rem;">Pop Back Kick</div></div>
+    </div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+      <div style="font-family:Cinzel,serif;font-size:0.75rem;color:var(--muted);margin-bottom:8px;">Bonus Kicks</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;">
+        <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:#66bb6a;font-family:Cinzel,serif;font-size:0.75rem;">+2 bonus</span><div style="color:#ccc;font-size:0.88rem;">Jump Back Kick</div></div>
+        <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:#66bb6a;font-family:Cinzel,serif;font-size:0.75rem;">+2 bonus</span><div style="color:#ccc;font-size:0.88rem;">Jump Wheel Kick</div></div>
+        <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:#66bb6a;font-family:Cinzel,serif;font-size:0.75rem;">+2 bonus</span><div style="color:#ccc;font-size:0.88rem;">Pop Spin Crescent</div></div>
+        <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:#66bb6a;font-family:Cinzel,serif;font-size:0.75rem;">+2 bonus</span><div style="color:#ccc;font-size:0.88rem;">540 Kick</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KICK SETS -->
+  <h3 class="subsection-title">Kick Sets (right &amp; left legs)</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="tag">Kick Set 1 — Basic (50 pts)</div>
+      <h3>Kick Set 1: Basic</h3>
+      <ol class="numbered-list">
+        <li><span class="num-badge">1</span>Rear Leg Front Kick</li>
+        <li><span class="num-badge">2</span>Rear Leg Side Kick</li>
+        <li><span class="num-badge">3</span>Rear Leg Roundhouse</li>
+        <li><span class="num-badge">4</span>Back Kick</li>
+      </ol>
+    </div>
+    <div class="card">
+      <div class="tag">Kick Set 2 — Front JBB (50 pts)</div>
+      <h3>Kick Set 2: Front</h3>
+      <ol class="numbered-list">
+        <li><span class="num-badge">1</span>Rear Front Kick</li>
+        <li><span class="num-badge">2</span>Slide Front Leg Front Kick</li>
+        <li><span class="num-badge">3</span>Pop Front Kick</li>
+        <li><span class="num-badge">4</span>Jump Front Kick</li>
+      </ol>
+    </div>
+    <div class="card">
+      <div class="tag">Kick Set 3 — Round JBB (50 pts)</div>
+      <h3>Kick Set 3: Round</h3>
+      <ol class="numbered-list">
+        <li><span class="num-badge">1</span>Rear Side Round</li>
+        <li><span class="num-badge">2</span>Slide Front Leg Round Kick</li>
+        <li><span class="num-badge">3</span>Pop Round Kick</li>
+        <li><span class="num-badge">4</span>Jump Round Kick</li>
+      </ol>
+    </div>
+    <div class="card">
+      <div class="tag">Kick Set 4 — Side JBB (50 pts)</div>
+      <h3>Kick Set 4: Side</h3>
+      <ol class="numbered-list">
+        <li><span class="num-badge">1</span>Rear Side Kick</li>
+        <li><span class="num-badge">2</span>Slide Side Kick</li>
+        <li><span class="num-badge">3</span>Pop Side Kick</li>
+        <li><span class="num-badge">4</span>Jump Side Kick</li>
+      </ol>
+    </div>
+    <div class="card">
+      <div class="tag">Kick Set 5 — JBB (50 pts)</div>
+      <h3>Kick Set 5: Slide Hook / Round / Wheel / Tornado</h3>
+      <ol class="numbered-list">
+        <li><span class="num-badge">1</span>Slide Hook Kick</li>
+        <li><span class="num-badge">2</span>Slide Round Kick</li>
+        <li><span class="num-badge">3</span>Wheel Kick</li>
+        <li><span class="num-badge">4</span>Tornado Kick</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- PART 3: KATA / FORMS -->
+  <h3 class="subsection-title">Part 3 — Kata / Forms (1000 pts)</h3>
+  <div class="card">
+    <h3>Traditional Forms — 100 pts each</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:12px;">
+      <div style="background:var(--deep);padding:12px;border-radius:4px;text-align:center;"><div style="font-family:Cinzel,serif;color:var(--gold-light);font-size:0.9rem;">Ki-Cho</div></div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;text-align:center;"><div style="font-family:Cinzel,serif;color:var(--gold-light);font-size:0.9rem;">Pal-Gwe I</div></div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;text-align:center;"><div style="font-family:Cinzel,serif;color:var(--gold-light);font-size:0.9rem;">Pal-Gwe II</div></div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;text-align:center;"><div style="font-family:Cinzel,serif;color:var(--gold-light);font-size:0.9rem;">Pal-Gwe III</div></div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;text-align:center;"><div style="font-family:Cinzel,serif;color:var(--gold-light);font-size:0.9rem;">Pal-Gwe IV</div></div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;text-align:center;"><div style="font-family:Cinzel,serif;color:var(--gold-light);font-size:0.9rem;">Pal-Gwe V</div></div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;text-align:center;"><div style="font-family:Cinzel,serif;color:var(--gold-light);font-size:0.9rem;">Pal-Gwe VI</div></div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;text-align:center;"><div style="font-family:Cinzel,serif;color:var(--gold-light);font-size:0.9rem;">Pal-Gwe VII</div></div>
+      <div style="background:var(--deep);padding:12px;border-radius:4px;text-align:center;"><div style="font-family:Cinzel,serif;color:var(--gold-light);font-size:0.9rem;">Pal-Gwe VIII</div></div>
+      <div style="background:var(--highlight);padding:12px;border-radius:4px;text-align:center;border:1px solid var(--gold-dim);"><div style="font-family:Cinzel,serif;color:var(--gold-light);font-size:0.9rem;">Creative Kata</div></div>
+    </div>
+  </div>
+
+  <!-- PART 4: BREAKING -->
+  <h3 class="subsection-title">Part 4 — Breaking (1000 pts)</h3>
+  <div class="card">
+    <h3>5 Breaking Techniques — 200 pts each</h3>
+    <p>Each technique is worth 200 points. Must demonstrate power, precision, and control through breaking materials. Techniques are typically chosen and prepared in advance.</p>
+  </div>
+
+  <!-- PART 5: SPARRING -->
+  <h3 class="subsection-title">Part 5 — Sparring Skills (200 pts)</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="tag">Footwork</div>
+      <h3>Footwork (L/R)</h3>
+      <ul>
+        <li>Half Step</li>
+        <li>Slide Step</li>
+        <li>¼ Turns</li>
+        <li>Full Step (16 pts)</li>
+        <li>Cross Step</li>
+        <li>Side Step</li>
+        <li>Shuffle Step</li>
+        <li>Z-Step</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Defense Techniques</div>
+      <h3>Defense Techniques</h3>
+      <ul>
+        <li>12 Corner Blocking L/R (12 pts)</li>
+        <li>Shoulder Roll Block</li>
+        <li>Slip / Slip</li>
+        <li>Weave / Weave</li>
+        <li>Forward Head Feint (10 pts)</li>
+        <li>Backward Head Feint</li>
+        <li>Shoulder Feint</li>
+        <li>Hand Feint</li>
+        <li>Leg Feint</li>
+        <li>Slip Weave Defense Drill (10 pts)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Sparring Matches — Pass/Fail</div>
+      <h3>Sparring Matches</h3>
+      <ul>
+        <li>Karate Point Sparring (×2)</li>
+        <li>Tae Kwon Do Sparring (×2)</li>
+        <li>Kick Boxing Sparring (×2)</li>
+        <li>2-on-1 Sparring</li>
+        <li>Submission / Grappling (×2)</li>
+        <li>MMA (JBB ×2)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PART 6: PAD DRILLS -->
+  <h3 class="subsection-title">Part 6 — Pad Drills (200 pts)</h3>
+  <div class="card">
+    <h3>Pad Drills</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:12px;">
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">40 pts</span><div style="color:#ccc;font-size:0.88rem;">Focus Mitts: Boxing</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">30 pts</span><div style="color:#ccc;font-size:0.88rem;">Focus Mitts: Kickboxing</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">20 pts</span><div style="color:#ccc;font-size:0.88rem;">Kick Shields: Timing</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">20 pts</span><div style="color:#ccc;font-size:0.88rem;">TKD Double Focus Pads: Speed</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">20 pts</span><div style="color:#ccc;font-size:0.88rem;">Heavy Bag: Endurance</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">20 pts</span><div style="color:#ccc;font-size:0.88rem;">Muay Thai Pads: L/R</div></div>
+      <div style="background:var(--deep);padding:10px;border-radius:4px;"><span style="color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;">50 pts</span><div style="color:#ccc;font-size:0.88rem;">All Pads (offense &amp; defense)</div></div>
+    </div>
+  </div>
+
+  <!-- COMBOS -->
+  <h3 class="subsection-title">Combinations — Sparring Combos</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="tag">Boxing Combos</div>
+      <h3>Boxing Combinations</h3>
+      <ul>
+        <li><strong>Combo 1:</strong> Cross, Hook, Cross</li>
+        <li><strong>Combo 2:</strong> Jab, Cross, Hook</li>
+        <li><strong>Combo 3:</strong> Uppercut, Hook, Cross</li>
+        <li><strong>Combo 4 (Box 1+2):</strong> Cross, Hook, Cross, Jab, Cross, Hook</li>
+        <li><strong>Combo 5 — 9-Punch (Box 1–3):</strong> Cross, Hook, Cross + Jab, Cross, Hook + Uppercut, Hook, Cross</li>
+        <li><strong>Combo 6:</strong> Jab, Jab + 9-Punch Combo</li>
+        <li><strong>Base Pattern (flow):</strong> Cross, Uppercut, Cross, Hook</li>
+        <li><strong>Jab, Cross, Hook, Hook L/R (10 pts)</strong></li>
+        <li><strong>11-Punch Combo with feet (10 pts)</strong></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Kickboxing Combos</div>
+      <h3>Kickboxing Combinations</h3>
+      <ul>
+        <li><strong>KB 1:</strong> Jab, Cross, Front Kick</li>
+        <li><strong>KB 2:</strong> Jab, Cross, Hook, Rear Leg Roundhouse</li>
+        <li><strong>KB 3:</strong> Push Kick, Cross, Hook, Rear Leg Roundhouse</li>
+      </ul>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+        <div style="font-family:Cinzel,serif;color:var(--gold-light);font-size:0.85rem;margin-bottom:8px;">Misc Sparring Combos (with footwork)</div>
+        <ul>
+          <li>Push Kick, Cross/Hook/Cross, Round (20 pts)</li>
+          <li>Jab/Cross/Hook, Round (20 pts)</li>
+          <li>Backfist, Slide Side (20 pts)</li>
+          <li>X-Step Round, Round, Round, Spin Round, Jump Round (20 pts)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="tag">Muay Thai Combos</div>
+      <h3>Muay Thai Combinations</h3>
+      <ul>
+        <li><strong>MT 1:</strong> Up Elbow, Side Elbow, Side Elbow, Knee</li>
+        <li><strong>MT 2:</strong> Up Elbow, Cross Elbow, Round Knee</li>
+        <li><strong>MT 3:</strong> Axe Elbow, Side Elbow, Piercing Knee</li>
+        <li><strong>MT 4:</strong> Elbow Block, Side Elbow, Rising Knee</li>
+      </ul>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+        <div style="font-family:Cinzel,serif;color:var(--gold-light);font-size:0.85rem;margin-bottom:8px;">Muay Thai Elbow Types</div>
+        <ul>
+          <li>Straight-Straight</li>
+          <li>Side-Side</li>
+          <li>Cross-Cross</li>
+          <li>Upward-Upward (10 pts)</li>
+          <li>Axe-Axe</li>
+          <li>Spin-Spin</li>
+          <li>Thrust / Poke / Round Knees (10 pts)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="tag">Tae Kwon Do Combos</div>
+      <h3>TKD Kicking Combos</h3>
+      <ul>
+        <li><strong>TKD 1:</strong> Cross-Step Round Kick, Round Kick, Jump Round Kick</li>
+        <li><strong>TKD 2:</strong> Shuffle-Step Round Kick, Spin Round Kick, Jump Round Kick</li>
+        <li><strong>TKD 3:</strong> Rear-Leg Push Kick, Rear-Leg Axe Kick, Fadeaway Back Kick</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PART 7: GRAPPLING -->
+  <h3 class="subsection-title">Part 7 — Grappling Skills (885 pts)</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="tag">Warmups / Falls / Rolls</div>
+      <h3>Warmups, Falls &amp; Rolls</h3>
+      <ul>
+        <li>Technical Stand Ups (20 pts)</li>
+        <li>Back Fall (10 pts)</li>
+        <li>Side Fall (10 pts)</li>
+        <li>Forward Sommersault (10 pts)</li>
+        <li>Back Roll (10 pts)</li>
+        <li>Shoulder Roll (15 pts)</li>
+        <li>Front Fall (5 pts)</li>
+        <li>Shrimps / Jack-knives (10 pts)</li>
+        <li>Arm Drags Seated / Guard (5 pts)</li>
+        <li>Side Rolls (5 pts)</li>
+        <li>Bridges (5 pts)</li>
+        <li>Sprawls — Cross Face (10 pts)</li>
+        <li>Dive Roll — JBB Bonus (+2)</li>
+        <li>Dive Judo Roll — JBB Bonus (+2)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Takedowns &amp; Defenses</div>
+      <h3>Takedowns &amp; Defenses</h3>
+      <ul>
+        <li>Pummel to Bear Hug / Arm Drag / Russian Tie / Thai Grip (40 pts)</li>
+        <li>Ankle Pick (10 pts)</li>
+        <li>Osoto Gari No GI (10 pts)</li>
+        <li>Ogoshi No GI (10 pts)</li>
+        <li>Double Leg Variations (20 pts)</li>
+        <li>Single Leg Variations (20 pts)</li>
+        <li>Takedown Defenses (50 pts)</li>
+        <li>Seonage Variations (10 pts)</li>
+        <li>Tomoenage (10 pts)</li>
+        <li>Uchimata (10 pts)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Grappling Escapes &amp; Passes</div>
+      <h3>Escapes &amp; Guard Passes</h3>
+      <ul>
+        <li>Escapes: Back Mount (30 pts)</li>
+        <li>Escapes: Full Mount Hi/Lo/S (30 pts)</li>
+        <li>Escapes: Side Control (30 pts)</li>
+        <li>Escapes: North-South (10 pts)</li>
+        <li>Escapes: Knee on Belly (10 pts)</li>
+        <li>Closed Guard Sweeps (30 pts)</li>
+        <li>Half Guard Sweeps (30 pts)</li>
+        <li>Guard Passes: Closed Guard (30 pts)</li>
+        <li>Guard Passes: Half Guard (30 pts)</li>
+        <li>Escapes: Head &amp; Arm Kesagatame (10 pts)</li>
+        <li>Butterfly Guard Sweep (10 pts)</li>
+        <li>X Guard Sweep (10 pts)</li>
+        <li>Single Leg X Guard Sweep (10 pts)</li>
+        <li>Deep Half Guard Sweep (10 pts)</li>
+        <li>411 Guard (10 pts)</li>
+        <li>Turtle Guard (10 pts)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Submissions &amp; Defenses — 20 pts each</div>
+      <h3>Submissions</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
+        <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Rear Naked Choke</div>
+        <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Arm Triangle Choke</div>
+        <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Guillotine Choke</div>
+        <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Leg Triangle Choke</div>
+        <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Shoulder Lock Kimura</div>
+        <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Shoulder Lock Americana</div>
+        <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Shoulder Lock Omoplata</div>
+        <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Arm Bar</div>
+        <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Straight Arm Bar</div>
+        <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Straight Leg Lock</div>
+        <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Heel Hook</div>
+        <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Darce / Anaconda Choke</div>
+        <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Straight Knee Bar</div>
+        <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Toe Hold</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 9: SELF DEFENSE -->
+  <h3 class="subsection-title">Part 9 — Self Defense (500 pts)</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="tag">Self Defense — Pass/Fail</div>
+      <h3>Defense Scenarios</h3>
+      <ul>
+        <li>Defend: Football Tackle</li>
+        <li>Defend: Wild Punches Standing</li>
+        <li>Defend: Wild Punches from Mount</li>
+        <li>Defend: Choke from Guard</li>
+        <li>Defend: Choke from Mount</li>
+        <li>Defend Multiple Wrist Grabs</li>
+        <li>Bear Hug: Front / Under Arms</li>
+        <li>Bear Hug: Front / Over Arms</li>
+        <li>Bear Hug: Behind / Under Arm (hook leg)</li>
+        <li>Bear Hug: Behind / Over Arms (hook leg)</li>
+        <li>Head Lock (grab opposite leg to armbar)</li>
+        <li>Hair Pull (grab opponent arm to straight armbar)</li>
+        <li>Choke: Front</li>
+        <li>Choke: Rear</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Weapons Defense — Pass/Fail</div>
+      <h3>Weapons &amp; Advanced Defense</h3>
+      <ul>
+        <li>Knife Defense #1 Strike</li>
+        <li>Knife Defense #2 Strike</li>
+        <li>Knife Defense #6 Overhead</li>
+        <li>Gun Defense 1 — Head Front</li>
+        <li>Gun Defense 2 — Chest Front</li>
+        <li>Gun Defense 3 — Back</li>
+        <li>Bat Swing 1 — Swing Left</li>
+        <li>Bat Swing 2 — Swing Right</li>
+        <li>Bat Swing 3 — Swing Overtop</li>
+        <li>Flow Defenses (pushes/strikes/grabs/ground)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Expect the Unexpected — 100 pts each</div>
+      <h3>Expect the Unexpected (500 pts)</h3>
+      <ul>
+        <li><strong>#1:</strong> Verbal (100 pts)</li>
+        <li><strong>#2:</strong> Standing (100 pts)</li>
+        <li><strong>#3:</strong> Sitting (100 pts)</li>
+        <li><strong>#4:</strong> Laying (100 pts)</li>
+        <li><strong>#5:</strong> 2-on-1 (100 pts)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="sec-skills-quiz" class="section">
+  <div class="quiz-container" id="skillsQuizContainer">
+    <div class="quiz-header">
+      <h2>🥊 Skills Exam Flashcards</h2>
+      <p style="color:var(--muted);font-size:0.88rem;">Tap a card to reveal the answer.</p>
+    </div>
+    <div class="category-filter" id="skillsCategoryFilter"></div>
+    <div class="score-display">
+      <div class="score-item"><div class="score-num correct" id="skillsScoreCorrect">0</div><div class="score-label">Correct</div></div>
+      <div class="score-item"><div class="score-num incorrect" id="skillsScoreIncorrect">0</div><div class="score-label">Incorrect</div></div>
+      <div class="score-item"><div class="score-num remaining" id="skillsScoreRemaining">0</div><div class="score-label">Remaining</div></div>
+    </div>
+    <div class="quiz-progress"><div class="progress-bar"><div class="progress-fill" id="skillsProgressFill" style="width:0%"></div></div><span class="progress-text" id="skillsProgressText">0/0</span></div>
+    <div id="skillsFlashcardArea"></div>
+    <div class="quiz-controls">
+      <button class="quiz-btn btn-flip" onclick="flipCard('skills')">👁 Reveal</button>
+      <button class="quiz-btn btn-correct" onclick="markAnswer('skills',true)">✓ Got It</button>
+      <button class="quiz-btn btn-incorrect" onclick="markAnswer('skills',false)">✗ Still Learning</button>
+      <button class="quiz-btn btn-neutral" onclick="shuffleDeck('skills')">🔀 Shuffle</button>
+      <button class="quiz-btn btn-neutral" onclick="resetQuiz('skills')">↺ Reset</button>
+    </div>
+  </div>
 </section>
 
 <script>
-// ── NAVIGATION ──
-function toggleMenu() {
-  const nav = document.getElementById('navInner');
-  const btn = document.getElementById('hamburger');
-  nav.classList.toggle('open');
-  btn.classList.toggle('open');
+// ══════════════════════════════════════════════
+// APP STATE
+// ══════════════════════════════════════════════
+let currentMode = 'dash';
+let currentSection = 'sec-dash';
+
+const ORAL_DATE = new Date('2025-06-05T09:00:00');
+const SKILLS_DATE = new Date('2025-08-07T09:00:00');
+const START_DATE = new Date('2025-03-19T00:00:00');
+
+// ── MODE CONFIG ──
+const modes = {
+  dash: {
+    label: 'Dashboard',
+    theme: '',
+    sections: [{ id:'sec-dash', label:'🏠 Dashboard' }],
+  },
+  oral: {
+    label: 'Oral Exam',
+    theme: '',
+    sections: [
+      { id:'sec-dojo', label:'🏯 Dojo History' },
+      { id:'sec-styles', label:'🥋 Styles' },
+      { id:'sec-people', label:'⭐ Famous People' },
+      { id:'sec-philosophy', label:'📖 Philosophy' },
+      { id:'sec-achievements', label:'🎯 Achievements' },
+      { id:'sec-mindset', label:'🧠 Mindset' },
+      { id:'sec-oral-quiz', label:'🃏 Flashcards', isQuiz:true },
+    ],
+  },
+  skills: {
+    label: 'Skills Exam',
+    theme: 'mode-skills',
+    sections: [
+      { id:'sec-techniques', label:'🥊 Techniques' },
+      { id:'sec-skills-quiz', label:'🃏 Flashcards', isQuiz:true },
+    ],
+  },
+};
+
+// ── CURRICULUM ──
+const oralCurriculum = [
+  { week:1, label:'Dojo History & Key People', dates:'Mar 19 – Mar 25', tasks:[
+    'Read the Dojo History section',
+    'Study all key dojo figures',
+    'Complete Dojo History flashcards',
+    'Recite the dojo timeline from memory',
+  ]},
+  { week:2, label:'Martial Art Styles — Part 1', dates:'Mar 26 – Apr 1', tasks:[
+    'Study Karate, TKD, Muay Thai, Judo/BJJ',
+    'Study Krav Maga, Arnis, Wing Chun, Kung Fu',
+    'Complete Martial Art Styles flashcards',
+    "Name each style's country of origin from memory",
+  ]},
+  { week:3, label:'Martial Art Styles — Part 2', dates:'Apr 2 – Apr 8', tasks:[
+    'Study Aikido, Ninjutsu, Jeet Kune Do, Boxing',
+    'Study Capoeira, Sambo, Savate, Sumo, Silat',
+    'Study UFC, CDT, WTF, IBJJF, Kodokan organizations',
+    'Listen to Styles Quick Summary 3x',
+  ]},
+  { week:4, label:'Famous Martial Artists', dates:'Apr 9 – Apr 15', tasks:[
+    'Study Bruce Lee, Chuck Norris, Jackie Chan, Jet Li',
+    'Study Muhammad Ali, Joe Lewis, Gracie Family',
+    'Study Ronda Rousey, Jhoon Rhee, Ed Parker, Stephen Hayes',
+    'Complete Famous People flashcards',
+  ]},
+  { week:5, label:'Philosophy, Creeds & Sensei Sayings', dates:'Apr 16 – Apr 22', tasks:[
+    'Memorize the Mission Statement word for word',
+    'Memorize the Student Creed word for word',
+    'Study all 5 Dale Carnegie Golden Rules',
+    'Study all 7 Stephen Covey Habits with explanations',
+  ]},
+  { week:6, label:'Achievements — Body, Mind & Spirit', dates:'Apr 23 – Apr 29', tasks:[
+    'Study all Body achievement requirements',
+    'Study all Mind achievement requirements',
+    'Study all Spirit achievement requirements',
+    'Complete Achievements flashcards',
+  ]},
+  { week:7, label:'Mindset, Values & Key Terms', dates:'Apr 30 – May 6', tasks:[
+    'Memorize the Five Mindset Checklist',
+    'Study all key terms: Do, Dan, Kata, Judoka, Randori, etc.',
+    'Complete Terms flashcards',
+    'Listen to Mindset Quick Summary 3x',
+  ]},
+  { week:8, label:'Full Oral Review', dates:'May 7 – May 13', tasks:[
+    'Complete ALL oral flashcards — target 80%+ score',
+    'Listen to all Quick Summaries back to back',
+    'Recite Mission Statement & Student Creed aloud',
+    'Review any flashcard categories scored below 80%',
+  ]},
+  { week:9, label:'Mock Oral Exam + Weak Spots', dates:'May 14 – May 20', tasks:[
+    'Do a full timed oral run-through with someone asking questions',
+    'Drill any remaining weak topics',
+    'Listen to Read Full Section for weakest areas',
+    'Confirm physical fitness prep is on track',
+  ]},
+  { week:10, label:'Exam Week — Light Review Only', dates:'May 21 – Jun 5', tasks:[
+    'Light review — no new studying',
+    'Listen to Quick Summaries once per day',
+    'Rest and stay confident',
+    '⭐ ORAL EXAM — June 5th!',
+  ]},
+];
+
+const skillsCurriculum = [
+  { week:1, label:'Traditional Basics & Stances', dates:'Jun 5 – Jun 11', tasks:[
+    'Drill all 5 stances: Attention, Ready, Horse Ready, Front, Back',
+    'Practice all blocks and strikes in each stance',
+    'Drill all 3 basic hand combinations',
+    'Practice 10 one-step attacks with precision',
+  ]},
+  { week:2, label:'Kicking Techniques', dates:'Jun 12 – Jun 18', tasks:[
+    'Drill all 9 rear leg kicks both sides',
+    'Practice 3 JBB kicks: Wheel, Spin Crescent, Tornado',
+    'Drill all 5 slide/front leg kicks',
+    'Practice all JBB jump & pop kicks',
+  ]},
+  { week:3, label:'Kick Sets & TKD Combos', dates:'Jun 19 – Jun 25', tasks:[
+    'Drill Kick Set 1 (Basic) both legs to fluency',
+    'Drill Kick Sets 2, 3, 4 both legs',
+    'Drill Kick Set 5 (Slide Hook/Round/Wheel/Tornado)',
+    'Practice all 3 TKD kicking combos',
+  ]},
+  { week:4, label:'Boxing & Kickboxing Combos', dates:'Jun 26 – Jul 2', tasks:[
+    'Drill Boxing Combos 1–3 until automatic',
+    'Build up to 9-punch combo and 11-punch combo',
+    'Drill all 3 Kickboxing combos with footwork',
+    'Practice Base Pattern flow drill',
+  ]},
+  { week:5, label:'Muay Thai & Pad Drills', dates:'Jul 3 – Jul 9', tasks:[
+    'Drill all 6 Muay Thai elbow types both sides',
+    'Drill all 4 Muay Thai combos',
+    'Train on Focus Mitts: Boxing & Kickboxing',
+    'Train on Heavy Bag and Kick Shields',
+  ]},
+  { week:6, label:'Grappling — Takedowns & Escapes', dates:'Jul 10 – Jul 16', tasks:[
+    'Drill technical stand ups, falls, rolls, sprawls',
+    'Practice all 10 takedown techniques',
+    'Drill escapes from Back Mount, Full Mount, Side Control',
+    'Practice guard passes: Closed Guard, Half Guard',
+  ]},
+  { week:7, label:'Grappling — Submissions', dates:'Jul 17 – Jul 23', tasks:[
+    'Drill all 14 submissions from the exam list',
+    'Practice all guard sweeps: Butterfly, X, Deep Half, etc.',
+    'Complete Skills — Techniques flashcards',
+    'Do live grappling rounds focusing on submissions',
+  ]},
+  { week:8, label:'Self Defense & Weapons', dates:'Jul 24 – Jul 30', tasks:[
+    'Drill all 5 Expect the Unexpected scenarios',
+    'Practice all bear hug, choke, and grab defenses',
+    'Drill Knife Defense #1, #2, #6',
+    'Drill Gun Defense 1, 2, 3 and all bat swing defenses',
+  ]},
+  { week:9, label:'Full Run-Through', dates:'Jul 31 – Aug 7', tasks:[
+    'Full practice run of all 9 exam parts',
+    'Focus on weakest scoring areas',
+    'Rest and stay confident',
+    '⭐ SKILLS EXAM — August 7, 8 & 9!',
+  ]},
+];
+
+// ══════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════
+function setMode(mode) {
+  currentMode = mode;
+  // Update body theme class
+  document.body.classList.remove('mode-skills');
+  if (mode === 'skills') document.body.classList.add('mode-skills');
+  // Update top nav active state
+  ['dash','oral','skills'].forEach(m => {
+    const btn = document.getElementById('btn-' + m);
+    btn.classList.remove('active-dash','active-oral','active-skills');
+  });
+  document.getElementById('btn-' + mode).classList.add('active-' + mode);
+  // Build sub nav
+  buildSubNav(mode);
+  // Show first section of mode
+  const firstSec = modes[mode].sections[0].id;
+  showSection(firstSec);
+}
+
+function buildSubNav(mode) {
+  const inner = document.getElementById('subNavInner');
+  const label = document.getElementById('subMenuLabel');
+  inner.innerHTML = '';
+  modes[mode].sections.forEach((sec, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'sub-btn' + (sec.isQuiz ? ' quiz-btn' : '');
+    btn.textContent = sec.label;
+    btn.onclick = () => showSection(sec.id);
+    btn.dataset.secId = sec.id;
+    inner.appendChild(btn);
+  });
+  label.textContent = modes[mode].label + ' Menu';
 }
 
 function showSection(id) {
-  // Close mobile menu
-  document.getElementById('navInner').classList.remove('open');
-  document.getElementById('hamburger').classList.remove('open');
+  // Close mobile sub menu
+  document.getElementById('subNavInner').classList.remove('open');
+  document.getElementById('subHamburger').classList.remove('open');
+  // Hide all sections
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  const btns = document.querySelectorAll('.nav-btn');
-  const labels = ['dojo','styles','people','philosophy','achievements','mindset','quiz'];
-  const idx = labels.indexOf(id);
-  if (idx >= 0) btns[idx].classList.add('active');
+  // Show target
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+  currentSection = id;
+  // Update sub-btn active state
+  document.querySelectorAll('.sub-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.secId === id);
+  });
   window.scrollTo({top:0, behavior:'smooth'});
+  // Special init for quiz sections
+  if (id === 'sec-oral-quiz') initQuiz('oral');
+  if (id === 'sec-skills-quiz') initQuiz('skills');
+  if (id === 'sec-dash') buildDashboard();
 }
 
-// ── FLASHCARD DATA ──
+function toggleSubMenu() {
+  document.getElementById('subNavInner').classList.toggle('open');
+  document.getElementById('subHamburger').classList.toggle('open');
+}
+
+// ══════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════
+function buildDashboard() {
+  const now = new Date();
+  // Determine current phase
+  const oralDone = now >= ORAL_DATE;
+  const skillsDone = now >= SKILLS_DATE;
+  // Current week calculations
+  const msPerWeek = 7 * 24 * 60 * 60 * 1000;
+  const oralWeekNum = Math.min(10, Math.max(1, Math.floor((now - START_DATE) / msPerWeek) + 1));
+  const skillsWeekNum = oralDone ? Math.min(9, Math.max(1, Math.floor((now - ORAL_DATE) / msPerWeek) + 1)) : 0;
+
+  const activePhase = skillsDone ? 'complete' : oralDone ? 'skills' : 'oral';
+  const currentCurriculum = activePhase === 'oral' ? oralCurriculum : skillsCurriculum;
+  const currentWeekIdx = activePhase === 'oral' ? oralWeekNum - 1 : Math.max(0, skillsWeekNum - 1);
+  const currentWeek = currentCurriculum[Math.min(currentWeekIdx, currentCurriculum.length - 1)];
+
+  // Load saved checkbox state
+  const saved = JSON.parse(localStorage.getItem('fma_checklist') || '{}');
+  const weekKey = (activePhase === 'oral' ? 'oral_' : 'skills_') + (activePhase === 'oral' ? oralWeekNum : skillsWeekNum);
+
+  let phaseLabel = '';
+  if (activePhase === 'oral') phaseLabel = `<div style="display:inline-block;background:rgba(201,168,76,0.15);border:1px solid var(--gold-dim);color:var(--gold-light);padding:6px 16px;border-radius:20px;font-family:Cinzel,serif;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:24px;">📚 Currently: Oral Exam Phase</div>`;
+  else if (activePhase === 'skills') phaseLabel = `<div style="display:inline-block;background:rgba(74,144,184,0.15);border:1px solid var(--steel-dim);color:var(--steel-light);padding:6px 16px;border-radius:20px;font-family:Cinzel,serif;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:24px;">🥊 Currently: Skills Exam Phase</div>`;
+  else phaseLabel = `<div style="display:inline-block;background:rgba(46,125,50,0.2);border:1px solid #2e7d32;color:#81c784;padding:6px 16px;border-radius:20px;font-family:Cinzel,serif;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:24px;">🎖 Both Exams Complete!</div>`;
+
+  const tasks = currentWeek ? currentWeek.tasks.map((task, i) => {
+    const key = weekKey + '_' + i;
+    const checked = saved[key] ? 'checked' : '';
+    const doneClass = saved[key] ? 'done' : '';
+    return `<div class="checklist-item ${doneClass}" id="ci_${key}">
+      <input type="checkbox" id="cb_${key}" ${checked} onchange="toggleCheck('${key}')">
+      <label for="cb_${key}">${task}</label>
+    </div>`;
+  }).join('') : '';
+
+  const thisWeekHtml = currentWeek ? `
+    <div class="this-week-card">
+      <h3>📅 This Week's Focus — Week ${activePhase === 'oral' ? oralWeekNum : skillsWeekNum}</h3>
+      <div class="week-meta">${currentWeek.label} &nbsp;·&nbsp; ${currentWeek.dates}</div>
+      ${tasks}
+    </div>` : '';
+
+  document.getElementById('dashContent').innerHTML = `
+    <div style="text-align:center;margin-bottom:20px;">${phaseLabel}</div>
+    <div class="dash-countdown">
+      <div class="countdown-card oral">
+        <div class="exam-label">📚 Oral + Physical Exam</div>
+        <div class="exam-date">June 5, 2025</div>
+        <div class="countdown-units" id="oralCountdown"></div>
+      </div>
+      <div class="countdown-card skills">
+        <div class="exam-label">🥊 Skills Exam</div>
+        <div class="exam-date">August 7–9, 2025</div>
+        <div class="countdown-units" id="skillsCountdown"></div>
+      </div>
+    </div>
+    ${thisWeekHtml}
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
+      <button onclick="setMode('oral')" style="flex:1;min-width:160px;background:rgba(201,168,76,0.1);border:1px solid var(--gold-dim);color:var(--gold-light);padding:14px;border-radius:6px;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;letter-spacing:0.1em;">📚 Go to Oral Exam Prep →</button>
+      <button onclick="setMode('skills')" style="flex:1;min-width:160px;background:rgba(74,144,184,0.1);border:1px solid var(--steel-dim);color:var(--steel-light);padding:14px;border-radius:6px;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;letter-spacing:0.1em;">🥊 Go to Skills Exam Prep →</button>
+    </div>`;
+
+  updateCountdowns();
+  setInterval(updateCountdowns, 60000);
+}
+
+function updateCountdowns() {
+  const now = new Date();
+  function buildUnits(target) {
+    const diff = Math.max(0, target - now);
+    if (diff === 0) return `<div class="countdown-unit"><div class="countdown-num" style="font-size:1.4rem;">✅</div><div class="countdown-unit-label">Complete</div></div>`;
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hrs = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    const mins = Math.floor((diff % (1000*60*60)) / (1000*60));
+    return `
+      <div class="countdown-unit"><div class="countdown-num">${days}</div><div class="countdown-unit-label">Days</div></div>
+      <div class="countdown-unit"><div class="countdown-num">${hrs}</div><div class="countdown-unit-label">Hrs</div></div>
+      <div class="countdown-unit"><div class="countdown-num">${mins}</div><div class="countdown-unit-label">Min</div></div>`;
+  }
+  const oc = document.getElementById('oralCountdown');
+  const sc = document.getElementById('skillsCountdown');
+  if (oc) oc.innerHTML = buildUnits(ORAL_DATE);
+  if (sc) sc.innerHTML = buildUnits(SKILLS_DATE);
+}
+
+function toggleCheck(key) {
+  const saved = JSON.parse(localStorage.getItem('fma_checklist') || '{}');
+  const cb = document.getElementById('cb_' + key);
+  if (cb) {
+    saved[key] = cb.checked;
+    localStorage.setItem('fma_checklist', JSON.stringify(saved));
+    const ci = document.getElementById('ci_' + key);
+    if (ci) ci.classList.toggle('done', cb.checked);
+  }
+}
+
+// ══════════════════════════════════════════════
+// COLLAPSIBLES
+// ══════════════════════════════════════════════
+function toggleCollapsible(id) {
+  const header = document.getElementById('ch_' + id);
+  const body = document.getElementById('cb_' + id);
+  if (!header || !body) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  header.classList.toggle('open', !isOpen);
+}
+
+// ══════════════════════════════════════════════
+// FLASHCARDS
+// ══════════════════════════════════════════════
+const oralCats = ['Dojo History','Famous People','Martial Art Styles','Philosophy','Terms','Achievements'];
+const skillsCats = ['Techniques'];
+
 const allCards = [
   // DOJO HISTORY
   { cat:'Dojo History', q:'When did Sensei Kikuchi open the Freestyle Martial Arts dojo, and where?', a:'1994 — on Rosecrans Ave in San Diego. It later moved to Sports Arena Blvd in 2011.' },
@@ -1630,10 +2280,10 @@ const allCards = [
   { cat:'Famous People', q:'What martial art did Chuck Norris study?', a:'Tang Soo Do. Discharged from US Air Force. Fighting career 1964–1974. Famously fought Bruce Lee. Defeated multiple times by Joe Lewis.' },
   { cat:'Famous People', q:'What are Jackie Chan\'s noteworthy facts?', a:'Born April 7, 1954 — Hong Kong. Had minor roles in two Bruce Lee films. Breakthrough with Drunken Master. Famous for performing his own stunts. Voice of Monkey in Kung Fu Panda.' },
   { cat:'Famous People', q:'What are Jet Li\'s martial arts achievements?', a:'Born 1963 — Beijing. Started Wushu at age 8. National Wushu Champion at age 11 (held title 5 years). Film debut in Shaolin Temple (1982).' },
-  { cat:'Famous People', q:'What is Muhammad Ali famous for beyond boxing?', a:'1960 Olympic Gold Medal. Famous opposition to Vietnam War — stripped of passport, banned from boxing 3 years. Changed name from Cassius Clay. Received MLK Award 1970. "Float like a butterfly, sting like a bee." Bruce Lee was inspired by his footwork.' },
+  { cat:'Famous People', q:'What is Muhammad Ali famous for beyond boxing?', a:'1960 Olympic Gold Medal. Famous opposition to Vietnam War — stripped of passport, banned from boxing for over 3 years. Changed name from Cassius Clay. Received MLK Award 1970. "Float like a butterfly, sting like a bee." Bruce Lee was inspired by his footwork.' },
   { cat:'Famous People', q:'Who is called the "Father of Kickboxing" in the western world?', a:'Joe Lewis (1944–2012). Born North Carolina. Retired UNDEFEATED in heavyweight kickboxing. Trained with Bruce Lee 1967–1968. Signature: fast left leg sidekick. Passed away from brain cancer.' },
-  { cat:'Famous People', q:'Who founded Brazilian Jiu-Jitsu and what is their legacy?', a:'The Gracie family — Helio Gracie and Carlos Gracie. From Rio de Janeiro. Helio practiced until age 90. Rorion Gracie was one of 5 founders of UFC (1993). BJJ came to the US in the 1980s.' },
-  { cat:'Famous People', q:'What is Ronda Rousey known for?', a:'Born February 1, 1987 — Riverside, CA. First American woman to medal in Olympic Judo. First female fighter in UFC Hall of Fame. Her mother was a decorated Judoka. Struggled to speak until age 6.' },
+  { cat:'Famous People', q:'Who founded Brazilian Jiu-Jitsu and what is their legacy?', a:'The Gracie family — Helio Gracie and Carlos Gracie. From Rio de Janeiro. Helio practiced until age 90. Rorion Gracie was a co-founder of the UFC (1993). Rorion Gracie arrived in the US in the late 1970s; BJJ spread widely through the 1980s and 90s.' },
+  { cat:'Famous People', q:'What is Ronda Rousey known for?', a:'Born February 1, 1987 — Riverside, CA. First American woman to win a bronze medal in Olympic Judo. First female fighter in UFC Hall of Fame. Her mother was a decorated Judoka. Struggled to speak until age 6.' },
   { cat:'Famous People', q:'What did Jhoon Rhee accomplish?', a:'"Father of American Taekwondo." Born January 7, 1932. Arrived in US in the 1950s and introduced TKD to America. Met Bruce Lee and Ed Parker at the 1964 Long Beach Karate Championships.' },
   { cat:'Famous People', q:'Who is Stephen Hayes and what is his claim to fame?', a:'Expert in Ninjutsu. Trained under Masaaki Hatsumi (34th Grandmaster). 1985: Black Belt Hall of Fame Instructor of Year. 1993: 10th-degree black belt. 1997: Founded To-Shin Do. Served as Dalai Lama\'s personal security escort.' },
   { cat:'Famous People', q:'What was Floyd Mayweather\'s record?', a:'Retired 50–0. Competed 1996–2007 and 2009–2015.' },
@@ -1647,7 +2297,7 @@ const allCards = [
   { cat:'Martial Art Styles', q:'When was Taekwondo officially founded and by whom?', a:'April 11, 1955 by General Choi Hong Hi (founder of Oh Do Kwan). "Way of the Foot and Fist." Largest martial art in the world. Olympic sport. Known for flying/jump kicks.' },
   { cat:'Martial Art Styles', q:'What is Krav Maga and where did it originate?', a:'Developed by Imi Lichenfield in 1940s Israel. Offensive martial art. Official self-defense of Israeli Defense Forces. No ranking system. Originally taught for Haganah (Jewish underground army).' },
   { cat:'Martial Art Styles', q:'What is Capoeira and how did it originate?', a:'Brazilian martial art, 300+ years old. Founded by African slaves from Angola in the 16th century. Uses kicks, flips, cartwheels, backflips. Based on kicks because slaves\' hands were shackled. Became official sport in 1972.' },
-  { cat:'Martial Art Styles', q:'What is the difference between Judo and BJJ?', a:'Judo: created by Jigoro Kano, 1882 Japan. Olympic sport. Focus on throws, pins, joint locks. BJJ: founded by Helio Gracie in Brazil. Predominantly ground grappling. Mitsubishi Maedo brought judo/jiu-jitsu to Brazil in 1910 then taught the Gracie family.' },
+  { cat:'Martial Art Styles', q:'What is the difference between Judo and BJJ?', a:'Judo: created by Jigoro Kano, 1882 Japan. Olympic sport. Focus on throws, pins, joint locks. BJJ: founded by Helio Gracie in Brazil. Predominantly ground grappling. Mitsuyo Maeda brought judo and jiu-jitsu to Brazil in 1914, teaching primarily Carlos Gracie who passed it to his brothers including Helio.' },
   { cat:'Martial Art Styles', q:'What is Aikido and who developed it?', a:'Developed by Morihei Ueshiba in 1942. Joint locks and throws. "Way of unifying with life energy." Encourages NON-VIOLENCE. Goal: defend yourself while protecting your attacker from injury.' },
   { cat:'Martial Art Styles', q:'What is Wing Chun and what is its significance?', a:'Subset of Kung Fu. Most influential Chinese martial art in the modern era. Close-range linear strikes — simultaneous attack and defense. Originally from Shaolin monks. Bruce Lee began with Wing Chun.' },
   { cat:'Martial Art Styles', q:'What is Kajukenbo and where did it start?', a:'Japanese-American hybrid. Combines Karate, Tang Soo Do, Judo, Ju-jitsu, Kempo, and Chinese boxing. Originated 1947, taught in Hawaii\'s Palomas settlements. Created by "the Black Belt Society." Goal: invincible on the street.' },
@@ -1691,119 +2341,124 @@ const allCards = [
   { cat:'Achievements', q:'What does the Spirit achievement require?', a:'1) Read "Tuesdays with Morrie" by Mitch Albom.  2) Mentor a student for 3 months and get a letter of recommendation from both the student and their parent.' },
   { cat:'Achievements', q:'What is the Aristotle quote used in the Body achievement?', a:'"We are what we repeatedly do. Excellence then, is not an act, but a habit."' },
   { cat:'Achievements', q:'What is the Grandmaster Rhee quote used in the Mind achievement?', a:'"A picture speaks a thousand words, but action speaks a thousand pictures."' },
+
+
+  { cat:'Techniques', q:'Name the 4 kicks in Kick Set 1 (Basic).', a:'1) Rear Leg Front Kick  2) Rear Leg Side Kick  3) Rear Leg Roundhouse  4) Back Kick.' },
+  { cat:'Techniques', q:'Name the 4 kicks in Kick Set 2 (Front).', a:'1) Rear Front Kick  2) Slide Front Leg Front Kick  3) Pop Front Kick  4) Jump Front Kick.' },
+  { cat:'Techniques', q:'Name the 4 kicks in Kick Set 3 (Round).', a:'1) Rear Side Round  2) Slide Front Leg Round Kick  3) Pop Round Kick  4) Jump Round Kick.' },
+  { cat:'Techniques', q:'Name the 4 kicks in Kick Set 4 (Side).', a:'1) Rear Side Kick  2) Slide Side Kick  3) Pop Side Kick  4) Jump Side Kick.' },
+  { cat:'Techniques', q:'What are the 3 Kickboxing combos?', a:'KB1: Jab, Cross, Front Kick.  KB2: Jab, Cross, Hook, Rear Leg Roundhouse.  KB3: Push Kick, Cross, Hook, Rear Leg Roundhouse.' },
+  { cat:'Techniques', q:'What is Boxing Combo 5 (9-punch combo)?', a:'Cross, Hook, Cross (Box 1) + Jab, Cross, Hook (Box 2) + Uppercut, Hook, Cross (Box 3).' },
+  { cat:'Techniques', q:'What is the Base Pattern?', a:'Cross, Uppercut, Cross, Hook — the foundational flow combination.' },
+  { cat:'Techniques', q:'Name the 4 Muay Thai combos.', a:'MT1: Up Elbow, Side Elbow, Side Elbow, Knee.  MT2: Up Elbow, Cross Elbow, Round Knee.  MT3: Axe Elbow, Side Elbow, Piercing Knee.  MT4: Elbow Block, Side Elbow, Rising Knee.' },
+  { cat:'Techniques', q:'Name the 3 TKD kicking combos.', a:'TKD1: Cross-Step Round Kick, Round Kick, Jump Round Kick.  TKD2: Shuffle-Step Round Kick, Spin Round Kick, Jump Round Kick.  TKD3: Rear-Leg Push Kick, Rear-Leg Axe Kick, Fadeaway Back Kick.' },
+  { cat:'Techniques', q:'Name all 14 submissions on the exam.', a:'Rear Naked Choke, Arm Triangle, Guillotine, Leg Triangle, Kimura, Americana, Omoplata, Arm Bar, Straight Arm Bar, Straight Leg Lock, Heel Hook, Darce/Anaconda, Straight Knee Bar, Toe Hold.' },
+  { cat:'Techniques', q:'Name the 5 Expect the Unexpected scenarios.', a:'1 Verbal, 2 Standing, 3 Sitting, 4 Laying, 5 Two-on-One. Each worth 100 points.' },
+  { cat:'Techniques', q:'What are the 9 parts of the black belt exam and their point values?', a:'1) Traditional Basics 400pts  2) Kicking Techniques 440pts  3) Kata/Forms 1000pts  4) Breaking 1000pts  5) Sparring 200pts  6) Pad Drills 200pts  7) Grappling 885pts  8) Combatives  9) Self Defense 500pts.' },
+  { cat:'Techniques', q:'Name the 10 Traditional Forms in order.', a:'Ki-Cho, Pal-Gwe I, II, III, IV, V, VI, VII, VIII, then Creative Kata. Each worth 100 points.' },
+  { cat:'Techniques', q:'What grappling escapes are tested?', a:'Back Mount, Full Mount Hi/Lo/S, Side Control, North-South, Knee on Belly, Head and Arm Kesagatame. Plus sweeps: Closed Guard, Half Guard, Butterfly, X Guard, Single Leg X, Deep Half, 411 Guard, Turtle Guard.' },
+  { cat:'Techniques', q:'Name the footwork patterns tested in sparring.', a:'Half Step, Slide Step, Quarter Turns, Full Step, Cross Step, Side Step, Shuffle Step, Z-Step.' },
+  { cat:'Techniques', q:'What are the defense techniques tested?', a:'12 Corner Blocking, Shoulder Roll Block, Slip/Slip, Weave/Weave, Forward Head Feint, Backward Head Feint, Shoulder Feint, Hand Feint, Leg Feint, Slip Weave Defense Drill.' },
+  { cat:'Techniques', q:'What are the takedowns tested in grappling?', a:'Pummel to Bear Hug/Arm Drag/Russian Tie/Thai Grip, Ankle Pick, Osoto Gari No GI, Ogoshi No GI, Double Leg Variations, Single Leg Variations, Takedown Defenses, Seonage, Tomoenage, Uchimata.' },
+  { cat:'Techniques', q:'What weapon defenses are tested?', a:'Knife Defense 1 and 2 Strike, Knife Defense 6 Overhead, Gun Defense 1 Head Front, Gun Defense 2 Chest Front, Gun Defense 3 Back, Bat Swing Left/Right/Overtop, Flow Defenses.' },
+
 ];
 
-// ── QUIZ STATE ──
-let deck = [];
-let currentIndex = 0;
-let correct = 0;
-let incorrect = 0;
-let isFlipped = false;
-let activeCategory = 'all';
+const oralCards = allCards.filter(c => oralCats.includes(c.cat));
+const skillsCards = allCards.filter(c => skillsCats.includes(c.cat));
 
-function buildDeck() {
-  deck = (activeCategory === 'all' ? [...allCards] : allCards.filter(c => c.cat === activeCategory));
-  currentIndex = 0;
-  correct = 0;
-  incorrect = 0;
-  isFlipped = false;
-  updateUI();
+let quizState = {
+  oral: { deck:[], idx:0, correct:0, incorrect:0, flipped:false, cat:'all' },
+  skills: { deck:[], idx:0, correct:0, incorrect:0, flipped:false, cat:'all' },
+};
+
+function initQuiz(mode) {
+  buildCategoryFilter(mode);
+  buildDeck(mode);
 }
 
-function filterCategory(cat, btn) {
-  activeCategory = cat;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+function buildCategoryFilter(mode) {
+  const el = document.getElementById(mode + 'CategoryFilter');
+  if (!el) return;
+  const cats = mode === 'oral' ? ['all', ...oralCats] : ['all', ...skillsCats];
+  el.innerHTML = cats.map(c => `<button class="filter-btn ${c==='all'?'active':''}" onclick="filterCat('${mode}','${c}',this)">${c==='all'?'All Topics':c}</button>`).join('');
+}
+
+function filterCat(mode, cat, btn) {
+  quizState[mode].cat = cat;
+  document.querySelectorAll('#' + mode + 'CategoryFilter .filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  buildDeck();
+  buildDeck(mode);
 }
 
-function shuffleDeck() {
-  for (let i = deck.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [deck[i], deck[j]] = [deck[j], deck[i]];
-  }
-  currentIndex = 0;
-  isFlipped = false;
-  updateUI();
+function buildDeck(mode) {
+  const base = mode === 'oral' ? oralCards : skillsCards;
+  const cat = quizState[mode].cat;
+  let deck = cat === 'all' ? [...base] : base.filter(c => c.cat === cat);
+  quizState[mode] = { ...quizState[mode], deck, idx:0, correct:0, incorrect:0, flipped:false };
+  updateQuizUI(mode);
 }
 
-function resetQuiz() {
-  buildDeck();
+function shuffleDeck(mode) {
+  const d = quizState[mode].deck;
+  for (let i = d.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [d[i],d[j]]=[d[j],d[i]]; }
+  quizState[mode].idx = 0; quizState[mode].flipped = false;
+  updateQuizUI(mode);
 }
 
-function flipCard() {
-  isFlipped = !isFlipped;
-  const fc = document.getElementById('currentCard');
-  if (fc) {
-    if (isFlipped) fc.classList.add('flipped');
-    else fc.classList.remove('flipped');
-  }
+function resetQuiz(mode) { buildDeck(mode); }
+
+function flipCard(mode) {
+  quizState[mode].flipped = !quizState[mode].flipped;
+  const fc = document.getElementById(mode + 'CurrentCard');
+  if (fc) fc.classList.toggle('flipped', quizState[mode].flipped);
 }
 
-function markAnswer(wasCorrect) {
-  if (currentIndex >= deck.length) return;
-  if (wasCorrect) correct++; else incorrect++;
-  currentIndex++;
-  isFlipped = false;
-  updateUI();
+function markAnswer(mode, correct) {
+  const s = quizState[mode];
+  if (s.idx >= s.deck.length) return;
+  if (correct) s.correct++; else s.incorrect++;
+  s.idx++; s.flipped = false;
+  updateQuizUI(mode);
 }
 
-function updateUI() {
-  const remaining = deck.length - currentIndex;
-  document.getElementById('scoreCorrect').textContent = correct;
-  document.getElementById('scoreIncorrect').textContent = incorrect;
-  document.getElementById('scoreRemaining').textContent = remaining;
-  const done = correct + incorrect;
-  const total = deck.length;
-  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressText').textContent = done + ' / ' + total;
-
-  const area = document.getElementById('flashcardArea');
-  if (currentIndex >= deck.length) {
-    const pctRight = total > 0 ? Math.round((correct / total) * 100) : 0;
-    area.innerHTML = `
-      <div class="complete-banner">
-        <h3>🎖 Deck Complete!</h3>
-        <p style="color:#bbb; margin:12px 0;">You scored <strong style="color:#81c784;">${correct} / ${total}</strong> (${pctRight}%)</p>
-        <p style="color:var(--muted); font-size:0.88rem; margin-top:8px;">Click Reset or Shuffle to practice again.</p>
-      </div>`;
+function updateQuizUI(mode) {
+  const s = quizState[mode];
+  const remaining = s.deck.length - s.idx;
+  document.getElementById(mode + 'ScoreCorrect').textContent = s.correct;
+  document.getElementById(mode + 'ScoreIncorrect').textContent = s.incorrect;
+  document.getElementById(mode + 'ScoreRemaining').textContent = remaining;
+  const done = s.correct + s.incorrect;
+  const total = s.deck.length;
+  const pct = total > 0 ? Math.round((done/total)*100) : 0;
+  document.getElementById(mode + 'ProgressFill').style.width = pct + '%';
+  document.getElementById(mode + 'ProgressText').textContent = done + ' / ' + total;
+  const area = document.getElementById(mode + 'FlashcardArea');
+  if (s.idx >= s.deck.length) {
+    const pctRight = total > 0 ? Math.round((s.correct/total)*100) : 0;
+    area.innerHTML = `<div class="complete-banner"><h3>🎖 Deck Complete!</h3><p style="color:#bbb;margin:10px 0;">You scored <strong style="color:#81c784;">${s.correct} / ${total}</strong> (${pctRight}%)</p><p style="color:var(--muted);font-size:0.85rem;margin-top:6px;">Click Reset or Shuffle to practice again.</p></div>`;
     return;
   }
-  const card = deck[currentIndex];
-  area.innerHTML = `
-    <div class="flashcard" id="currentCard" onclick="flipCard()">
-      <div class="flashcard-inner">
-        <div class="flashcard-front">
-          <div class="flashcard-category">${card.cat}</div>
-          <div class="flashcard-question">${card.q}</div>
-          <div class="flashcard-hint">Tap card or click "Reveal Answer"</div>
-        </div>
-        <div class="flashcard-back">
-          <div class="flashcard-category">${card.cat}</div>
-          <div class="flashcard-answer"><strong>Answer:</strong>${card.a}</div>
-        </div>
-      </div>
-    </div>`;
+  const card = s.deck[s.idx];
+  area.innerHTML = `<div class="flashcard" id="${mode}CurrentCard" onclick="flipCard('${mode}')"><div class="flashcard-inner"><div class="flashcard-front"><div class="flashcard-category">${card.cat}</div><div class="flashcard-question">${card.q}</div><div class="flashcard-hint">Tap card or click Reveal</div></div><div class="flashcard-back"><div class="flashcard-category">${card.cat}</div><div class="flashcard-answer"><strong>Answer:</strong>${card.a}</div></div></div></div>`;
 }
 
-// ── INIT ──
-buildDeck();
-
-// ══════════════════════════════════════
-// TTS ENGINE — ElevenLabs + Browser fallback
-// ══════════════════════════════════════
-
+// ══════════════════════════════════════════════
+// TTS ENGINE
+// ══════════════════════════════════════════════
 const ttsSummaries = {
+
   dojo: "Freestyle Martial Arts was founded by Sensei Darren Kikuchi, who has been training since 1974. He opened the dojo on Rosecrans Avenue in 1994, later moving to Sports Arena Boulevard in 2011. The first black belt was earned by T.J. Roberts. Key instructors include Sensei Will Jackson, the current head instructor and third-degree black belt, and Sensei Jerry Haranco, a fourth-degree black belt. Notable members include Mary Davis, who started martial arts at age 57 and earned her black belt at 60, and Dr. Stephen Hayden, whose entire family holds black belts. The Student Creed was developed in 1994 and the Mission Statement in 2002.",
   styles: "Freestyle Martial Arts covers a wide range of styles. Karate means empty hands, and is a Japanese striking art. Taekwondo is the art of kicking and punching, founded in Korea in 1955. Muay Thai is the art of eight limbs from Thailand. Judo, meaning the gentle way, was created in Japan in 1882 by Jigoro Kano. Brazilian Jiu-Jitsu focuses on ground grappling and was founded by Helio Gracie. Krav Maga is the offensive Israeli military art. Arnis or Escrima is the national martial art of the Philippines. Jeet Kune Do was Bruce Lee's eclectic hybrid style. Other styles include Kung Fu, Wing Chun, Aikido, Kickboxing, and Capoeira.",
   people: "Famous martial artists include Bruce Lee, who founded Jeet Kune Do in 1967 and died at age 32. Chuck Norris studied Tang Soo Do. Jackie Chan is known for performing his own stunts. Jet Li became a national Wushu champion at age 11. Muhammad Ali was an Olympic gold medalist in 1960 and famous for opposing the Vietnam War. Joe Lewis, the father of kickboxing in the western world, retired undefeated. The Gracie family founded Brazilian Jiu-Jitsu. Ronda Rousey was the first American woman to medal in Olympic Judo. Jhoon Rhee is the father of American Taekwondo. Ed Parker founded American Kenpo.",
   philosophy: "The Mission Statement is: Empower our students to achieve their personal best in life. Encourage education, strong morals, and great character. Enrich lives through excellent martial arts instruction. Inspire others with honor, integrity, and loyalty. We are committed to make a difference in the world. The Student Creed states: I am developing myself in a positive manner, mentally, physically, and spiritually. I am developing confidence, discipline, and respect. I am using my martial arts to inspire a kind and compassionate world. I am dedicated and motivated to Achieve Black Belt Excellence. Dale Carnegie's five golden rules are: Smile. Remember the person's name. Give honest and sincere appreciation. Become genuinely interested in other people. And do not criticize, condemn, or complain. Stephen Covey's seven habits are: Be proactive. Begin with the end in mind. Put first things first. Think win-win. Seek first to understand then to be understood. Synergize. And sharpen the saw.",
   achievements: "The three Body Mind Spirit achievements must be earned in order, beginning at the adult Red Belt level. The Body achievement requires improving one of the five fitness components tracked over two months, plus quizzes on human anatomy and striking areas. The Mind achievement requires reading the Seven Habits of Highly Effective People by Stephen Covey and being able to verbally defend yourself. The Spirit achievement requires reading Tuesdays with Morrie by Mitch Albom and mentoring a student for three months with a letter of recommendation.",
+  techniques: "The black belt exam has nine parts. Part one is Traditional Basics worth 400 points, covering stances, blocks, strikes, and one-step attacks. Part two is Kicking Techniques worth 440 points, including rear leg kicks, slide kicks, jump and pop kicks, and five kick sets. Part three is Kata and Forms worth 1000 points, covering Ki-Cho and Pal-Gwe forms one through eight plus a creative kata. Part four is Breaking worth 1000 points across five techniques. Part five is Sparring including footwork, defense techniques, and multiple sparring matches. Part six is Pad Drills worth 200 points. Part seven is Grappling Skills worth 885 points covering takedowns, escapes, guard passes, and 14 submissions including the rear naked choke, arm bar, kimura, guillotine, and heel hook. Part nine is Self Defense worth 500 points, including bear hugs, chokes, weapon defenses, and five Expect the Unexpected scenarios. Combos include boxing, kickboxing, Muay Thai, and TKD kicking combinations.",
+
   mindset: "The Five Mindset Checklist states: One, we are the friendliest place in San Diego. Be the first to say hello, smile, and be sincerely interested in all. Two, we are the cleanest martial arts school in San Diego. It is everyone's job to keep the dojo clean and safe. Three, we only teach great classes, never just good classes. Keep students smiling, sweating, and learning. Four, we are excellent at student and parent communication. Five, we spend quality time on new student acquisition every day. Key terms include: Do, meaning the way. Sensei, meaning teacher. Dan and Degree mean the same thing. Kata means formal practice sequences. Randori means free sparring."
+
 };
 
-// ── ElevenLabs voices (user can pick) ──
 const elVoices = [
   { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Sarah (Natural Female)' },
   { id: 'cgSgspJ2msm6clMCkdW9', name: 'Jessica (Warm Female)' },
@@ -2058,6 +2713,36 @@ if (typeof speechSynthesis !== 'undefined') {
   speechSynthesis.onvoiceschanged = () => { speechSynthesis.getVoices(); };
 }
 
+function ttsReadSummary(key) {
+  const text = ttsSummaries[key] || 'No summary available.';
+  const title = document.querySelector('.section.active .section-title');
+  ttsSpeak(text, title ? title.textContent.trim() : key, 'Quick Summary');
+}
+
+function ttsReadSection(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const clone = el.cloneNode(true);
+  clone.querySelectorAll('button,.read-btn,.card-read-btn,.section-read-bar').forEach(b => b.remove());
+  let text = (clone.innerText || clone.textContent).replace(/\\n{3,}/g,'\\n\\n').trim();
+  const title = el.querySelector('.section-title');
+  ttsSpeak(text, title ? title.textContent.trim() : id, 'Reading Full Section');
+}
+
+// ══════════════════════════════════════════════
+// SCROLL TO TOP
+// ══════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 300);
+});
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+setMode('dash');
+if (typeof speechSynthesis !== 'undefined') {
+  speechSynthesis.onvoiceschanged = () => { speechSynthesis.getVoices(); };
+}
 </script>
 </body>
 </html>
