@@ -1397,8 +1397,8 @@ body {
       <p>Pronounced "doe." Japanese word meaning "The Way" or "The Journey." Used in art names: Judo (gentle way), Taekwondo (way of foot and fist), Aikido (way of unifying with life energy).</p>
     </div>
     <div class="card">
-      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Jitsu / Jutsu (術) Meaning  art  or  technique.  Used in names like: Ju-Jitsu (art of flexibility), Ninjutsu (ninja art).','Card')" title="Read aloud">🔊</button>Jitsu / Jutsu (術)</h3>
-      <p>Meaning "art" or "technique." Used in names like: Ju-Jitsu (art of flexibility), Ninjutsu (ninja art).</p>
+      <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Jitsu / Jutsu (術) Meaning  art  or  technique.  Used in names like: Ju-Jitsu (gentle art), Ninjutsu (ninja art).','Card')" title="Read aloud">🔊</button>Jitsu / Jutsu (術)</h3>
+      <p>Meaning "art" or "technique." Used in names like: Ju-Jitsu (gentle art — from "Ju" meaning gentle and "Jutsu" meaning art), Ninjutsu (ninja art).</p>
     </div>
     <div class="card">
       <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Dan / Degree These mean the same thing — both refer to the rank/level of a black belt. (e.g., 3rd Dan = 3rd Degree Black Belt)','Card')" title="Read aloud">🔊</button>Dan / Degree</h3>
@@ -1428,6 +1428,11 @@ body {
       <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Dojo A martial arts training hall or school. Literally means  place of the way. ','Card')" title="Read aloud">🔊</button>Dojo</h3>
       <p>A martial arts training hall or school. Literally means "place of the way."</p>
     </div>
+    <div class="card">
+      <h3>ISKA — International Sport Karate Association</h3>
+      <p>A major sanctioning body for sport karate and kickboxing competitions worldwide. The ISKA governs events across multiple disciplines including full-contact, light-contact, and musical forms. It is one of the most recognized organizations in competitive martial arts globally.</p>
+    </div>
+
     <div class="card">
       <h3><button class="card-read-btn" onclick="event.stopPropagation();ttsSpeak('Sensei Japanese term meaning  teacher  or  one who has come before.  Used as a title of respect for a martial arts instructor.','Card')" title="Read aloud">🔊</button>Sensei</h3>
       <p>Japanese term meaning "teacher" or "one who has come before." Used as a title of respect for a martial arts instructor.</p>
@@ -1888,7 +1893,13 @@ body {
       </ul>
     </div>
     <div class="card">
-      <div class="tag">Submissions &amp; Defenses — 20 pts each</div>
+      <div class="card" style="margin-bottom:16px;">
+      <div class="tag">BJJ Core Principle</div>
+      <h3>Position Before Submission</h3>
+      <p>The foundational BJJ mantra meaning you must first establish a dominant position before attempting a submission. Trying to submit from a weak or neutral position gives the opponent the opportunity to escape or reverse. Dominant positions in order: Back Mount → Full Mount → Knee on Belly → Side Control → Half Guard → Guard.</p>
+    </div>
+
+    <div class="tag">Submissions &amp; Defenses — 20 pts each</div>
       <h3>Submissions</h3>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
         <div style="background:var(--deep);padding:8px;border-radius:4px;font-size:0.85rem;color:#ccc;">Rear Naked Choke</div>
@@ -2272,6 +2283,7 @@ function buildDashboard() {
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
       <button onclick="setMode('oral')" style="flex:1;min-width:160px;background:rgba(201,168,76,0.1);border:1px solid var(--gold-dim);color:var(--gold-light);padding:14px;border-radius:6px;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;letter-spacing:0.1em;">📚 Go to Oral Exam Prep →</button>
       <button onclick="setMode('skills')" style="flex:1;min-width:160px;background:rgba(74,144,184,0.1);border:1px solid var(--steel-dim);color:var(--steel-light);padding:14px;border-radius:6px;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;letter-spacing:0.1em;">🥊 Go to Skills Exam Prep →</button>
+      <a href="blackbelt_quiz.html" target="_blank" style="flex:1;min-width:160px;background:rgba(192,57,43,0.15);border:1px solid var(--red);color:var(--red-light);padding:14px;border-radius:6px;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;letter-spacing:0.1em;text-decoration:none;display:flex;align-items:center;justify-content:center;">🎯 Take the Quiz →</a>
     </div>`;
 
   updateCountdowns();
@@ -2392,7 +2404,7 @@ const allCards = [
   { cat:'Philosophy', q:'What is the difference between Dan and Degree?', a:'They mean the same thing — both refer to the rank/level of a black belt. 3rd Dan = 3rd Degree Black Belt.' },
 
   // TERMS
-  { cat:'Terms', q:'What does "Jitsu / Jutsu" mean?', a:'"Art" or "technique." Used in: Ju-Jitsu (art of flexibility), Ninjutsu (ninja art).' },
+  { cat:'Terms', q:'What does "Jitsu / Jutsu" mean?', a:'"Art" or "technique." Used in: Ju-Jitsu (gentle art), Ninjutsu (ninja art).' },
   { cat:'Terms', q:'What is a Judoka?', a:'A person who practices or is an expert in Judo.' },
   { cat:'Terms', q:'What is Kata?', a:'Formal practice sequences / forms. A set pattern of movements used for practice and demonstration.' },
   { cat:'Terms', q:'What is Randori?', a:'Free exercise / sparring in Judo — as opposed to formal kata practice.' },

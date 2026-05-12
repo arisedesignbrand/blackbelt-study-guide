@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Black Belt Excellence Quiz</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0a0a; font-family: Georgia, serif; }
+    button:focus { outline: none; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #111; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const questions = [
+      // DOJO HISTORY
+      { id: 1, category: "Dojo History", q: "What year did Sensei K first begin his martial arts journey?", options: ["1968", "1974", "1980", "1986"], answer: 1 },
+      { id: 2, category: "Dojo History", q: "What was the original location of Freestyle Martial Arts when Sensei K opened the first official dojo?", options: ["Sports Arena Blvd", "La Jolla YMCA", "Rosecrans Ave", "Mission Valley"], answer: 2 },
+      { id: 3, category: "Dojo History", q: "Who was the FIRST student to earn a Black Belt at Freestyle Martial Arts?", options: ["Sensei Will Jackson", "T.J. Roberts", "Sensei Jerry", "Mary Davis"], answer: 1 },
+      { id: 4, category: "Dojo History", q: "How many students were attending Sensei K's Parks & Recreation program by 1992?", options: ["Over 50", "Over 80", "Over 120", "Over 200"], answer: 2 },
+      { id: 5, category: "Dojo History", q: "What year was the Freestyle Student Creed written?", options: ["1992", "1994", "1998", "2002"], answer: 1 },
+      { id: 6, category: "Dojo History", q: "Mary Davis received her first Black Belt at what age?", options: ["55", "57", "60", "63"], answer: 2 },
+      { id: 7, category: "Dojo History", q: "Sensei K's teacher, Ernie Reyes Sr., held what distinction in 1981?", options: ["UFC Hall of Fame", "Black Belt Magazine Instructor of the Year", "Olympic Taekwondo Coach", "West Coast Karate Champion"], answer: 1 },
+      { id: 8, category: "Dojo History", q: "What was declared on November 17th, 2014 by the City of San Diego?", options: ["Freestyle Martial Arts Day", "Sensei K Day", "Sensei Jackson Day", "Black Belt Excellence Day"], answer: 2 },
+      { id: 9, category: "Dojo History", q: "Don Kikuchi — Sensei K's uncle — won a gold medal at the US National Judo Championships in what year?", options: ["1948", "1953", "1960", "1965"], answer: 1 },
+      { id: 10, category: "Dojo History", q: "Team Freestyle Performance was founded in what year by Sensei Will Jackson?", options: ["2004", "2006", "2008", "2010"], answer: 2 },
+      // MARTIAL ART STYLES
+      { id: 11, category: "Martial Arts Styles", q: "Taekwondo was officially founded on April 11th, 1955 by whom?", options: ["Jhoon Rhee", "General Choi Hong Hi", "Grandmaster Hwang Kee", "King Chinhung"], answer: 1 },
+      { id: 12, category: "Martial Arts Styles", q: "What are the THREE phases of a Judo throw, in order?", options: ["Tsukuri, Kuzushi, Kake", "Kake, Tsukuri, Kuzushi", "Kuzushi, Tsukuri, Kake", "Randori, Kata, Kake"], answer: 2 },
+      { id: 13, category: "Martial Arts Styles", q: "What does 'Jiu-Jitsu' translate to in English?", options: ["Iron Fist", "Gentle Art", "Way of the Warrior", "Empty Hand"], answer: 1 },
+      { id: 14, category: "Martial Arts Styles", q: "Mitsuyo Maeda arrived in Brazil and began teaching in what year?", options: ["1905", "1910", "1914", "1920"], answer: 2 },
+      { id: 15, category: "Martial Arts Styles", q: "Muay Thai is known as 'The Art of Eight Limbs.' Which of these is NOT one of those eight?", options: ["Elbows", "Knees", "Shins", "Shoulders"], answer: 3 },
+      { id: 16, category: "Martial Arts Styles", q: "Jeet Kune Do was created by Bruce Lee in what year?", options: ["1963", "1965", "1967", "1970"], answer: 2 },
+      { id: 17, category: "Martial Arts Styles", q: "Capoeira was created by enslaved Africans in Brazil and disguised as what?", options: ["Prayer", "Dance", "Exercise", "Theater"], answer: 1 },
+      { id: 18, category: "Martial Arts Styles", q: "Krav Maga was developed for which country's military?", options: ["United States", "Russia", "Israel", "Germany"], answer: 2 },
+      { id: 19, category: "Martial Arts Styles", q: "The first documented formal Jiu-Jitsu school was founded in what year?", options: ["1482", "1532", "1603", "1650"], answer: 1 },
+      { id: 20, category: "Martial Arts Styles", q: "Hwarang-Do's five codes of ethics were created by which Buddhist monk?", options: ["Won Kwang Bopsa", "Masaaki Hatsumi", "Morihei Ueshiba", "Jigoro Kano"], answer: 0 },
+      { id: 21, category: "Martial Arts Styles", q: "What does 'Karate' mean in Japanese?", options: ["Iron Fist", "Way of the Warrior", "Empty Hands", "Open Palm"], answer: 2 },
+      { id: 22, category: "Martial Arts Styles", q: "XMA was popularized in part by which seven-time World Martial Arts Champion?", options: ["Ernie Reyes Sr.", "Mike Chat", "Dan Inosanto", "Ed Parker"], answer: 1 },
+      // FAMOUS PEOPLE
+      { id: 23, category: "Famous People", q: "Bruce Lee was born in what city?", options: ["Hong Kong", "Seattle", "San Francisco", "Los Angeles"], answer: 2 },
+      { id: 24, category: "Famous People", q: "What was the cause of Bruce Lee's death at age 32?", options: ["Heart attack", "Cerebral edema", "Stroke", "Training injury"], answer: 1 },
+      { id: 25, category: "Famous People", q: "Muhammad Ali was banned from boxing for how long due to his refusal of the Vietnam draft?", options: ["1 year", "2 years", "Over 3 years", "5 years"], answer: 2 },
+      { id: 26, category: "Famous People", q: "Joe Lewis is known as the 'Father of Kickboxing' and trained with Bruce Lee from 1967 to what year?", options: ["1968", "1970", "1972", "1975"], answer: 0 },
+      { id: 27, category: "Famous People", q: "Ronda Rousey won an Olympic medal in which martial art?", options: ["BJJ", "Wrestling", "Judo", "Taekwondo"], answer: 2 },
+      { id: 28, category: "Famous People", q: "Floyd Mayweather retired with what professional boxing record?", options: ["48-0", "49-0", "50-0", "51-0"], answer: 2 },
+      { id: 29, category: "Famous People", q: "What role did Rorion Gracie play in founding the UFC?", options: ["Promoter", "Co-founder", "Investor only", "Head referee"], answer: 1 },
+      { id: 30, category: "Famous People", q: "Jhoon Rhee is known as the 'Father of American Taekwondo' — he arrived in the US in which decade?", options: ["1940s", "1950s", "1960s", "1970s"], answer: 1 },
+      { id: 31, category: "Famous People", q: "Stephen Hayes served as a security adviser and personal protection escort for which world leader?", options: ["The Pope", "The Dalai Lama", "Nelson Mandela", "The Emperor of Japan"], answer: 1 },
+      { id: 32, category: "Famous People", q: "Jet Li became Chinese National Wushu Champion at what age?", options: ["9", "11", "13", "15"], answer: 1 },
+      // PHILOSOPHY & CREEDS
+      { id: 33, category: "Philosophy & Creeds", q: "What are the five tenets of Taekwondo?", options: ["Honor, Loyalty, Courage, Discipline, Spirit", "Courtesy, Integrity, Perseverance, Self-Control, Indomitable Spirit", "Respect, Honesty, Focus, Power, Balance", "Discipline, Courage, Humility, Loyalty, Wisdom"], answer: 1 },
+      { id: 34, category: "Philosophy & Creeds", q: "How many lines make up the Freestyle Student Creed?", options: ["3", "4", "5", "6"], answer: 2 },
+      { id: 35, category: "Philosophy & Creeds", q: "Black Belt Excellence is defined as always doing your personal best in how many dimensions of life?", options: ["2 — mentally and physically", "3 — mentally, physically, and spiritually", "4 — mentally, physically, spiritually, and socially", "5 — body, mind, spirit, family, community"], answer: 1 },
+      { id: 36, category: "Philosophy & Creeds", q: "Which Sensei saying addresses the difference between natural ability and hard work?", options: ["Pain is inevitable. Suffering is optional.", "You are not chained to your current capabilities.", "Talent does not equal success. Effort equals success.", "Unsuccessful people drown in puddles."], answer: 2 },
+      { id: 37, category: "Philosophy & Creeds", q: "The Freestyle Mission Statement begins with which word?", options: ["Inspire", "Empower", "Enrich", "Encourage"], answer: 1 },
+      // CARNEGIE & COVEY
+      { id: 38, category: "Carnegie & Covey", q: "What year did Dale Carnegie publish 'How to Win Friends and Influence People'?", options: ["1928", "1932", "1936", "1940"], answer: 2 },
+      { id: 39, category: "Carnegie & Covey", q: "Which of Carnegie's '6 Ways to Make People Like You' involves the sweetest sound in any language?", options: ["Smile at them sincerely", "Remember their name", "Listen actively", "Show genuine interest"], answer: 1 },
+      { id: 40, category: "Carnegie & Covey", q: "Stephen Covey's Habit 7 is 'Sharpen the Saw.' What does this mean?", options: ["Work harder than everyone else", "Continuously invest in your own development", "Focus on your most important task first", "Begin every project with a clear goal"], answer: 1 },
+      { id: 41, category: "Carnegie & Covey", q: "Which of the 7 Habits asks you to imagine your own funeral before setting life goals?", options: ["Habit 1 — Be Proactive", "Habit 2 — Begin with the End in Mind", "Habit 3 — Put First Things First", "Habit 5 — Seek First to Understand"], answer: 1 },
+      { id: 42, category: "Carnegie & Covey", q: "What is Covey's Habit 4?", options: ["Be Proactive", "Synergize", "Think Win-Win", "Put First Things First"], answer: 2 },
+      { id: 43, category: "Carnegie & Covey", q: "A 2013 Library of Congress survey ranked 'How to Win Friends and Influence People' as the ___ most influential book in American history.", options: ["3rd", "5th", "7th", "10th"], answer: 2 },
+      // ACHIEVEMENTS
+      { id: 44, category: "Achievements", q: "How many months must you track physical improvement for the Body Achievement?", options: ["1 month", "2 months", "3 months", "6 months"], answer: 1 },
+      { id: 45, category: "Achievements", q: "Which book is required reading for the MIND Achievement?", options: ["Tuesdays with Morrie", "How to Win Friends and Influence People", "The 7 Habits of Highly Effective People", "The Art of War"], answer: 2 },
+      { id: 46, category: "Achievements", q: "Which book is required reading for the SPIRIT Achievement?", options: ["The 7 Habits of Highly Effective People", "Tuesdays with Morrie", "How to Win Friends and Influence People", "Man's Search for Meaning"], answer: 1 },
+      { id: 47, category: "Achievements", q: "Tuesdays with Morrie is written by:", options: ["Stephen Covey", "Dale Carnegie", "Mitch Albom", "Malcolm Gladwell"], answer: 2 },
+      { id: 48, category: "Achievements", q: "For the Spirit Achievement, how many months must you mentor a student?", options: ["1 month", "2 months", "3 months", "6 months"], answer: 2 },
+      { id: 49, category: "Achievements", q: "Morrie Schwartz's most famous teaching is:", options: ["Love your neighbor as yourself", "Once you learn how to die, you learn how to live", "The purpose of life is to be happy", "Time is the most valuable currency"], answer: 1 },
+      // TECHNIQUES & TERMS
+      { id: 50, category: "Techniques & Terms", q: "How many points is a Side Kick worth in the Individual Kicks scoring?", options: ["20 points", "30 points", "40 points", "50 points"], answer: 3 },
+      { id: 51, category: "Techniques & Terms", q: "Boxing Combo 5 is the 'Nine-Punch.' How many strikes does Combo 6 contain?", options: ["9", "10", "11", "12"], answer: 2 },
+      { id: 52, category: "Techniques & Terms", q: "In BJJ, what is the mantra that describes the correct order of priorities on the ground?", options: ["Guard before submit", "Position before submission", "Control before choke", "Sweep before submit"], answer: 1 },
+      { id: 53, category: "Techniques & Terms", q: "What does 'Dan' mean in Japanese martial arts?", options: ["Teacher", "Degree or rank", "Technique", "Training hall"], answer: 1 },
+      { id: 54, category: "Techniques & Terms", q: "Judo's world headquarters — the Kodokan — is located in which city?", options: ["Osaka", "Kyoto", "Tokyo", "Seoul"], answer: 2 },
+      { id: 55, category: "Techniques & Terms", q: "Which Muay Thai combination is: Axe Elbow, Side Elbow, Piercing Knee?", options: ["MT One", "MT Two", "MT Three", "MT Four"], answer: 2 },
+      { id: 56, category: "Techniques & Terms", q: "ISKA stands for:", options: ["International Sport Karate Association", "International Sparring and Kicking Association", "International Skills and Knowledge Academy", "International Sport and Kickboxing Alliance"], answer: 0 },
+      { id: 57, category: "Techniques & Terms", q: "How many submission categories are tested in your grappling exam, each worth 20 points?", options: ["10", "12", "14", "16"], answer: 2 },
+    ];
+
+    const categoryColors = {
+      "Dojo History": "#e85d3a",
+      "Martial Arts Styles": "#d4a017",
+      "Famous People": "#4a9eba",
+      "Philosophy & Creeds": "#8b5cf6",
+      "Carnegie & Covey": "#10b981",
+      "Achievements": "#ec4899",
+      "Techniques & Terms": "#f97316",
+    };
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function App() {
+      const [quizQuestions, setQuizQuestions] = useState([]);
+      const [current, setCurrent] = useState(0);
+      const [selected, setSelected] = useState(null);
+      const [confirmed, setConfirmed] = useState(false);
+      const [score, setScore] = useState(0);
+      const [answers, setAnswers] = useState([]);
+      const [done, setDone] = useState(false);
+      const [started, setStarted] = useState(false);
+      const [questionCount, setQuestionCount] = useState(20);
+      const [showReview, setShowReview] = useState(false);
+
+      useEffect(() => {
+        setQuizQuestions(shuffle(questions).slice(0, questionCount));
+      }, [questionCount]);
+
+      const q = quizQuestions[current];
+      const progress = quizQuestions.length > 0 ? (current / quizQuestions.length) * 100 : 0;
+
+      function handleSelect(idx) {
+        if (confirmed) return;
+        setSelected(idx);
+      }
+
+      function handleConfirm() {
+        if (selected === null) return;
+        setConfirmed(true);
+        const correct = selected === q.answer;
+        if (correct) setScore(s => s + 1);
+        setAnswers(a => [...a, { q: q.q, options: q.options, selected, correct: q.answer, category: q.category, wasCorrect: correct }]);
+      }
+
+      function handleNext() {
+        if (current + 1 >= quizQuestions.length) {
+          setDone(true);
+        } else {
+          setCurrent(c => c + 1);
+          setSelected(null);
+          setConfirmed(false);
+        }
+      }
+
+      function handleRestart(count) {
+        const c = count || questionCount;
+        setQuizQuestions(shuffle(questions).slice(0, c));
+        setCurrent(0); setSelected(null); setConfirmed(false);
+        setScore(0); setAnswers([]); setDone(false);
+        setStarted(false); setShowReview(false);
+      }
+
+      const categoryScores = () => {
+        const cats = {};
+        answers.forEach(a => {
+          if (!cats[a.category]) cats[a.category] = { total: 0, correct: 0 };
+          cats[a.category].total++;
+          if (a.wasCorrect) cats[a.category].correct++;
+        });
+        return cats;
+      };
+
+      const pct = quizQuestions.length > 0 ? Math.round((score / quizQuestions.length) * 100) : 0;
+      const belt = pct >= 90 ? "🥋 BLACK BELT" : pct >= 75 ? "🟤 BROWN BELT" : pct >= 60 ? "🔵 BLUE BELT" : pct >= 40 ? "🟡 YELLOW BELT" : "⬜ WHITE BELT";
+      const beltMsg = pct >= 90 ? "Outstanding. You're exam-ready." : pct >= 75 ? "Strong performance. Review the misses." : pct >= 60 ? "Solid foundation. Keep studying." : pct >= 40 ? "More mat time needed. Keep going." : "Back to the drawing board — and the podcast!";
+
+      // Welcome screen
+      if (!started) {
+        return (
+          <div style={{ minHeight:"100vh", background:"#0a0a0a", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"Georgia,serif", padding:"20px" }}>
+            <div style={{ maxWidth:560, width:"100%", textAlign:"center" }}>
+              <div style={{ fontSize:64, marginBottom:8 }}>🥋</div>
+              <h1 style={{ color:"#fff", fontSize:"clamp(26px,5vw,42px)", fontWeight:900, letterSpacing:"-1px", margin:"0 0 8px", lineHeight:1.1 }}>BLACK BELT EXCELLENCE</h1>
+              <p style={{ color:"#e85d3a", fontStyle:"italic", fontSize:14, margin:"0 0 28px", letterSpacing:"2px", textTransform:"uppercase" }}>Study Guide Quiz</p>
+              <p style={{ color:"#666", fontSize:14, lineHeight:1.7, marginBottom:32 }}>57 questions drawn from all 10 podcast episodes — Dojo History, Martial Arts Styles, Famous People, Philosophy, Carnegie &amp; Covey, Achievements, and Techniques.</p>
+              <p style={{ color:"#888", fontSize:12, marginBottom:12, textTransform:"uppercase", letterSpacing:"1px" }}>Select number of questions</p>
+              <div style={{ display:"flex", gap:10, justifyContent:"center", marginBottom:32, flexWrap:"wrap" }}>
+                {[10, 20, 30, 57].map(n => (
+                  <button key={n} onClick={() => setQuestionCount(n)}
+                    style={{ padding:"10px 18px", borderRadius:6, border:`2px solid ${questionCount===n?"#e85d3a":"#333"}`, background:questionCount===n?"#e85d3a":"transparent", color:questionCount===n?"#fff":"#888", cursor:"pointer", fontFamily:"Georgia,serif", fontSize:13, fontWeight:questionCount===n?700:400, transition:"all 0.2s" }}>
+                    {n === 57 ? "All 57" : `${n} Questions`}
+                  </button>
+                ))}
+              </div>
+              <button onClick={() => setStarted(true)}
+                style={{ background:"#e85d3a", color:"#fff", border:"none", padding:"16px 0", borderRadius:8, fontSize:16, fontWeight:700, cursor:"pointer", letterSpacing:"1px", textTransform:"uppercase", fontFamily:"Georgia,serif", width:"100%", maxWidth:320 }}>
+                Begin Test
+              </button>
+              <div style={{ marginTop:36, display:"flex", flexWrap:"wrap", gap:8, justifyContent:"center" }}>
+                {Object.entries(categoryColors).map(([cat, color]) => (
+                  <span key={cat} style={{ background:color+"22", border:`1px solid ${color}44`, color:color, padding:"4px 10px", borderRadius:20, fontSize:11 }}>{cat}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // Review screen
+      if (done && showReview) {
+        return (
+          <div style={{ minHeight:"100vh", background:"#0a0a0a", padding:"24px 16px", fontFamily:"Georgia,serif" }}>
+            <div style={{ maxWidth:680, margin:"0 auto" }}>
+              <div style={{ display:"flex", alignItems:"center", gap:16, marginBottom:28 }}>
+                <button onClick={() => setShowReview(false)} style={{ background:"transparent", border:"1px solid #333", color:"#888", padding:"8px 16px", borderRadius:6, cursor:"pointer", fontFamily:"Georgia,serif", fontSize:13 }}>← Back</button>
+                <h2 style={{ color:"#fff", margin:0, fontSize:20 }}>Answer Review</h2>
+              </div>
+              {answers.map((a, i) => (
+                <div key={i} style={{ marginBottom:14, background:a.wasCorrect?"#0d2b1a":"#2b0d0d", border:`1px solid ${a.wasCorrect?"#1a4a2a":"#4a1a1a"}`, borderRadius:8, padding:"14px 16px" }}>
+                  <div style={{ display:"flex", gap:10, alignItems:"flex-start", marginBottom:a.wasCorrect?0:10 }}>
+                    <span style={{ fontSize:15 }}>{a.wasCorrect?"✅":"❌"}</span>
+                    <div style={{ flex:1 }}>
+                      <span style={{ background:(categoryColors[a.category]||"#888")+"33", color:categoryColors[a.category]||"#888", fontSize:10, padding:"2px 7px", borderRadius:10, letterSpacing:"0.5px", marginBottom:4, display:"inline-block" }}>{a.category}</span>
+                      <p style={{ color:"#ddd", margin:"4px 0 0", fontSize:13, lineHeight:1.5 }}>{i+1}. {a.q}</p>
+                    </div>
+                  </div>
+                  {!a.wasCorrect && (
+                    <div style={{ marginLeft:26, padding:"8px 12px", background:"#ffffff08", borderRadius:6, fontSize:13 }}>
+                      <span style={{ color:"#666" }}>Correct answer: </span>
+                      <span style={{ color:"#4ade80", fontWeight:600 }}>{a.options[a.correct]}</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+              <button onClick={() => handleRestart()} style={{ marginTop:16, background:"#e85d3a", color:"#fff", border:"none", padding:"14px 0", borderRadius:8, fontSize:15, fontWeight:700, cursor:"pointer", fontFamily:"Georgia,serif", width:"100%" }}>
+                Take Another Quiz
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      // Results screen
+      if (done) {
+        const cats = categoryScores();
+        return (
+          <div style={{ minHeight:"100vh", background:"#0a0a0a", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"Georgia,serif", padding:"24px 16px" }}>
+            <div style={{ maxWidth:560, width:"100%", textAlign:"center" }}>
+              <div style={{ fontSize:56, marginBottom:12 }}>{pct>=75?"🏆":pct>=50?"💪":"📚"}</div>
+              <h1 style={{ color:"#fff", fontSize:"clamp(22px,5vw,34px)", fontWeight:900, margin:"0 0 8px" }}>{score} / {quizQuestions.length} Correct</h1>
+              <p style={{ color:"#e85d3a", fontSize:20, fontWeight:700, margin:"0 0 4px" }}>{belt}</p>
+              <p style={{ color:"#666", fontSize:14, marginBottom:32, fontStyle:"italic" }}>{beltMsg}</p>
+              <div style={{ background:"#111", borderRadius:12, padding:"20px", marginBottom:24, textAlign:"left" }}>
+                <p style={{ color:"#555", fontSize:11, textTransform:"uppercase", letterSpacing:"1px", margin:"0 0 14px" }}>Score by Category</p>
+                {Object.entries(cats).sort((a,b) => b[1].correct/b[1].total - a[1].correct/a[1].total).map(([cat, {total, correct}]) => {
+                  const p = Math.round((correct/total)*100);
+                  return (
+                    <div key={cat} style={{ marginBottom:12 }}>
+                      <div style={{ display:"flex", justifyContent:"space-between", marginBottom:5 }}>
+                        <span style={{ color:categoryColors[cat]||"#aaa", fontSize:13 }}>{cat}</span>
+                        <span style={{ color:"#666", fontSize:12 }}>{correct}/{total} — {p}%</span>
+                      </div>
+                      <div style={{ background:"#1e1e1e", borderRadius:4, height:6, overflow:"hidden" }}>
+                        <div style={{ width:`${p}%`, height:"100%", background:categoryColors[cat]||"#e85d3a", borderRadius:4 }} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+                <button onClick={() => setShowReview(true)}
+                  style={{ background:"transparent", color:"#888", border:"1px solid #2a2a2a", padding:"13px 0", borderRadius:8, fontSize:14, cursor:"pointer", fontFamily:"Georgia,serif" }}>
+                  Review Answers
+                </button>
+                <button onClick={() => handleRestart(questionCount)}
+                  style={{ background:"#e85d3a", color:"#fff", border:"none", padding:"14px 0", borderRadius:8, fontSize:15, fontWeight:700, cursor:"pointer", fontFamily:"Georgia,serif" }}>
+                  Take Another Quiz
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // Quiz screen
+      if (!q) return null;
+      const color = categoryColors[q.category] || "#e85d3a";
+
+      return (
+        <div style={{ minHeight:"100vh", background:"#0a0a0a", fontFamily:"Georgia,serif", paddingBottom:40 }}>
+          <div style={{ background:"#0f0f0f", borderBottom:"1px solid #1a1a1a", padding:"14px 20px", display:"flex", alignItems:"center", justifyContent:"space-between", position:"sticky", top:0, zIndex:10 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+              <span style={{ fontSize:18 }}>🥋</span>
+              <span style={{ color:"#fff", fontWeight:700, fontSize:13, letterSpacing:"0.5px" }}>BLACK BELT EXCELLENCE</span>
+            </div>
+            <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+              <span style={{ color:"#e85d3a", fontWeight:700, fontSize:14 }}>{score}</span>
+              <span style={{ color:"#333", fontSize:12 }}>pts</span>
+              <span style={{ color:"#333", margin:"0 4px" }}>|</span>
+              <span style={{ color:"#666", fontSize:13 }}>{current+1} / {quizQuestions.length}</span>
+            </div>
+          </div>
+          <div style={{ height:3, background:"#1a1a1a" }}>
+            <div style={{ height:"100%", width:`${progress}%`, background:color, transition:"width 0.4s ease" }} />
+          </div>
+          <div style={{ maxWidth:620, margin:"0 auto", padding:"28px 16px" }}>
+            <div style={{ marginBottom:18 }}>
+              <span style={{ background:color+"22", border:`1px solid ${color}44`, color:color, padding:"5px 12px", borderRadius:20, fontSize:11, letterSpacing:"1px", textTransform:"uppercase" }}>
+                {q.category}
+              </span>
+            </div>
+            <h2 style={{ color:"#fff", fontSize:"clamp(16px,3vw,21px)", fontWeight:700, lineHeight:1.5, margin:"0 0 26px" }}>
+              {q.q}
+            </h2>
+            <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+              {q.options.map((opt, idx) => {
+                let bg = "#111", border = "#222", textColor = "#bbb";
+                if (confirmed) {
+                  if (idx === q.answer) { bg="#0d2b1a"; border="#22c55e"; textColor="#4ade80"; }
+                  else if (idx === selected && idx !== q.answer) { bg="#2b0d0d"; border="#ef4444"; textColor="#f87171"; }
+                  else { textColor="#444"; }
+                } else if (selected === idx) { bg=color+"18"; border=color; textColor="#fff"; }
+                return (
+                  <button key={idx} onClick={() => handleSelect(idx)}
+                    style={{ background:bg, border:`1.5px solid ${border}`, color:textColor, padding:"14px 16px", borderRadius:10, textAlign:"left", cursor:confirmed?"default":"pointer", fontSize:15, lineHeight:1.4, fontFamily:"Georgia,serif", transition:"all 0.15s", display:"flex", alignItems:"center", gap:12, width:"100%" }}>
+                    <span style={{ width:26, height:26, minWidth:26, borderRadius:"50%", border:`1.5px solid ${border}`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, color:textColor, fontWeight:700 }}>
+                      {confirmed && idx===q.answer ? "✓" : confirmed && idx===selected && idx!==q.answer ? "✗" : String.fromCharCode(65+idx)}
+                    </span>
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+            <div style={{ marginTop:20 }}>
+              {!confirmed ? (
+                <button onClick={handleConfirm} disabled={selected===null}
+                  style={{ width:"100%", background:selected!==null?color:"#1a1a1a", color:selected!==null?"#fff":"#333", border:"none", padding:"15px", borderRadius:10, fontSize:15, fontWeight:700, cursor:selected!==null?"pointer":"not-allowed", fontFamily:"Georgia,serif", transition:"all 0.2s" }}>
+                  Confirm Answer
+                </button>
+              ) : (
+                <div>
+                  <div style={{ padding:"12px 16px", borderRadius:8, background:selected===q.answer?"#0d2b1a":"#2b0d0d", marginBottom:12, textAlign:"center" }}>
+                    <p style={{ margin:0, color:selected===q.answer?"#4ade80":"#f87171", fontWeight:700, fontSize:15 }}>
+                      {selected===q.answer ? "✓ Correct!" : `✗ Correct answer: ${q.options[q.answer]}`}
+                    </p>
+                  </div>
+                  <button onClick={handleNext}
+                    style={{ width:"100%", background:"#e85d3a", color:"#fff", border:"none", padding:"15px", borderRadius:10, fontSize:15, fontWeight:700, cursor:"pointer", fontFamily:"Georgia,serif" }}>
+                    {current+1>=quizQuestions.length ? "See Results →" : "Next Question →"}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>
