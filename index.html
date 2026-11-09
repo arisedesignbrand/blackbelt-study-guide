@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Black Belt Excellence — Freestyle Martial Arts</title>
+<title>Black Belt Excellence 2027 — Freestyle Martial Arts</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -679,7 +679,13 @@ body {
     <p style="font-size:0.72rem;color:var(--muted);margin-bottom:14px;">Stored locally on this device only. <button onclick="ttsClearKey()" style="background:none;border:none;color:var(--red-light);cursor:pointer;font-size:0.72rem;text-decoration:underline;">Clear key</button></p>
     <label class="modal-label">Voice</label>
     <select id="ttsVoiceSelect" class="modal-select"></select>
-    <p style="font-size:0.72rem;color:var(--muted);margin-bottom:18px;">No API key? Browser voice will be used as fallback.</p>
+    <label class="modal-label">Use premium voice for</label>
+    <select id="ttsScopeSelect" class="modal-select">
+      <option value="summaries">Quick Summaries only (saves credits)</option>
+      <option value="all">Everything (uses credits fast)</option>
+    </select>
+    <p style="font-size:0.72rem;color:var(--muted);margin-bottom:10px;">Everything else uses your device's built-in voice. Premium audio is saved on this device after the first play, so replays are free. <button onclick="ttsClearCache()" id="ttsClearCacheBtn" style="background:none;border:none;color:var(--red-light);cursor:pointer;font-size:0.72rem;text-decoration:underline;">Clear saved audio</button></p>
+    <p style="font-size:0.72rem;color:var(--muted);margin-bottom:18px;">No API key? The built-in browser voice is used for everything.</p>
     <div class="modal-actions">
       <button class="modal-btn modal-btn-cancel" onclick="ttsCloseSettings()">Cancel</button>
       <button class="modal-btn modal-btn-save" id="ttsSettingsBtn" onclick="ttsSaveSettings()">Save Settings</button>
@@ -700,21 +706,21 @@ body {
 </div>
 
 <!-- SCROLL TO TOP -->
-<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({{top:0,behavior:'smooth'}})">↑</button>
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-belt"></div>
   <h1>Black Belt Excellence</h1>
-  <p class="hero-sub">Freestyle Martial Arts — Black Belt Exam Study Guide</p>
+  <p class="hero-sub">Freestyle Martial Arts — Black Belt Exam Study Guide · 2027</p>
   <div class="hero-belt"></div>
 </div>
 
 <!-- TOP NAV -->
 <nav class="top-nav" id="topNav">
   <button class="top-nav-btn" id="btn-dash" onclick="setMode('dash')">🏠 Dashboard</button>
-  <button class="top-nav-btn" id="btn-oral" onclick="setMode('oral')">📚 Oral Exam — June 5</button>
-  <button class="top-nav-btn" id="btn-skills" onclick="setMode('skills')">🥊 Skills Exam — Aug 7–9</button>
+  <button class="top-nav-btn" id="btn-oral" onclick="setMode('oral')">📚 Oral Exam — June 4</button>
+  <button class="top-nav-btn" id="btn-skills" onclick="setMode('skills')">🥊 Skills Exam — Aug 6–8</button>
 </nav>
 
 <!-- SUB NAV -->
@@ -729,6 +735,33 @@ body {
 <!-- ═══ DASHBOARD ═══ -->
 <section id="sec-dash" class="section">
   <div id="dashContent"></div>
+</section>
+
+
+<!-- ═══ CRITICAL THINKING ═══ -->
+<section id="sec-critical" class="section">
+  <h2 class="section-title">Critical Thinking</h2>
+  <div class="section-read-bar">
+    <button class="read-btn" onclick="ttsReadCT()">🔊 Read Current Question</button>
+  </div>
+
+  <div class="card" style="margin-bottom:24px;background:linear-gradient(135deg,#13110a,#0d0d0a);border-color:var(--accent-dim);">
+    <p style="font-size:0.9rem;color:#ccc;line-height:1.8;">These questions require you to <strong style="color:var(--accent-light);">connect concepts, explain your reasoning, and apply knowledge</strong> — exactly what the oral exam panel will ask. Think through your answer first, then reveal the model answer to compare. Rate yourself honestly so the weakest questions surface first.</p>
+  </div>
+
+  <!-- Filters -->
+  <div class="category-filter" id="ctFilter" style="margin-bottom:20px;"></div>
+
+  <!-- Progress -->
+  <div style="display:flex;gap:20px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;">
+    <div style="text-align:center;"><div style="font-family:'Cinzel Decorative',serif;font-size:1.8rem;color:#66bb6a;" id="ctNailed">0</div><div style="font-size:0.65rem;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;">Nailed It</div></div>
+    <div style="text-align:center;"><div style="font-family:'Cinzel Decorative',serif;font-size:1.8rem;color:var(--gold);" id="ctGetting">0</div><div style="font-size:0.65rem;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;">Getting There</div></div>
+    <div style="text-align:center;"><div style="font-family:'Cinzel Decorative',serif;font-size:1.8rem;color:var(--red-light);" id="ctNeeds">0</div><div style="font-size:0.65rem;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;">Need Work</div></div>
+    <div style="text-align:center;"><div style="font-family:'Cinzel Decorative',serif;font-size:1.8rem;color:var(--muted);" id="ctUnseen">30</div><div style="font-size:0.65rem;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;">Remaining</div></div>
+  </div>
+
+  <!-- Question Card -->
+  <div id="ctQuestionArea"></div>
 </section>
 
 <!-- ═══ ORAL SECTIONS ═══ -->
@@ -2004,9 +2037,9 @@ body {
 let currentMode = 'dash';
 let currentSection = 'sec-dash';
 
-const ORAL_DATE = new Date('2026-06-05T09:00:00');
-const SKILLS_DATE = new Date('2026-08-07T09:00:00');
-const START_DATE = new Date('2026-03-19T00:00:00');
+const ORAL_DATE = new Date('2027-06-04T09:00:00');
+const SKILLS_DATE = new Date('2027-08-06T09:00:00');
+const START_DATE = new Date('2026-11-09T00:00:00');
 
 // ── MODE CONFIG ──
 const modes = {
@@ -2025,6 +2058,7 @@ const modes = {
       { id:'sec-philosophy', label:'📖 Philosophy' },
       { id:'sec-achievements', label:'🎯 Achievements' },
       { id:'sec-mindset', label:'🧠 Mindset' },
+      { id:'sec-critical', label:'🧠 Critical Thinking' },
       { id:'sec-oral-quiz', label:'🃏 Flashcards', isQuiz:true },
     ],
   },
@@ -2039,124 +2073,307 @@ const modes = {
 };
 
 // ── CURRICULUM ──
-const oralCurriculum = [
-  { week:1, label:'Dojo History & Key People', dates:'Mar 19 – Mar 25, 2026', tasks:[
-    'Read the Dojo History section',
-    'Study all key dojo figures',
-    'Complete Dojo History flashcards',
-    'Recite the dojo timeline from memory',
+// Each week is defined once (label + tasks). Dates are computed from the exam dates
+// at the top of this script, so moving an exam date re-labels the whole schedule.
+function fmtShort(d) { return d.toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
+
+function daysBetween(a, b) {
+  // whole local calendar days from a to b (immune to daylight-saving shifts)
+  const a0 = new Date(a.getFullYear(), a.getMonth(), a.getDate());
+  const b0 = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+  return Math.round((b0 - a0) / 86400000);
+}
+
+function buildSchedule(weeks, anchor, lastDay) {
+  return weeks.map((w, i) => {
+    const s = new Date(anchor.getFullYear(), anchor.getMonth(), anchor.getDate() + i * 7);
+    const isLast = i === weeks.length - 1;
+    const e = isLast
+      ? new Date(lastDay.getFullYear(), lastDay.getMonth(), lastDay.getDate())
+      : new Date(s.getFullYear(), s.getMonth(), s.getDate() + 6);
+    return { ...w, week: i + 1, dates: fmtShort(s) + " – " + fmtShort(e) + ", " + e.getFullYear() };
+  });
+}
+
+// 30 weeks: Nov 9, 2026 → Jun 4, 2027
+// Pass 1 (wks 1–9): learn each topic. Pass 2 (10–16): go deeper with Critical Thinking.
+// Pass 3 (17–23): recall from memory. Then mock orals (24–28), final review, exam week.
+const oralWeeks = [
+  { label: "Dojo History & Key People", tasks: [
+    "Read the Dojo History section",
+    "Study all key dojo figures",
+    "Complete Dojo History flashcards",
+    "Recite the dojo timeline from memory",
   ]},
-  { week:2, label:'Martial Art Styles — Part 1', dates:'Mar 26 – Apr 1', tasks:[
-    'Study Karate, TKD, Muay Thai, Judo/BJJ',
-    'Study Krav Maga, Arnis, Wing Chun, Kung Fu',
-    'Complete Martial Art Styles flashcards',
+  { label: "Martial Art Styles — Part 1", tasks: [
+    "Study Karate, Tae Kwon Do, Tang Soo Do, Muay Thai, and Kickboxing",
+    "Study Judo, Jiu-Jitsu/BJJ, Krav Maga/Haganah, and Arnis/Escrima/Kali",
+    "Start the Martial Art Styles flashcards",
     "Name each style's country of origin from memory",
   ]},
-  { week:3, label:'Martial Art Styles — Part 2', dates:'Apr 2 – Apr 8', tasks:[
-    'Study Aikido, Ninjutsu, Jeet Kune Do, Boxing',
-    'Study Capoeira, Sambo, Savate, Sumo, Silat',
-    'Study UFC, CDT, WTF, IBJJF, Kodokan organizations',
-    'Listen to Styles Quick Summary 3x',
+  { label: "Martial Art Styles — Part 2", tasks: [
+    "Study Kung Fu, Wushu, Wing Chun, and Kempo/Kajukenbo",
+    "Study Aikido, Ninjutsu, Jeet Kune Do, and Tai Chi",
+    "Continue the Martial Art Styles flashcards",
+    "Listen to the Styles Quick Summary 3x",
   ]},
-  { week:4, label:'Famous Martial Artists', dates:'Apr 9 – Apr 15', tasks:[
-    'Study Bruce Lee, Chuck Norris, Jackie Chan, Jet Li',
-    'Study Muhammad Ali, Joe Lewis, Gracie Family',
-    'Study Ronda Rousey, Jhoon Rhee, Ed Parker, Stephen Hayes',
-    'Complete Famous People flashcards',
+  { label: "Martial Art Styles — Part 3 & Organizations", tasks: [
+    "Study Wrestling, Boxing, and XMA/Tricking",
+    "Study the Other Styles card: Sambo, Savate, Capoeira, Silat, Sumo",
+    "Study the organizations: UFC, CDT, WTF, IBJJF, Kodokan, IWUF",
+    "Complete all Martial Art Styles flashcards",
   ]},
-  { week:5, label:'Philosophy, Creeds & Sensei Sayings', dates:'Apr 16 – Apr 22', tasks:[
-    'Memorize the Mission Statement word for word',
-    'Memorize the Student Creed word for word',
-    'Study all 5 Dale Carnegie Golden Rules',
-    'Study all 7 Stephen Covey Habits with explanations',
+  { label: "Famous Martial Artists", tasks: [
+    "Study Bruce Lee, Chuck Norris, Jackie Chan, Jet Li",
+    "Study Muhammad Ali, Joe Lewis, Gracie Family",
+    "Study Ronda Rousey, Jhoon Rhee, Ed Parker, Stephen Hayes",
+    "Complete Famous People flashcards",
   ]},
-  { week:6, label:'Achievements — Body, Mind & Spirit', dates:'Apr 23 – Apr 29', tasks:[
-    'Study all Body achievement requirements',
-    'Study all Mind achievement requirements',
-    'Study all Spirit achievement requirements',
-    'Complete Achievements flashcards',
+  { label: "Philosophy, Creeds & Sensei Sayings", tasks: [
+    "Memorize the Mission Statement word for word",
+    "Memorize the Student Creed word for word",
+    "Study all 5 Dale Carnegie Golden Rules",
+    "Study all 7 Stephen Covey Habits with explanations",
   ]},
-  { week:7, label:'Mindset, Values & Key Terms', dates:'Apr 30 – May 6', tasks:[
-    'Memorize the Five Mindset Checklist',
-    'Study all key terms: Do, Dan, Kata, Judoka, Randori, etc.',
-    'Complete Terms flashcards',
-    'Listen to Mindset Quick Summary 3x',
+  { label: "Achievements — Body, Mind & Spirit", tasks: [
+    "Study all Body achievement requirements",
+    "Study all Mind achievement requirements",
+    "Study all Spirit achievement requirements",
+    "Complete Achievements flashcards",
   ]},
-  { week:8, label:'Full Oral Review', dates:'May 7 – May 13', tasks:[
-    'Complete ALL oral flashcards — target 80%+ score',
-    'Listen to all Quick Summaries back to back',
-    'Recite Mission Statement & Student Creed aloud',
-    'Review any flashcard categories scored below 80%',
+  { label: "Mindset, Values & Key Terms", tasks: [
+    "Memorize the Five Mindset Checklist",
+    "Study all key terms: Do, Dan, Kata, Judoka, Randori, etc.",
+    "Complete Terms flashcards",
+    "Listen to the Mindset Quick Summary 3x",
   ]},
-  { week:9, label:'Mock Oral Exam + Weak Spots', dates:'May 14 – May 20', tasks:[
-    'Do a full timed oral run-through with someone asking questions',
-    'Drill any remaining weak topics',
-    'Listen to Read Full Section for weakest areas',
-    'Confirm physical fitness prep is on track',
+  { label: "First Full Review", tasks: [
+    "Complete ALL oral flashcards — target 80%+ score",
+    "Listen to all Quick Summaries back to back",
+    "Recite the Mission Statement & Student Creed aloud",
+    "Review any flashcard categories scored below 80%",
   ]},
-  { week:10, label:'Exam Week — Light Review Only', dates:'May 21 – Jun 5', tasks:[
-    'Light review — no new studying',
-    'Listen to Quick Summaries once per day',
-    'Rest and stay confident',
-    '⭐ ORAL EXAM — June 5th!',
+  { label: "Second Pass — Dojo History", tasks: [
+    "Answer every Dojo History Critical Thinking question out loud before revealing the answer",
+    "Rate yourself honestly — redo any Need Work questions",
+    "Retake the Dojo History flashcards — aim for 90%+",
+    "Explain the dojo timeline and key people to a family member or friend",
+  ]},
+  { label: "Second Pass — Martial Art Styles", tasks: [
+    "Answer every Styles Critical Thinking question out loud",
+    "Retake the Martial Art Styles flashcards — aim for 90%+",
+    "Compare in your own words: Judo vs Jiu-Jitsu/BJJ, Muay Thai vs Kickboxing, Aikido vs Krav Maga",
+    "Listen to the Styles Quick Summary while commuting or exercising",
+  ]},
+  { label: "Second Pass — Famous Martial Artists", tasks: [
+    "Answer every Famous People Critical Thinking question out loud",
+    "Retake the Famous People flashcards — aim for 90%+",
+    "For each person, state who they are, when they lived, and why they matter",
+    "Rate yourself and redo any Need Work questions",
+  ]},
+  { label: "Second Pass — Philosophy & Creeds", tasks: [
+    "Answer every Philosophy Critical Thinking question out loud",
+    "Recite the Mission Statement and Student Creed without notes",
+    "Explain each of Covey's 7 Habits and Carnegie's 5 Golden Rules in your own words",
+    "Give a real example from your own life for three of the habits or rules",
+  ]},
+  { label: "Second Pass — Achievements, Mindset & Key Terms", tasks: [
+    "Retake the Achievements and Terms flashcards — aim for 90%+",
+    "Explain the Body, Mind & Spirit achievements and their requirements without notes",
+    "Recite the Five Mindset Checklist from memory",
+    "Review your dojo materials for Striking Targets, Human Anatomy, Health/Nutrition, and Verbal Defense (not covered in this guide)",
+  ]},
+  { label: "Second Pass — Cross-Topic Critical Thinking", tasks: [
+    "Work through the Cross-Topic Critical Thinking questions out loud",
+    "Practice linking one idea from three different sections in a single answer",
+    "Re-rate yourself — your weakest questions come up first",
+    "Listen to the Model Answer for anything rated Need Work",
+  ]},
+  { label: "Review #2", tasks: [
+    "Complete ALL oral flashcards — target 85%+",
+    "Take the Quiz (button on the Dashboard) and note your weak categories",
+    "Recite the Mission Statement and Student Creed aloud",
+    "Check in on your physical test prep — are you on track for June 4?",
+  ]},
+  { label: "Recall — Dojo History", tasks: [
+    "Write the dojo timeline from memory, then check it against the guide",
+    "List every key dojo person and one fact about each without notes",
+    "Redo the Dojo History flashcards — aim for 100%",
+    "Explain why the dojo's key dates matter, not just when they happened",
+  ]},
+  { label: "Recall — Martial Art Styles", tasks: [
+    "For each style, state its origin, founder or date, and one key fact — from memory",
+    "Name the organizations (UFC, CDT, WTF, IBJJF, Kodokan, IWUF) and what each does",
+    "Redo the Martial Art Styles flashcards — aim for 100%",
+    "Teach three styles to someone else",
+  ]},
+  { label: "Recall — Famous Martial Artists", tasks: [
+    "For each famous martial artist, state key dates, style, and legacy — from memory",
+    "Match each person to the style or organization they are tied to",
+    "Redo the Famous People flashcards — aim for 100%",
+    "Pick the three people you know least and re-read their cards",
+  ]},
+  { label: "Recall — Philosophy & Creeds", tasks: [
+    "Write out the Mission Statement and Student Creed from memory",
+    "List all 5 Golden Rules and all 7 Habits from memory",
+    "Explain the Concept of Black Belt Excellence in your own words",
+    "Redo the Philosophy flashcards — aim for 100%",
+  ]},
+  { label: "Recall — Achievements, Mindset & Terms", tasks: [
+    "Explain each achievement (Body, Mind, Spirit) and what it requires, from memory",
+    "Recite the Five Mindset Checklist",
+    "Define every key term in the guide without looking",
+    "Study your dojo materials for Striking Targets, Human Anatomy, Health/Nutrition, and Verbal Defense",
+  ]},
+  { label: "Cross-Topic Synthesis", tasks: [
+    "Redo all Critical Thinking questions rated Need Work or Getting There",
+    "Take the Quiz (Dashboard button) — target 85%+",
+    "Practice answering in three parts: your point, your reason, an example",
+    "Ask someone to quiz you using the judge's cheat sheet topics",
+  ]},
+  { label: "Review #3 & Logistics", tasks: [
+    "Complete ALL oral flashcards — target 90%+",
+    "Check that your physician clearance form is signed and ready to turn in",
+    "Check in on your physical test prep — are you on track for June 4?",
+    "Listen to all Quick Summaries back to back",
+  ]},
+  { label: "Mock Oral #1", tasks: [
+    "Have someone ask you questions on Dojo History, Philosophy, and Mindset",
+    "Answer out loud, standing up, as you would in front of the judges",
+    "Note every question you hesitated on",
+    "Review those topics in the guide",
+  ]},
+  { label: "Mock Oral #2", tasks: [
+    "Have someone ask you questions on Styles, Famous People, and Achievements",
+    "Answer out loud in full sentences — no one-word answers",
+    "Note every question you hesitated on",
+    "Review those topics in the guide",
+  ]},
+  { label: "Weak-Spot Drill", tasks: [
+    "Redo every flashcard category scored below 90%",
+    "Drill every Critical Thinking question still rated Need Work",
+    "Re-read the guide sections behind your weakest answers",
+    "Keep up your physical test training",
+  ]},
+  { label: "Full Mock Oral", tasks: [
+    "Do a full timed oral run-through with someone asking questions in the judge's cheat sheet order",
+    "Cover every topic, including Verbal Defense, Striking Targets, Human Anatomy, and Health/Nutrition",
+    "Ask your mock judge for honest feedback",
+    "Write down the three topics to tighten up",
+  ]},
+  { label: "Tighten Up", tasks: [
+    "Work through your three weakest topics from the full mock oral",
+    "Retake the Quiz — aim to beat your previous score",
+    "Recite the Mission Statement and Student Creed aloud",
+    "Keep up your physical test training",
+  ]},
+  { label: "Final Review", tasks: [
+    "Complete ALL oral flashcards one last time",
+    "Listen to all Quick Summaries",
+    "Confirm exam logistics: time, location, what to bring, and your physician clearance form",
+    "Get good sleep and plan a light final few days",
+  ]},
+  { label: "Exam Week — Light Review Only", tasks: [
+    "Light review — no new studying",
+    "Listen to a Quick Summary once per day",
+    "Rest, eat well, and stay confident",
+    "⭐ ORAL EXAM + PHYSICAL — June 4th!",
   ]},
 ];
 
-const skillsCurriculum = [
-  { week:1, label:'Traditional Basics & Stances', dates:'Jun 5 – Jun 11', tasks:[
-    'Drill all 5 stances: Attention, Ready, Horse Ready, Front, Back',
-    'Practice all blocks and strikes in each stance',
-    'Drill all 3 basic hand combinations',
-    'Practice 10 one-step attacks with precision',
+// 9 weeks: Jun 4 → Aug 6, 2027
+const skillsWeeks = [
+  { label: "Traditional Basics & Stances", tasks: [
+    "Drill all 5 stances: Attention, Ready, Horse Ready, Front, Back",
+    "Practice all blocks and strikes in each stance",
+    "Drill all 3 basic hand combinations",
+    "Practice 10 one-step attacks with precision",
   ]},
-  { week:2, label:'Kicking Techniques', dates:'Jun 12 – Jun 18', tasks:[
-    'Drill all 9 rear leg kicks both sides',
-    'Practice 3 JBB kicks: Wheel, Spin Crescent, Tornado',
-    'Drill all 5 slide/front leg kicks',
-    'Practice all JBB jump & pop kicks',
+  { label: "Kicking Techniques", tasks: [
+    "Drill all 9 rear leg kicks both sides",
+    "Practice 3 JBB kicks: Wheel, Spin Crescent, Tornado",
+    "Drill all 5 slide/front leg kicks",
+    "Practice all JBB jump & pop kicks",
   ]},
-  { week:3, label:'Kick Sets & TKD Combos', dates:'Jun 19 – Jun 25', tasks:[
-    'Drill Kick Set 1 (Basic) both legs to fluency',
-    'Drill Kick Sets 2, 3, 4 both legs',
-    'Drill Kick Set 5 (Slide Hook/Round/Wheel/Tornado)',
-    'Practice all 3 TKD kicking combos',
+  { label: "Kick Sets & TKD Combos", tasks: [
+    "Drill Kick Set 1 (Basic) both legs to fluency",
+    "Drill Kick Sets 2, 3, 4 both legs",
+    "Drill Kick Set 5 (Slide Hook/Round/Wheel/Tornado)",
+    "Practice all 3 TKD kicking combos",
   ]},
-  { week:4, label:'Boxing & Kickboxing Combos', dates:'Jun 26 – Jul 2', tasks:[
-    'Drill Boxing Combos 1–3 until automatic',
-    'Build up to 9-punch combo and 11-punch combo',
-    'Drill all 3 Kickboxing combos with footwork',
-    'Practice Base Pattern flow drill',
+  { label: "Boxing & Kickboxing Combos", tasks: [
+    "Drill Boxing Combos 1–3 until automatic",
+    "Build up to 9-punch combo and 11-punch combo",
+    "Drill all 3 Kickboxing combos with footwork",
+    "Practice Base Pattern flow drill",
   ]},
-  { week:5, label:'Muay Thai & Pad Drills', dates:'Jul 3 – Jul 9', tasks:[
-    'Drill all 6 Muay Thai elbow types both sides',
-    'Drill all 4 Muay Thai combos',
-    'Train on Focus Mitts: Boxing & Kickboxing',
-    'Train on Heavy Bag and Kick Shields',
+  { label: "Muay Thai & Pad Drills", tasks: [
+    "Drill all 6 Muay Thai elbow types both sides",
+    "Drill all 4 Muay Thai combos",
+    "Train on Focus Mitts: Boxing & Kickboxing",
+    "Train on Heavy Bag and Kick Shields",
   ]},
-  { week:6, label:'Grappling — Takedowns & Escapes', dates:'Jul 10 – Jul 16', tasks:[
-    'Drill technical stand ups, falls, rolls, sprawls',
-    'Practice all 10 takedown techniques',
-    'Drill escapes from Back Mount, Full Mount, Side Control',
-    'Practice guard passes: Closed Guard, Half Guard',
+  { label: "Grappling — Takedowns & Escapes", tasks: [
+    "Drill technical stand ups, falls, rolls, sprawls",
+    "Practice all 10 takedown techniques",
+    "Drill escapes from Back Mount, Full Mount, Side Control",
+    "Practice guard passes: Closed Guard, Half Guard",
   ]},
-  { week:7, label:'Grappling — Submissions', dates:'Jul 17 – Jul 23', tasks:[
-    'Drill all 14 submissions from the exam list',
-    'Practice all guard sweeps: Butterfly, X, Deep Half, etc.',
-    'Complete Skills — Techniques flashcards',
-    'Do live grappling rounds focusing on submissions',
+  { label: "Grappling — Submissions", tasks: [
+    "Drill all 14 submissions from the exam list",
+    "Practice all guard sweeps: Butterfly, X, Deep Half, etc.",
+    "Complete Skills — Techniques flashcards",
+    "Do live grappling rounds focusing on submissions",
   ]},
-  { week:8, label:'Self Defense & Weapons', dates:'Jul 24 – Jul 30', tasks:[
-    'Drill all 5 Expect the Unexpected scenarios',
-    'Practice all bear hug, choke, and grab defenses',
-    'Drill Knife Defense #1, #2, #6',
-    'Drill Gun Defense 1, 2, 3 and all bat swing defenses',
+  { label: "Self Defense & Weapons", tasks: [
+    "Drill all 5 Expect the Unexpected scenarios",
+    "Practice all bear hug, choke, and grab defenses",
+    "Drill Knife Defense #1, #2, #6",
+    "Drill Gun Defense 1, 2, 3 and all bat swing defenses",
   ]},
-  { week:9, label:'Full Run-Through', dates:'Jul 31 – Aug 7', tasks:[
-    'Full practice run of all 9 exam parts',
-    'Focus on weakest scoring areas',
-    'Rest and stay confident',
-    '⭐ SKILLS EXAM — August 7, 8 & 9!',
+  { label: "Full Run-Through", tasks: [
+    "Full practice run of all 9 exam parts",
+    "Focus on weakest scoring areas",
+    "Rest and stay confident",
+    "⭐ SKILLS EXAM — August 6, 7 & 8!",
   ]},
+];
+
+const oralCurriculum = buildSchedule(oralWeeks, START_DATE, ORAL_DATE);
+const skillsCurriculum = buildSchedule(skillsWeeks, ORAL_DATE, SKILLS_DATE);
+
+
+const ctQuestions = [
+  { id:1, topic:"Dojo History", difficulty:"medium", q:"Sensei K began teaching at San Diego Parks & Recreation at age 20 with over 120 students by 1992, yet didn't open his own dojo until 1994. What does this progression tell us about the right approach to building something meaningful?", a:"It shows that building credibility, experience, and a student base before making a major commitment leads to a stronger foundation. Sensei K proved the demand existed before investing in a physical space — a patient, strategic approach consistent with Covey's Habit 2 (Begin with the End in Mind) and Habit 3 (Put First Things First). Rushing to open a dojo without that foundation might have led to failure." },
+  { id:2, topic:"Dojo History", difficulty:"hard", q:"Mary Davis began martial arts at age 57 and earned her black belt at 60. How does her journey embody the concept of Black Belt Excellence, and what does it challenge us to reconsider about age and potential?", a:"Mary Davis demonstrates that Black Belt Excellence — always doing your personal best mentally, physically, and spiritually — has no age limit. Her journey challenges the assumption that martial arts is only for the young, and proves that discipline, commitment, and growth are available to anyone at any stage of life. She also went on to start the STARS program and teach multiple class types, showing that earning a black belt was a beginning, not an end." },
+  { id:3, topic:"Dojo History", difficulty:"medium", q:"The Mission Statement was not written until 2002 — eight years after the dojo opened. Why might a school operate successfully without a formal mission statement, and what value does having one bring?", a:"In the early years, the mission may have lived in Sensei K's actions and teaching rather than in words. However, formalizing a mission statement creates a shared standard that guides all students and instructors, especially as the school grows. It transforms a personal vision into a community commitment. The Mission Statement's five E's — Empower, Encourage, Enrich, Inspire, and We are committed — give every member a framework to live by, not just a school to attend." },
+  { id:4, topic:"Dojo History", difficulty:"hard", q:"Grandmaster Lucky Luciano trained in Shotokan while serving in the US Armed Forces in Japan in the 1950s. How did the US military's presence in postwar Japan contribute to the global spread of martial arts?", a:"American servicemen stationed in Japan after World War II were exposed to traditional martial arts — Judo, Karate, Aikido — and brought those skills home when they returned. This created an organic pipeline that introduced martial arts to American communities long before they appeared in mainstream culture. Grandmaster Luciano is a direct example of this pathway. Without that military-cultural exchange, the American martial arts movement of the 1960s and 70s would have developed very differently." },
+  { id:5, topic:"Dojo History", difficulty:"medium", q:"Sensei Will Jackson started teaching at age 15 and had his own program at the La Jolla YMCA at 19. How does his early teaching career connect to Covey's Habit 7 — Sharpen the Saw?", a:"Teaching is one of the most powerful ways to deepen your own understanding — you cannot teach what you do not fully know. By taking on teaching responsibilities so young, Sensei Jackson was simultaneously sharpening his own skills while developing others. Habit 7 is about continuous renewal and improvement, and teaching is a form of that renewal. His early career also reflects Habit 1 — Be Proactive — by creating opportunities rather than waiting for them." },
+  { id:6, topic:"Dojo History", difficulty:"hard", q:"The Five Mindset Checklist says we are the 'friendliest place in San Diego' and the 'cleanest martial arts school in San Diego.' Why would a martial arts school specifically define itself by friendliness and cleanliness rather than fighting skill?", a:"Because a martial arts school is also a community, a business, and a representation of its values. Friendliness reflects the Carnegie principle of genuine interest in people and creates an environment where students want to return. Cleanliness signals respect — for the space, for training partners, and for oneself. These qualities also make the school accessible and welcoming to families and beginners. Fighting skill is assumed; character and culture are what differentiate a great school from a merely good one." },
+  { id:7, topic:"Philosophy", difficulty:"medium", q:"The Student Creed says 'I am using my martial arts to inspire a kind and compassionate world.' How is this statement both ambitious and practical at the same time?", a:"It is ambitious because it frames martial arts training as a tool for global change rather than personal achievement alone. It is practical because it happens one interaction at a time — how a student treats a training partner, a stranger, or a difficult situation. Every act of respect, restraint, or kindness in daily life is a direct expression of this line. The creed does not ask students to change the world through grand gestures, but through consistent character." },
+  { id:8, topic:"Philosophy", difficulty:"hard", q:"Carnegie's rule 'Don't criticize, condemn or complain' and Covey's Habit 5 'Seek first to understand' are closely related. How do they work together in a martial arts context?", a:"Both principles ask you to lead with empathy rather than judgment. In a dojo, criticizing a training partner's technique harshly creates defensiveness and erodes trust. Seeking first to understand their level, their fear, their goal before offering feedback creates a learning environment. Together they form a communication philosophy: withhold the impulse to criticize, replace it with curiosity and understanding, and only then offer your perspective. This is as important in sparring as it is in life." },
+  { id:9, topic:"Philosophy", difficulty:"medium", q:"Covey's Habit 4 is 'Think Win-Win.' How might this apply to a sparring match where there is a clear winner and loser?", a:"Even in competitive sparring, a Win-Win mindset reframes the outcome. The winner gains experience reading and responding to a real opponent. The loser gains specific feedback on vulnerabilities and areas to improve. Both students leave better than they arrived. A Win-Win mindset also changes behavior during the match — instead of trying to hurt or embarrass an opponent, you challenge them in a way that makes both of you better. The best training partners make each other great, regardless of who scores more points." },
+  { id:10, topic:"Philosophy", difficulty:"hard", q:"The saying 'A Black Belt is a White Belt who never gave up' is one of the most famous in martial arts. What does it reveal about the nature of mastery and how does it connect to the Body, Mind, and Spirit achievements?", a:"It reveals that mastery is not a destination reached by the talented few — it is the result of persistent, sustained effort over time. The white belt who never gave up has developed Body (physical conditioning and technique), Mind (knowledge, strategy, self-awareness), and Spirit (the inner resolve to continue when progress is slow or painful). The three achievements mirror this exactly — each requires sustained effort over months, not a single test. Black Belt Excellence is not a title; it is a practice." },
+  { id:11, topic:"Philosophy", difficulty:"medium", q:"Carnegie says 'Give honest and sincere appreciation' — not just appreciation, but honest AND sincere. Why does the distinction matter, and how does insincere appreciation cause harm?", a:"Insincere appreciation — flattery — is manipulative and people can often sense it. It erodes trust over time and devalues genuine praise when it is given. Honest and sincere appreciation must be earned by the recipient through real merit, and offered by the giver because they truly mean it. In a dojo, telling every student their technique is perfect when it is not fails them — it robs them of the feedback they need to grow. Carnegie understood that people crave real recognition, not empty words." },
+  { id:12, topic:"Philosophy", difficulty:"hard", q:"Covey's Habit 2 asks you to 'Begin with the End in Mind' by imagining your own funeral. How does this same principle apply to earning a black belt, and how might it change how someone approaches their training?", a:"Imagining the end — standing in front of the panel at your black belt exam, having earned it — helps you reverse-engineer what that requires. It clarifies the physical conditioning, the knowledge, the character, and the consistency needed. A student who keeps that end in mind trains with purpose rather than going through the motions. It also shifts the question from 'will I pass?' to 'who do I need to become?' — which is a fundamentally more powerful motivator." },
+  { id:13, topic:"Martial Art Styles", difficulty:"medium", q:"Judo and Aikido both evolved from Japanese Jiu-Jitsu but developed very different philosophies. Compare and contrast their approaches to conflict.", a:"Judo, created by Jigoro Kano in 1882, retained the competitive and physical elements of Jiu-Jitsu — throws, pins, and submissions — and became an Olympic sport. It values efficiency and maximum effect with minimum effort. Aikido, created by Morihei Ueshiba in 1942, took a more spiritual path — explicitly non-violent, focused on redirecting force to protect both defender and attacker from injury. Judo asks how do I win, while Aikido asks how do I resolve this without harm. Both are valid responses to conflict, shaped by the philosophy of their founders." },
+  { id:14, topic:"Martial Art Styles", difficulty:"hard", q:"Bruce Lee created Jeet Kune Do in 1967 to free practitioners from the limitations of any single style. How does this philosophy of 'absorb what is useful, discard what is not' mirror the broader history of how martial arts evolve?", a:"Every major martial art is itself a synthesis — Kano took Jiu-Jitsu and created Judo, the Gracies took Judo and created BJJ, Kajukenbo blended five styles. Martial arts have always evolved through cross-pollination and adaptation. Bruce Lee simply made this process conscious and intentional. JKD is philosophy applied to combat: do not be bound by tradition for tradition's sake; keep what works in reality. This is also why MMA emerged — fighters tested their arts against each other and the most effective elements from each survived." },
+  { id:15, topic:"Martial Art Styles", difficulty:"medium", q:"Krav Maga has no ranking system, no kata, and no sporting competition. How does this make it fundamentally different from most other martial arts, and what does that trade-off cost and gain?", a:"Most martial arts use ranking, forms, and competition to develop discipline, measure progress, and preserve tradition. Krav Maga strips all of that away in favor of a single goal: real-world survival. The gain is immediacy and practicality — techniques are simple, aggressive, and designed to work under stress against real threats. The cost is the depth of tradition, the developmental journey of ranking, and the refinement that comes from competitive pressure. Krav Maga is a tool, not a way of life. Most other martial arts aspire to be both." },
+  { id:16, topic:"Martial Art Styles", difficulty:"hard", q:"Capoeira was developed by enslaved Africans in Brazil who disguised it as dance. What does this tell us about the relationship between oppression, creativity, and the human need for self-determination?", a:"It demonstrates that the human drive for dignity and self-defense cannot be fully suppressed — it finds a way to exist even under extreme oppression. By embedding martial technique within a cultural art form, enslaved Africans preserved both their physical autonomy and their cultural identity simultaneously. Capoeira is a profound example of resilience and creativity under constraint. It also challenges the assumption that martial arts must be overtly confrontational — sometimes the most powerful acts of resistance are the ones that go unrecognized by those in power." },
+  { id:17, topic:"Martial Art Styles", difficulty:"medium", q:"Muay Thai uses eight points of contact — fists, elbows, knees, and shins. How does training in Muay Thai change how a practitioner thinks about distance and range in a fight?", a:"Most striking arts are effective at one or two ranges. Boxing works at punching range. Kicking arts work at longer range. Muay Thai trains all ranges simultaneously — the shin kick at long range, the knee in the clinch, the elbow at close quarters. A Muay Thai fighter is never without a weapon because every range has one. This multi-range awareness fundamentally changes how a fighter reads space — they are constantly evaluating distance not just for safety but for opportunity." },
+  { id:18, topic:"Martial Art Styles", difficulty:"hard", q:"The UFC was co-founded in 1993 partly to answer the question: which martial art is most effective? What did the early UFC tournaments actually prove, and how did that change the martial arts world?", a:"The early UFCs proved that grappling — specifically BJJ — was devastatingly effective against strikers who had no ground-fighting training. Royce Gracie, a lean BJJ practitioner, submitted fighters from other styles repeatedly. This forced the martial arts world to confront an uncomfortable truth: stylistic purity was a weakness. Within a decade, every serious fighter had to develop a base in both striking and grappling. The UFC did not prove one style was best; it proved that versatility is best." },
+  { id:19, topic:"Martial Art Styles", difficulty:"medium", q:"Tai Chi is practiced today primarily as a health and meditation discipline, yet it originated as a martial art. How can a practice be both deeply peaceful and rooted in combat?", a:"Tai Chi's martial origins are in its principles — redirecting force, maintaining balance, reading an opponent's energy — which are the same principles that make it therapeutic. The slow deliberate movements that improve balance and joint health are the same movements that, performed quickly and with intent, constitute self-defense techniques. The Yin-Yang philosophy at its core holds that opposites are inseparable — peace and combat, soft and hard, movement and stillness. The deepest martial arts all contain this duality." },
+  { id:20, topic:"Famous People", difficulty:"medium", q:"Bruce Lee died at 32, yet Time magazine named him one of the 100 most important people of the 20th century. What made his impact so disproportionate to the length of his life?", a:"Bruce Lee compressed a lifetime of innovation into 13 years of public life. He broke racial barriers in Hollywood at a time when Asian actors were excluded. He created a new martial art philosophy in JKD. He introduced millions of Westerners to Asian culture and martial arts through film. He articulated a philosophy of self-expression and authenticity that resonated far beyond combat. His impact was multiplied by film — a single movie reaches millions simultaneously. His early death also froze him in time, preventing the inevitable decline that diminishes most legacies." },
+  { id:21, topic:"Famous People", difficulty:"hard", q:"Muhammad Ali refused induction into the US military in 1967, saying he had no quarrel with the Viet Cong. He was stripped of his title and banned for over 3 years. How does his decision connect to the martial arts concept of using your training for a higher purpose?", a:"Ali's greatest fight was not in the ring. He used the platform that boxing gave him to take a moral stand at enormous personal cost — losing his title, his income, and his prime fighting years. This is a direct expression of the martial arts philosophy that physical training serves a larger purpose: developing the character and courage to stand for what is right even when it is costly. The Student Creed says we use our martial arts to inspire a kind and compassionate world — Ali literally did this at the highest possible price." },
+  { id:22, topic:"Famous People", difficulty:"medium", q:"Ronda Rousey was the first female fighter in the UFC Hall of Fame. What barriers did she break, and why does representation in martial arts matter?", a:"Rousey proved that women's martial arts could headline pay-per-view events and draw mainstream audiences — a commercially significant breakthrough that opened the door for the entire women's division in MMA. Representation matters because it expands what people believe is possible. A young girl watching Rousey compete sees a direct example that the sport is for her too. Her success changed the economics, culture, and demographics of the sport permanently." },
+  { id:23, topic:"Famous People", difficulty:"hard", q:"Joe Lewis, Chuck Norris, and Bruce Lee all trained together or competed against each other in the late 1960s. What does this intersection of talent tell us about how great practitioners elevate each other?", a:"Elite performers cluster because they need worthy opponents and collaborators to reach their potential. Lewis and Norris were pushing the boundaries of American karate competition. Bruce Lee was challenging every assumption about style and training. By training and competing together, each grew faster than they would have in isolation. Lewis trained with Lee specifically to add speed and philosophy to his power. This mirrors Covey's Habit 6 — Synergize: the combination of their talents produced something greater than any of them could achieve alone." },
+  { id:24, topic:"Famous People", difficulty:"medium", q:"Stephen Hayes served as the Dalai Lama's personal protection escort in the 1990s. How does this role represent the fullest expression of martial arts training?", a:"It represents the convergence of technical mastery, spiritual development, and service to a higher purpose. The Dalai Lama is a symbol of compassion and nonviolence — protecting him requires someone whose martial skill is matched by their integrity, composure, and judgment. Hayes also founded To-Shin Do, integrating Ninjutsu's practical techniques with Buddhist philosophy. His career arc from student of a 34th-generation Grandmaster to protector of one of the world's most important spiritual leaders is a complete expression of the martial arts ideal: skill in service of something greater than oneself." },
+  { id:25, topic:"Famous People", difficulty:"hard", q:"Helio Gracie continued practicing BJJ until just before his death at age 95. He once said the best position is never having to fight. How does this statement from the co-founder of one of the world's most effective fighting systems reveal the deepest purpose of martial arts training?", a:"It reveals that the goal of martial arts mastery is not to fight more but to fight less — because the truly skilled practitioner has the confidence, awareness, and judgment to avoid or de-escalate most situations before they become physical. Helio spent a lifetime developing the most effective ground-fighting system in the world, and his conclusion was that wisdom is superior to technique. This mirrors the Student Creed: we train not to become fighters, but to inspire a kind and compassionate world. The highest use of power is knowing when not to use it." },
+  { id:26, topic:"Cross-Topic", difficulty:"hard", q:"The Five Mindset Checklist says to spend quality time on new student acquisition every day. How does this connect to Carnegie's principle of becoming genuinely interested in other people?", a:"Acquiring new students is not about sales — it is about genuine belief that martial arts will improve someone's life and sharing that belief authentically. Carnegie's principle says that people respond to genuine interest, not manufactured enthusiasm. When an instructor or student genuinely cares about a friend's wellbeing and believes this training will help them, that authenticity is felt and persuasive. Treating new student acquisition as a sincere act of service rather than a commercial transaction is both more ethical and more effective." },
+  { id:27, topic:"Cross-Topic", difficulty:"hard", q:"The Mission Statement says to 'inspire others with honor, integrity, and loyalty.' How do these three values show up differently in a martial arts context versus everyday life?", a:"In martial arts, honor means following the rules of engagement even when you could cheat. Integrity means training honestly — not pretending techniques work that do not, not ranking students who are not ready. Loyalty means standing by your training partners, your school, and your sensei even when it is inconvenient. In everyday life these same values manifest as keeping promises, being honest when it costs you, and showing up for people who depend on you. The dojo is a training ground for the character needed in the world." },
+  { id:28, topic:"Cross-Topic", difficulty:"medium", q:"How does the journey from white belt to black belt mirror Covey's seven habits as a complete system?", a:"Habit 1 Be Proactive — showing up to train when you do not feel like it. Habit 2 Begin with the End in Mind — keeping the black belt goal clear through years of training. Habit 3 Put First Things First — prioritizing training and study. Habit 4 Think Win-Win — developing training partners rather than defeating them. Habit 5 Seek First to Understand — listening to instructor corrections before defending your current technique. Habit 6 Synergize — combining what you have learned from multiple styles and teachers. Habit 7 Sharpen the Saw — the black belt exam itself, and everything that comes after." },
+  { id:29, topic:"Cross-Topic", difficulty:"hard", q:"Freestyle Martial Arts teaches styles from over 15 countries and cultures. What responsibility does that create for students and instructors, and how does it connect to Black Belt Excellence?", a:"When you learn a martial art, you are inheriting a culture — its history, its philosophy, its people. That creates a responsibility to represent those arts with accuracy and respect. Black Belt Excellence — doing your personal best mentally, physically, and spiritually — extends to intellectual honesty about where knowledge comes from and the people who developed it. A student who knows that Capoeira came from enslaved Africans, or that Ninjutsu was outlawed by feudal authorities, carries that history with them. Knowledge without context is technique without soul." },
+  { id:30, topic:"Cross-Topic", difficulty:"medium", q:"The Spirit Achievement requires mentoring a student for three months. Why is teaching others a requirement for achieving the highest level of personal development?", a:"Because you cannot fully own knowledge until you can transmit it. Teaching requires you to understand something deeply enough to explain it clearly, answer questions you had not considered, and adapt your approach to someone else's learning style. It also develops patience, empathy, and communication — the Spirit qualities. Beyond that, mentoring creates the continuity that makes a school a community rather than just a class. The black belt who mentors is investing in the next generation, embodying the Mission Statement's commitment to make a difference in the world." },
 ];
 
 // ══════════════════════════════════════════════
@@ -2212,6 +2429,7 @@ function showSection(id) {
   window.scrollTo({top:0, behavior:'smooth'});
   // Special init for quiz sections
   if (id === 'sec-oral-quiz') initQuiz('oral');
+  if (id === 'sec-critical') initCT();
   if (id === 'sec-skills-quiz') initQuiz('skills');
   if (id === 'sec-dash') buildDashboard();
 }
@@ -2230,9 +2448,8 @@ function buildDashboard() {
   const oralDone = now >= ORAL_DATE;
   const skillsDone = now >= SKILLS_DATE;
   // Current week calculations
-  const msPerWeek = 7 * 24 * 60 * 60 * 1000;
-  const oralWeekNum = Math.min(10, Math.max(1, Math.floor((now - START_DATE) / msPerWeek) + 1));
-  const skillsWeekNum = oralDone ? Math.min(9, Math.max(1, Math.floor((now - ORAL_DATE) / msPerWeek) + 1)) : 0;
+  const oralWeekNum = Math.min(oralCurriculum.length, Math.max(1, Math.floor(daysBetween(START_DATE, now) / 7) + 1));
+  const skillsWeekNum = oralDone ? Math.min(skillsCurriculum.length, Math.max(1, Math.floor(daysBetween(ORAL_DATE, now) / 7) + 1)) : 0;
 
   const activePhase = skillsDone ? 'complete' : oralDone ? 'skills' : 'oral';
   const currentCurriculum = activePhase === 'oral' ? oralCurriculum : skillsCurriculum;
@@ -2240,7 +2457,7 @@ function buildDashboard() {
   const currentWeek = currentCurriculum[Math.min(currentWeekIdx, currentCurriculum.length - 1)];
 
   // Load saved checkbox state
-  const saved = JSON.parse(localStorage.getItem('fma_checklist') || '{}');
+  const saved = JSON.parse(localStorage.getItem('fma_checklist_2027') || '{}');
   const weekKey = (activePhase === 'oral' ? 'oral_' : 'skills_') + (activePhase === 'oral' ? oralWeekNum : skillsWeekNum);
 
   let phaseLabel = '';
@@ -2270,12 +2487,12 @@ function buildDashboard() {
     <div class="dash-countdown">
       <div class="countdown-card oral">
         <div class="exam-label">📚 Oral + Physical Exam</div>
-        <div class="exam-date">June 5, 2025</div>
+        <div class="exam-date">June 4, 2027</div>
         <div class="countdown-units" id="oralCountdown"></div>
       </div>
       <div class="countdown-card skills">
         <div class="exam-label">🥊 Skills Exam</div>
-        <div class="exam-date">August 7–9, 2025</div>
+        <div class="exam-date">August 6–8, 2027</div>
         <div class="countdown-units" id="skillsCountdown"></div>
       </div>
     </div>
@@ -2287,7 +2504,7 @@ function buildDashboard() {
     </div>`;
 
   updateCountdowns();
-  setInterval(updateCountdowns, 60000);
+  if (!window._cdTimer) window._cdTimer = setInterval(updateCountdowns, 60000);
 }
 
 function updateCountdowns() {
@@ -2310,11 +2527,11 @@ function updateCountdowns() {
 }
 
 function toggleCheck(key) {
-  const saved = JSON.parse(localStorage.getItem('fma_checklist') || '{}');
+  const saved = JSON.parse(localStorage.getItem('fma_checklist_2027') || '{}');
   const cb = document.getElementById('cb_' + key);
   if (cb) {
     saved[key] = cb.checked;
-    localStorage.setItem('fma_checklist', JSON.stringify(saved));
+    localStorage.setItem('fma_checklist_2027', JSON.stringify(saved));
     const ci = document.getElementById('ci_' + key);
     if (ci) ci.classList.toggle('done', cb.checked);
   }
@@ -2536,6 +2753,8 @@ const ttsSummaries = {
   people: "Famous martial artists include Bruce Lee, who founded Jeet Kune Do in 1967 and died at age 32. Chuck Norris studied Tang Soo Do. Jackie Chan is known for performing his own stunts. Jet Li became a national Wushu champion at age 11. Muhammad Ali was an Olympic gold medalist in 1960 and famous for opposing the Vietnam War. Joe Lewis, the father of kickboxing in the western world, retired undefeated. The Gracie family founded Brazilian Jiu-Jitsu. Ronda Rousey was the first American woman to medal in Olympic Judo. Jhoon Rhee is the father of American Taekwondo. Ed Parker founded American Kenpo.",
   philosophy: "The Mission Statement is: Empower our students to achieve their personal best in life. Encourage education, strong morals, and great character. Enrich lives through excellent martial arts instruction. Inspire others with honor, integrity, and loyalty. We are committed to make a difference in the world. The Student Creed states: I am developing myself in a positive manner, mentally, physically, and spiritually. I am developing confidence, discipline, and respect. I am using my martial arts to inspire a kind and compassionate world. I am dedicated and motivated to Achieve Black Belt Excellence. Dale Carnegie's five golden rules are: Smile. Remember the person's name. Give honest and sincere appreciation. Become genuinely interested in other people. And do not criticize, condemn, or complain. Stephen Covey's seven habits are: Be proactive. Begin with the end in mind. Put first things first. Think win-win. Seek first to understand then to be understood. Synergize. And sharpen the saw.",
   achievements: "The three Body Mind Spirit achievements must be earned in order, beginning at the adult Red Belt level. The Body achievement requires improving one of the five fitness components tracked over two months, plus quizzes on human anatomy and striking areas. The Mind achievement requires reading the Seven Habits of Highly Effective People by Stephen Covey and being able to verbally defend yourself. The Spirit achievement requires reading Tuesdays with Morrie by Mitch Albom and mentoring a student for three months with a letter of recommendation.",
+  critical: "This is the critical thinking section of your black belt study guide. It contains 30 questions designed to test your ability to connect concepts, explain your reasoning, and apply what you have learned. Topics include dojo history, philosophy, martial art styles, famous people, and cross-topic synthesis questions. Each question has a model answer you can compare to your own response, and you can rate yourself to track which questions need more practice.",
+
   techniques: "The black belt exam has nine parts. Part one is Traditional Basics worth 400 points, covering stances, blocks, strikes, and one-step attacks. Part two is Kicking Techniques worth 440 points, including rear leg kicks, slide kicks, jump and pop kicks, and five kick sets. Part three is Kata and Forms worth 1000 points, covering Ki-Cho and Pal-Gwe forms one through eight plus a creative kata. Part four is Breaking worth 1000 points across five techniques. Part five is Sparring including footwork, defense techniques, and multiple sparring matches. Part six is Pad Drills worth 200 points. Part seven is Grappling Skills worth 885 points covering takedowns, escapes, guard passes, and 14 submissions including the rear naked choke, arm bar, kimura, guillotine, and heel hook. Part nine is Self Defense worth 500 points, including bear hugs, chokes, weapon defenses, and five Expect the Unexpected scenarios. Combos include boxing, kickboxing, Muay Thai, and TKD kicking combinations.",
 
   mindset: "The Five Mindset Checklist states: One, we are the friendliest place in San Diego. Be the first to say hello, smile, and be sincerely interested in all. Two, we are the cleanest martial arts school in San Diego. It is everyone's job to keep the dojo clean and safe. Three, we only teach great classes, never just good classes. Keep students smiling, sweating, and learning. Four, we are excellent at student and parent communication. Five, we spend quality time on new student acquisition every day. Key terms include: Do, meaning the way. Sensei, meaning teacher. Dan and Degree mean the same thing. Kata means formal practice sequences. Randori means free sparring."
@@ -2554,6 +2773,7 @@ const elVoices = [
 let ttsApiKey = localStorage.getItem('el_api_key') || '';
 let ttsVoiceId = localStorage.getItem('el_voice_id') || elVoices[0].id;
 let ttsUseEL = !!ttsApiKey;
+let ttsScope = localStorage.getItem('el_scope') || 'summaries';
 let ttsAudio = null;
 let ttsUtterance = null;
 let ttsPaused = false;
@@ -2562,6 +2782,7 @@ let ttsPaused = false;
 function ttsOpenSettings() {
   document.getElementById('ttsModal').style.display = 'flex';
   document.getElementById('ttsApiInput').value = ttsApiKey ? '••••••••••••••••' : '';
+  document.getElementById('ttsScopeSelect').value = ttsScope;
   // Populate voice select
   const sel = document.getElementById('ttsVoiceSelect');
   sel.innerHTML = elVoices.map(v =>
@@ -2581,6 +2802,8 @@ function ttsSaveSettings() {
   }
   ttsVoiceId = document.getElementById('ttsVoiceSelect').value;
   localStorage.setItem('el_voice_id', ttsVoiceId);
+  ttsScope = document.getElementById('ttsScopeSelect').value;
+  localStorage.setItem('el_scope', ttsScope);
   ttsUseEL = !!ttsApiKey;
   ttsCloseSettings();
   // Show confirmation
@@ -2634,6 +2857,45 @@ function unlockSafariAudio() {
   } catch(e) {}
 }
 
+// ── AUDIO CACHE (saved on this device; replays cost no credits) ──
+const TTS_CACHE = 'fma_tts_v1';
+const TTS_MODEL = 'eleven_turbo_v2';
+function ttsHash(s) {
+  let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+    h1 = Math.imul(h1 ^ c, 2654435761);
+    h2 = Math.imul(h2 ^ c, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (h2 >>> 0).toString(16) + (h1 >>> 0).toString(16);
+}
+function ttsCacheKey(text) {
+  return 'https://tts-cache.invalid/' + ttsVoiceId + '/' + TTS_MODEL + '/' + ttsHash(text) + '-' + text.length;
+}
+async function ttsCacheGet(text) {
+  try {
+    if (!('caches' in window)) return null;
+    const c = await caches.open(TTS_CACHE);
+    const r = await c.match(ttsCacheKey(text));
+    return r ? await r.blob() : null;
+  } catch (e) { return null; }
+}
+async function ttsCachePut(text, blob) {
+  try {
+    if (!('caches' in window)) return;
+    const c = await caches.open(TTS_CACHE);
+    await c.put(ttsCacheKey(text), new Response(blob, { headers: { 'Content-Type': 'audio/mpeg' } }));
+  } catch (e) { /* storage full or unavailable: just skip saving */ }
+}
+async function ttsClearCache() {
+  const btn = document.getElementById('ttsClearCacheBtn');
+  try { await caches.delete(TTS_CACHE); btn.textContent = 'Cleared ✓'; }
+  catch (e) { btn.textContent = 'Nothing to clear'; }
+  setTimeout(() => btn.textContent = 'Clear saved audio', 1800);
+}
+
 async function ttsElevenLabs(text, label, mode) {
   ttsStop();
   ttsShowBar(label, mode);
@@ -2654,8 +2916,12 @@ async function ttsElevenLabs(text, label, mode) {
   // This way Safari only sees play() calls, not awaited fetches
   try {
     const audioUrls = [];
+    let allCached = true;
     for (let i = 0; i < chunks.length; i++) {
       if (!ttsUseEL) { ttsHideBar(); return; }
+      const cached = await ttsCacheGet(chunks[i]);
+      if (cached) { audioUrls.push(URL.createObjectURL(cached)); continue; }
+      allCached = false;
       const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ttsVoiceId}/stream`, {
         method: 'POST',
         headers: {
@@ -2665,7 +2931,7 @@ async function ttsElevenLabs(text, label, mode) {
         },
         body: JSON.stringify({
           text: chunks[i],
-          model_id: 'eleven_turbo_v2',
+          model_id: TTS_MODEL,
           voice_settings: { stability: 0.5, similarity_boost: 0.75 }
         })
       });
@@ -2674,8 +2940,10 @@ async function ttsElevenLabs(text, label, mode) {
         throw new Error(err.detail?.message || `API error ${res.status}`);
       }
       const blob = await res.blob();
+      await ttsCachePut(chunks[i], blob);
       audioUrls.push(URL.createObjectURL(blob));
     }
+    if (allCached) document.getElementById('ttsMode').textContent = (mode || 'Now Reading') + ' · 💾 saved audio';
 
     // Now play all chunks sequentially
     for (let i = 0; i < audioUrls.length; i++) {
@@ -2730,7 +2998,8 @@ function ttsBrowserSpeak(text, label, mode) {
 // ── MAIN SPEAK ENTRY POINT ──
 function ttsSpeak(text, label, mode) {
   unlockSafariAudio(); // must be called synchronously inside user gesture
-  if (ttsUseEL && ttsApiKey) {
+  const premiumOK = ttsScope === 'all' || mode === 'Quick Summary';
+  if (ttsUseEL && ttsApiKey && premiumOK) {
     ttsElevenLabs(text, label, mode);
   } else {
     ttsBrowserSpeak(text, label, mode);
@@ -2754,7 +3023,7 @@ function ttsReadSection(sectionId) {
 }
 
 function ttsPause() {
-  if (ttsAudio && ttsUseEL) {
+  if (ttsAudio) {
     if (ttsPaused) {
       ttsAudio.play();
       ttsPaused = false;
@@ -2807,9 +3076,175 @@ function ttsReadSection(id) {
   if (!el) return;
   const clone = el.cloneNode(true);
   clone.querySelectorAll('button,.read-btn,.card-read-btn,.section-read-bar').forEach(b => b.remove());
-  let text = (clone.innerText || clone.textContent).replace(/\\n{3,}/g,'\\n\\n').trim();
+  let text = (clone.innerText || clone.textContent).replace(/\n{3,}/g,'\n\n').trim();
   const title = el.querySelector('.section-title');
   ttsSpeak(text, title ? title.textContent.trim() : id, 'Reading Full Section');
+}
+
+
+// ══════════════════════════════════════════════
+// CRITICAL THINKING
+// ══════════════════════════════════════════════
+let ctState = {
+  activeTopic: 'all',
+  currentIdx: 0,
+  revealed: false,
+  deck: [],
+};
+
+function initCT() {
+  buildCTFilter();
+  buildCTDeck();
+}
+
+function buildCTFilter() {
+  const el = document.getElementById('ctFilter');
+  if (!el) return;
+  const topics = ['all', 'Dojo History', 'Philosophy', 'Martial Art Styles', 'Famous People', 'Cross-Topic'];
+  el.innerHTML = topics.map(t =>
+    `<button class="filter-btn ${t==='all'?'active':''}" onclick="filterCT('${t}',this)">${t==='all'?'All Topics':t}</button>`
+  ).join('');
+}
+
+function filterCT(topic, btn) {
+  ctState.activeTopic = topic;
+  document.querySelectorAll('#ctFilter .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildCTDeck();
+}
+
+function buildCTDeck() {
+  const saved = JSON.parse(localStorage.getItem('fma_ct_ratings_2027') || '{}');
+  let deck = ctState.activeTopic === 'all'
+    ? [...ctQuestions]
+    : ctQuestions.filter(q => q.topic === ctState.activeTopic);
+
+  // Sort: needs work first, then getting there, then unseen, then nailed it
+  const order = { 'needs': 0, 'getting': 1, 'unseen': 2, 'nailed': 3 };
+  deck.sort((a, b) => {
+    const ra = saved['ct_' + a.id] || 'unseen';
+    const rb = saved['ct_' + b.id] || 'unseen';
+    return (order[ra] || 2) - (order[rb] || 2);
+  });
+
+  ctState.deck = deck;
+  ctState.currentIdx = 0;
+  ctState.revealed = false;
+  updateCTScores();
+  renderCTQuestion();
+}
+
+function renderCTQuestion() {
+  const area = document.getElementById('ctQuestionArea');
+  if (!area) return;
+  const deck = ctState.deck;
+  if (!deck.length) { area.innerHTML = '<div class="card"><p style="color:var(--muted);text-align:center;">No questions in this category.</p></div>'; return; }
+  const q = deck[ctState.currentIdx];
+  const saved = JSON.parse(localStorage.getItem('fma_ct_ratings_2027') || '{}');
+  const rating = saved['ct_' + q.id] || 'unseen';
+  const diffColor = q.difficulty === 'hard' ? 'var(--red-light)' : 'var(--gold)';
+  const diffLabel = q.difficulty === 'hard' ? '🔴 Hard' : '🟡 Medium';
+  const total = deck.length;
+  const pos = ctState.currentIdx + 1;
+
+  area.innerHTML = `
+    <div class="card" style="border-color:var(--accent-dim);margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span style="font-family:Cinzel,serif;font-size:0.68rem;color:var(--accent-dim);letter-spacing:0.15em;text-transform:uppercase;">${q.topic}</span>
+          <span style="font-size:0.75rem;color:${diffColor};">${diffLabel}</span>
+        </div>
+        <span style="font-family:Cinzel,serif;font-size:0.75rem;color:var(--muted);">${pos} of ${total}</span>
+      </div>
+      <p style="font-family:'Cinzel',serif;font-size:1rem;color:var(--white);line-height:1.65;margin-bottom:20px;">${q.q}</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="read-btn" onclick="ttsReadCT()" style="font-size:0.7rem;">🔊 Hear Question</button>
+        ${!ctState.revealed ? `<button class="read-btn" onclick="revealCT()" style="background:var(--accent-dim);border-color:var(--accent);">💡 Reveal Model Answer</button>` : ''}
+      </div>
+    </div>
+
+    ${ctState.revealed ? `
+    <div class="card" style="background:linear-gradient(135deg,#0f1a0f,#1a2a1a);border-color:#3a5a3a;margin-bottom:16px;">
+      <div style="font-family:Cinzel,serif;font-size:0.75rem;color:#66bb6a;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px;">💡 Model Answer</div>
+      <p style="font-size:0.92rem;color:#c8e6c9;line-height:1.8;">${q.a}</p>
+      <button class="read-btn" onclick="ttsReadCTAnswer()" style="margin-top:14px;font-size:0.7rem;border-color:#3a5a3a;color:#66bb6a;">🔊 Hear Answer</button>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-family:Cinzel,serif;font-size:0.78rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;">How did you do?</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button onclick="rateCT('nailed')" style="flex:1;min-width:100px;background:#1b5e20;border:1px solid #2e7d32;color:#a5d6a7;padding:12px;border-radius:6px;font-family:Cinzel,serif;font-size:0.78rem;cursor:pointer;letter-spacing:0.05em;">✅ Nailed It</button>
+        <button onclick="rateCT('getting')" style="flex:1;min-width:100px;background:#3e2723;border:1px solid var(--gold-dim);color:var(--gold-light);padding:12px;border-radius:6px;font-family:Cinzel,serif;font-size:0.78rem;cursor:pointer;letter-spacing:0.05em;">🔶 Getting There</button>
+        <button onclick="rateCT('needs')" style="flex:1;min-width:100px;background:#4a0000;border:1px solid var(--red);color:var(--red-light);padding:12px;border-radius:6px;font-family:Cinzel,serif;font-size:0.78rem;cursor:pointer;letter-spacing:0.05em;">❌ Need Work</button>
+      </div>
+    </div>` : ''}
+
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px;">
+      <button class="quiz-btn btn-neutral" onclick="ctNav(-1)" ${ctState.currentIdx===0?'disabled style="opacity:0.3;"':''}>← Previous</button>
+      <button class="quiz-btn btn-neutral" onclick="ctNav(1)" ${ctState.currentIdx===deck.length-1?'disabled style="opacity:0.3;"':''}>Next →</button>
+      <button class="quiz-btn btn-neutral" onclick="buildCTDeck()">🔀 Reorder</button>
+    </div>`;
+}
+
+function revealCT() {
+  ctState.revealed = true;
+  renderCTQuestion();
+  // Auto-read the answer
+  const q = ctState.deck[ctState.currentIdx];
+  if (q) ttsSpeak(q.a, 'Model Answer', 'Critical Thinking');
+}
+
+function rateCT(rating) {
+  const q = ctState.deck[ctState.currentIdx];
+  if (!q) return;
+  const saved = JSON.parse(localStorage.getItem('fma_ct_ratings_2027') || '{}');
+  saved['ct_' + q.id] = rating;
+  localStorage.setItem('fma_ct_ratings_2027', JSON.stringify(saved));
+  updateCTScores();
+  // Auto advance
+  if (ctState.currentIdx < ctState.deck.length - 1) {
+    ctState.currentIdx++;
+    ctState.revealed = false;
+    renderCTQuestion();
+  } else {
+    buildCTDeck(); // rebuild sorted by weakness
+  }
+}
+
+function ctNav(dir) {
+  ctState.currentIdx = Math.max(0, Math.min(ctState.deck.length - 1, ctState.currentIdx + dir));
+  ctState.revealed = false;
+  renderCTQuestion();
+}
+
+function updateCTScores() {
+  const saved = JSON.parse(localStorage.getItem('fma_ct_ratings_2027') || '{}');
+  let nailed = 0, getting = 0, needs = 0, unseen = 0;
+  ctQuestions.forEach(q => {
+    const r = saved['ct_' + q.id];
+    if (r === 'nailed') nailed++;
+    else if (r === 'getting') getting++;
+    else if (r === 'needs') needs++;
+    else unseen++;
+  });
+  const n = document.getElementById('ctNailed');
+  const g = document.getElementById('ctGetting');
+  const nd = document.getElementById('ctNeeds');
+  const u = document.getElementById('ctUnseen');
+  if (n) n.textContent = nailed;
+  if (g) g.textContent = getting;
+  if (nd) nd.textContent = needs;
+  if (u) u.textContent = unseen;
+}
+
+function ttsReadCT() {
+  const q = ctState.deck[ctState.currentIdx];
+  if (q) ttsSpeak(q.q, q.topic, 'Critical Thinking Question');
+}
+
+function ttsReadCTAnswer() {
+  const q = ctState.deck[ctState.currentIdx];
+  if (q) ttsSpeak(q.a, 'Model Answer', 'Critical Thinking');
 }
 
 // ══════════════════════════════════════════════
